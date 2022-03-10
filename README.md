@@ -1,5 +1,5 @@
 # Personal Website
-![homepage screenshot](images/homepage-light.jpg)
+![homepage screenshot](public/images/homepage-light.jpg)
 
 ## Project Setup
 
