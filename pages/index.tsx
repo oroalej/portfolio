@@ -1,65 +1,54 @@
-import Head from 'next/head'
-import Image from 'next/image'
-
-import styles from '@/pages/index.module.css'
+import {Fragment} from "react";
+import {EMAIL_ADDRESS, FACEBOOK_LINK, GITHUB_LINK, LINKED_IN_LINK, TWITTER_LINK} from "@/constants/index";
+import {ExternalLink, Projects, SectionTitle, SectionWrapper} from "@/components/index";
+import {Facebook, Github, Linkedin, Twitter} from "@icons-pack/react-simple-icons";
+import Skills from "@/components/Skills";
+import PortfolioSummary from "@/components/PortfolioSummary";
+import AboutMe from "@/components/AboutMe";
 
 export default function Home() {
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <Fragment>
+      <PortfolioSummary />
+      <AboutMe />
+      <Projects/>
+      <Skills />
 
-      <main>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+      <SectionWrapper className="rounded-tl-lg rounded-tr-lg bg-neutral-900 text-neutral-300" id="contacts">
+        <SectionTitle className="text-xl" anchor="#contacts">
+          Contact
+        </SectionTitle>
 
-        <p className={styles.description}>
-          Get started by editing <code>pages/index.js</code>
+        <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-4">Get in touch</h2>
+
+        <p className="text-sm xs:text-base mb-2 text-opacity-80 md:w-2/3">
+          {"As of this moment I am only accepting remote work as I am currently residing in the province. "}
+          {"If you have any open position that you think fits well with my skill sets or if you have any question, please feel free to contact me using any of the methods below."}
         </p>
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+        <div className="text-sm sm:text-base mt-10">
+          <p className="mb-1">Email:</p>
+          <a href={`mailto:${EMAIL_ADDRESS}`} className="mb-8 inline-block hover:text-white">{EMAIL_ADDRESS}</a>
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
+          <div className="flex flex-row gap-8">
+            <ExternalLink href={GITHUB_LINK} label="Github" className="hover:text-white transition-colors">
+              <Github size={22}/>
+            </ExternalLink>
 
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
+            <ExternalLink href={LINKED_IN_LINK} label="LinkedIn" className="hover:text-white transition-colors">
+              <Linkedin size={22}/>
+            </ExternalLink>
 
-          <a href="https://vercel.com/new" className={styles.card}>
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+            <ExternalLink href={FACEBOOK_LINK} label="Facebook" className="hover:text-white transition-colors">
+              <Facebook size={22}/>
+            </ExternalLink>
+
+            <ExternalLink href={TWITTER_LINK} label="Twitter" className="hover:text-white transition-colors">
+              <Twitter size={22}/>
+            </ExternalLink>
+          </div>
         </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
-    </div>
+      </SectionWrapper>
+    </Fragment>
   )
 }
