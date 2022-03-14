@@ -6,7 +6,7 @@ const DisabledNavLink: FC = (props) => {
   const {children} = props;
 
   return (
-    <div className={classNames(styles.default, styles.disabled, 'dark:text-neutral-100')}>
+    <div className={classNames(styles.default, styles.disabled, 'dark:text-neutral-400')}>
       {children}
     </div>
   )

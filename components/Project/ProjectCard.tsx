@@ -1,6 +1,6 @@
 import {FC} from "react";
 import {ExternalLink, ProjectTitle} from "@/components/index";
-import {Code, CornersOut, GlobeHemisphereEast} from "phosphor-react";
+import {Code, CornersOut, FigmaLogo, GlobeHemisphereEast} from "phosphor-react";
 import styles from "@/components/Project/ProjectCard.module.css";
 import Image from "next/image";
 
@@ -17,6 +17,7 @@ export interface ProjectWithoutScreenshotsInterface {
   uses: Array<string>;
   source?: string | undefined;
   site?: string | undefined;
+  design?: string | undefined
   screenshots?: never;
   image?: never;
 }
@@ -27,6 +28,7 @@ export interface ProjectWithScreenshotsInterface {
   uses: Array<string>;
   source?: string | undefined;
   site?: string | undefined;
+  design?: string | undefined
   screenshots: Array<ScreenshotInterface>;
   image: string;
 }
@@ -40,7 +42,7 @@ export interface ProjectCardInterface {
 
 export const ProjectCard: FC<ProjectCardInterface> = (props: ProjectCardInterface) => {
   const {project, onImagePreview} = props;
-  const {title, description, uses, source, site, image = null, screenshots = null} = project;
+  const {title, description, uses, source, site, design, image = null, screenshots = null} = project;
 
   return (
     <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 text-neutral-300">
@@ -81,6 +83,13 @@ export const ProjectCard: FC<ProjectCardInterface> = (props: ProjectCardInterfac
             site && (
               <ExternalLink href={site} label="Link" className={styles.external_link}>
                 <GlobeHemisphereEast weight="light"/>
+              </ExternalLink>
+            )
+          }
+          {
+            design && (
+              <ExternalLink href={design} label="Figma" className={styles.external_link}>
+                <FigmaLogo weight="light"/>
               </ExternalLink>
             )
           }
