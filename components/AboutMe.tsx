@@ -15,8 +15,8 @@ const AboutMe = () => {
 
             <div className="text-sm sm:text-base">
               <p className="mb-5">
-                {"I'm Alex from Naga City, Philippines! I’m a Developer and Hobbyist Photographer."}
-                Welcome to my little virtual world—I hope you find what you are looking for!
+                {"I'm Alex, a developer and hobbyist photographer, from Naga City, Philippines."}
+                Welcome to my little virtual world. I hope you find what you are looking for.
               </p>
 
               <p>Thanks for dropping by,</p>

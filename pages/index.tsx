@@ -22,8 +22,7 @@ export default function Home() {
         <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-4">Get in touch</h2>
 
         <p className="text-sm xs:text-base mb-2 text-opacity-80 md:w-2/3">
-          {"As of this moment I am only accepting remote work as I am currently residing in the province. "}
-          {"If you have any open position that you think fits well with my skill sets or if you have any question, please feel free to contact me using any of the methods below."}
+          I am only accepting remote work as I am currently residing in the province. If you have open positions that you think will fit well with my skill set or if you have any questions, please feel free to contact me using any of the methods below.
         </p>
 
         <div className="text-sm sm:text-base mt-10">

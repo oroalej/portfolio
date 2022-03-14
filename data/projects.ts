@@ -3,14 +3,14 @@ import {ProjectInterface} from "@/components/Project/ProjectCard";
 export const PROJECT_LIST: Array<ProjectInterface> = [
   {
     title: 'Expense Tracker',
-    description: 'This is a ongoing personal project. I create this to refresh my skills in Laravel and to test how to do Test Driven Design (TDD), Testing in general, Action Pattern, Data Transfer Object (DTO), and OOP Fluent Interface. And also since I am now handling the expense at our house, I want to create a tracker that suited my need.',
+    description: 'This is a ongoing personal project. I created this to refresh my skills in Laravel and to practice test driven design (TDD), testing in general, action pattern, data transfer object (DTO), and OOP fluent interface. This project was also created to suit my needs as I am now managing the finances at home.',
     uses: [
       'Laravel', 'Unit Testing', 'GraphQL', 'Typescript', 'ReactJS', 'NextJS', 'Redux', 'Tailwind CSS'
     ],
   },
   {
     title: 'alexanderjeamoro',
-    description: "A revamp portfolio of mine. A virtual world I can confidently say my creation.",
+    description: "This is a revamped portfolio of mine. A virtual world I can confidently say is  my creation.\n",
     source: 'https://github.com/oroalej/portfolio',
     uses: [
       'Tailwind CSS', 'ReactJS', 'NextJS', 'Typescript'
@@ -18,7 +18,7 @@ export const PROJECT_LIST: Array<ProjectInterface> = [
   },
   {
     title: 'intothealgoverse',
-    description: "Is an unofficial curation of tools, projects, and resources that are relevant to the Algorand ecosystem. ",
+    description: "This is an unofficial curation of tools, projects, and resources that are relevant to the Algorand ecosystem.",
     image: 'intothealgoverse/intothealgoverse-about.jpg',
     source: 'https://github.com/oroalej/intothealgoverse',
     site: 'https://oroalej.github.io/intothealgoverse/#/',
@@ -46,7 +46,7 @@ export const PROJECT_LIST: Array<ProjectInterface> = [
   },
   {
     title: 'Suki Reward App',
-    description: 'MVP of a system as a software customer loyalty program platform for small and medium-sized enterprises.',
+    description: 'This is an MVP of a system-as-a-software customer loyalty program platform for small and medium enterprises.',
     image: 'suki/suki-reward-add-partner.jpg',
     uses: [
       'Laravel', 'VueJS', 'Inertia', 'Tailwind CSS'
@@ -72,7 +72,7 @@ export const PROJECT_LIST: Array<ProjectInterface> = [
   },
   {
     title: 'E-Learning and content management system',
-    description: 'A 5 repository project that are interconnected with one other. I was responsible for maintaining and enhancing the project depending on what the client wants.',
+    description: 'A 5-repository project where the repositories are interconnected with each other. I was responsible for maintaining and enhancing the project depending on client requirements.',
     uses: [
      'Laravel', 'VueJS', 'AngularJS', 'GoLang', 'Vanilla PHP'
     ]
@@ -127,14 +127,14 @@ export const PROJECT_LIST: Array<ProjectInterface> = [
   },
   {
     title: 'Poultry farm internal system',
-    description: 'A point of sale, inventory, reports, sales return system that will be used internally by a local poultry farm.',
+    description: 'A point-of-sale, inventory, reports, and sales return system to be used internally by a local poultry farm.',
     uses: [
       'Codeigniter', 'Bootstrap'
     ]
   },
   {
     title: 'POS system for Local Burger Business',
-    description: 'A Point of sale system that will be used by a local burger business.',
+    description: 'A point-of-sale system to be used by a local burger business.',
     uses: [
       'Laravel', 'Bootstrap'
     ]
