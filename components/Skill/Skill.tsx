@@ -11,10 +11,7 @@ export const Skill: FC<SkillInterface> = (props: SkillInterface) => {
   const IconElement: Icon | undefined = icon;
 
   return (
-    <div
-      className="flex flex-row items-center gap-2.5"
-      key={Array.isArray(text) ? text[0] : text}
-    >
+    <div className="flex flex-row items-center gap-2.5">
       {IconElement ? (
         <IconElement size={20} />
       ) : (
