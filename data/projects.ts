@@ -13,19 +13,19 @@ export const PROJECT_LIST: Array<ProjectInterface> = [
         title: 'contributor-profile',
         filename: 'intothealgoverse_v2/contributor-profile.jpg',
         width: 1920,
-        height: 941
+        height: 1306
       },
       {
         title: 'dapp-members',
         filename: 'intothealgoverse_v2/dapp-members.jpg',
         width: 1920,
-        height: 941
+        height: 1215
       },
       {
         title: 'dapp-about',
         filename: 'intothealgoverse_v2/dapp-about.jpg',
         width: 1920,
-        height: 941
+        height: 1345
       }
     ]
   },
@@ -41,31 +41,31 @@ export const PROJECT_LIST: Array<ProjectInterface> = [
         title: 'account-page',
         filename: 'expense-tracker/account-page.png',
         width: 1920,
-        height: 941
+        height: 937
       },
       {
         title: 'add-transaction-form',
         filename: 'expense-tracker/add-transaction-form.png',
         width: 1920,
-        height: 941
+        height: 937
       },
       {
         title: 'budget-page',
         filename: 'expense-tracker/budget-page.png',
         width: 1920,
-        height: 941
+        height: 937
       },
       {
         title: 'goal-page',
         filename: 'expense-tracker/goal-page.png',
         width: 1920,
-        height: 941
+        height: 937
       },
       {
         title: 'sidebar-closed',
         filename: 'expense-tracker/sidebar-closed.png',
         width: 1920,
-        height: 941
+        height: 937
       }
     ]
   },
