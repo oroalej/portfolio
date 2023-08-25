@@ -3,7 +3,7 @@ import {ProjectInterface} from "@/components/Project/ProjectCard";
 export const PROJECT_LIST: Array<ProjectInterface> = [
   {
     title: 'intothealgoverse 2.0',
-    description: "Updating the previous project to User-Generated Content(UGC) via community voting. Integrating Algorand blockchain and its ecosystem",
+    description: "Updating the previous project to community based curation via voting. Integrating Algorand blockchain and its ecosystem",
     uses: [
       'NextJS', 'React', 'Typescript', 'Tailwind CSS', 'Redux-RTK', 'Supabase', 'Postgresql', 'js-algorand-sdk'
     ],
