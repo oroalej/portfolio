@@ -2,11 +2,72 @@ import {ProjectInterface} from "@/components/Project/ProjectCard";
 
 export const PROJECT_LIST: Array<ProjectInterface> = [
   {
+    title: 'intothealgoverse 2.0',
+    description: "Updating the previous project to User-Generated Content(UGC) via community voting. Integrating Algorand blockchain and its ecosystem",
+    uses: [
+      'NextJS', 'React', 'Typescript', 'Tailwind CSS', 'Redux-RTK', 'Supabase', 'Postgresql', 'js-algorand-sdk'
+    ],
+    image: 'intothealgoverse_v2/dapp-about.jpg',
+    screenshots: [
+      {
+        title: 'contributor-profile',
+        filename: 'expense-tracker/contributor-profile.jpg',
+        width: 1920,
+        height: 941
+      },
+      {
+        title: 'dapp-members',
+        filename: 'expense-tracker/dapp-members.jpg',
+        width: 1920,
+        height: 941
+      },
+      {
+        title: 'dapp-about',
+        filename: 'expense-tracker/dapp-about.jpg',
+        width: 1920,
+        height: 941
+      }
+    ]
+  },
+  {
     title: 'Expense Tracker',
     description: 'This is a ongoing personal project. I created this to refresh my skills in Laravel and to practice test driven design (TDD), testing in general, action pattern, data transfer object (DTO), and OOP fluent interface. This project was also created to suit my needs as I am now managing the finances at home.',
     uses: [
-      'Laravel', 'Unit Testing', 'GraphQL', 'Typescript', 'ReactJS', 'NextJS', 'Redux', 'Tailwind CSS'
+      'Laravel', 'Unit Testing', 'GraphQL', 'Typescript', 'ReactJS', 'NextJS', 'Redux-RTK', 'Tailwind CSS'
     ],
+    image: 'expense-tracker/account-page.png',
+    screenshots: [
+      {
+        title: 'account-page',
+        filename: 'expense-tracker/account-page.png',
+        width: 1920,
+        height: 941
+      },
+      {
+        title: 'add-transaction-form',
+        filename: 'expense-tracker/add-transaction-form.png',
+        width: 1920,
+        height: 941
+      },
+      {
+        title: 'budget-page',
+        filename: 'expense-tracker/budget-page.png',
+        width: 1920,
+        height: 941
+      },
+      {
+        title: 'goal-page',
+        filename: 'expense-tracker/goal-page.png',
+        width: 1920,
+        height: 941
+      },
+      {
+        title: 'sidebar-closed',
+        filename: 'expense-tracker/sidebar-closed.png',
+        width: 1920,
+        height: 941
+      }
+    ]
   },
   {
     title: 'alexanderjeamoro',
@@ -26,7 +87,7 @@ export const PROJECT_LIST: Array<ProjectInterface> = [
     ],
   },
   {
-    title: 'intothealgoverse',
+    title: 'intothealgoverse 1.0',
     description: "This is an unofficial curation of tools, projects, and resources that are relevant to the Algorand ecosystem.",
     image: 'intothealgoverse/intothealgoverse-about.jpg',
     source: 'https://github.com/oroalej/intothealgoverse',
