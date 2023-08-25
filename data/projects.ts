@@ -11,19 +11,19 @@ export const PROJECT_LIST: Array<ProjectInterface> = [
     screenshots: [
       {
         title: 'contributor-profile',
-        filename: 'expense-tracker/contributor-profile.jpg',
+        filename: 'intothealgoverse_v2/contributor-profile.jpg',
         width: 1920,
         height: 941
       },
       {
         title: 'dapp-members',
-        filename: 'expense-tracker/dapp-members.jpg',
+        filename: 'intothealgoverse_v2/dapp-members.jpg',
         width: 1920,
         height: 941
       },
       {
         title: 'dapp-about',
-        filename: 'expense-tracker/dapp-about.jpg',
+        filename: 'intothealgoverse_v2/dapp-about.jpg',
         width: 1920,
         height: 941
       }
