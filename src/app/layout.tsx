@@ -6,7 +6,7 @@ interface BaseComponent {
     className?: string
 }
 
-const RootLayout = ({children}: BaseComponent) => {
+const RootLayout = ({children}: Pick<BaseComponent, 'children'>) => {
     return (
         <html lang="en" className="!scroll-smooth">
         <body className="min-h-screen bg-zinc-50 relative">

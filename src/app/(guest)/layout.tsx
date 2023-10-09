@@ -7,7 +7,7 @@ import TheFooter from "@/app/(guest)/_components/Layout/TheFooter";
 import {Fragment} from "react";
 import {BaseComponent} from "@/types";
 
-const GuestLayout = ({children}: BaseComponent) => {
+const GuestLayout = ({children}: Pick<BaseComponent, 'children'>) => {
     return (
         <Fragment>
             <TheHeader/>
