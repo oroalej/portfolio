@@ -1,0 +1,18 @@
+.default {
+  @apply capitalize px-3 py-3 text-neutral-700 cursor-pointer;
+  @apply flex flex-row justify-center items-center;
+  @apply transition-colors duration-100;
+  @apply border-b-4 border-solid border-transparent;
+}
+
+.disabled {
+  @apply cursor-default italic opacity-70;
+}
+
+.border {
+  @apply hover:border-neutral-700;
+}
+
+.active {
+  @apply border-neutral-700 dark:border-neutral-200;
+}
