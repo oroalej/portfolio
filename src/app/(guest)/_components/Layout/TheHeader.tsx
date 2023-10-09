@@ -2,10 +2,11 @@
 
 import {FC, useEffect} from "react";
 import Link from "next/link";
-import {Container, DarkModeButton, NavLink} from "@/components"
+import {Container, NavLink} from "@/components"
 import {useOpenable} from "@/hooks";
 import {usePathname} from "next/navigation";
 import {PiListLight, PiXThin} from "react-icons/pi";
+import DarkModeButton from "@/app/(guest)/_components/DarkModeButton";
 
 const TheHeader: FC = () => {
     const {isOpen, onToggle} = useOpenable();
