@@ -10,4 +10,3 @@ export const ProjectButton = ({className, children, ...remaining}: HTMLAttribute
         </button>
     )
 }
-

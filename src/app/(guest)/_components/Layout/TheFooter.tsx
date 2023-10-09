@@ -18,7 +18,7 @@ const TheFooter = () => (
 
                     <Link
                         scroll
-                        href="/resume"
+                        href={"/resume"}
                         className="hover:underline underline-offset-[5px] decoration-4"
                     >
                         Résumé
