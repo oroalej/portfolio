@@ -12,3 +12,4 @@ const AdminLayout = ({children}: BaseComponent) => {
 }
 
 export default AdminLayout;
+
