@@ -29,7 +29,7 @@ export const EXPERIENCES = [
         ],
         'descriptions': [
             'Responsible for converting Figma design to working website',
-            'Created admin frontend using Laravel, Inertia, VueJS, and Tailwind CSS',
+            'Created admin frontend',
             'Assisted on database architecture'
         ],
         'technologies': [
@@ -48,7 +48,7 @@ export const EXPERIENCES = [
             }
         ],
         'descriptions': [
-            'Maintained E-Learning and Content Management System (CMS) projects using Laravel, VueJS, AngularJS, vanilla PHP, and GoLang',
+            'Maintained E-Learning and Content Management System (CMS) projects',
             'Refactored code, bug tracing, testing, UI enhancements',
             'Followed software development life cycle (SDLC).'
         ],
@@ -69,7 +69,7 @@ export const EXPERIENCES = [
         ],
         'position': 'Web Developer',
         'descriptions': [
-            'Created content management system (CMS) like wordpress.com UI using Laravel, Vuetify, VueJS, Router, and Vuex.',
+            'Created content management system (CMS) like wordpress.com UI',
         ],
         'technologies': [
             'HTML5', 'CSS3', 'Sass', 'Laravel', 'Javascript', 'Vue', 'Vuex', 'Vue-Router', 'MySQL', 'Vuetify', 'Git - Version Control', 'Restful APIs', 'Model-View-Controller (MVC)', 'Single-Page Application - SPA'
@@ -96,7 +96,7 @@ export const EXPERIENCES = [
         'descriptions': [
             'Followed Agile software development methodology',
             'Worked closely with UX/UI, QA, BA, PM in analyzing project requirements and enhancements',
-            'Developed and maintained internal company projects like Game Curation Platform, Wedding Supplier Portal, CMS, Data Gathering / crawler, Video Editing Platform using Laravel, VueJS, and Vuex',
+            'Developed and maintained internal company projects like Game Curation Platform, Wedding Supplier Portal, CMS, Data Gathering / crawler, Video Editing Platform',
             'Performed bug tracing, Testing',
             'Conducted code reviews',
             'Mentored junior developers',
@@ -140,7 +140,7 @@ export const EXPERIENCES = [
             }
         ],
         'descriptions': [
-            'Developed inventory and POS System for Poultry Farm using CodeIgniter.',
+            'Developed inventory and POS System for Poultry Farm',
             'Updated UI, managed database, refactored code'
         ],
         'technologies': [
