@@ -1,6 +1,6 @@
 "use client";
 
-import {FC, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {Switch} from "@headlessui/react";
 import {PiMoonFill, PiSunFill} from "react-icons/pi";
 
@@ -20,7 +20,7 @@ const isInitialDarkTheme = () => {
     return 'light';
 }
 
-const DarkModeButton: FC = () => {
+const DarkModeButton = () => {
     const [enabled, setEnabled] = useState(false)
 
     const setPageTheme = (event: boolean) => {

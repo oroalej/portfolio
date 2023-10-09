@@ -102,7 +102,7 @@ const PortfolioSummarySection = () => {
 
                                 <CodeBlock line={12} className="ml-4 sm:ml-8">
                                     <SingleLineComment>
-                                        <a href="/#what-i-use"
+                                        <a href="/Projects/portfolio/public#what-i-use"
                                            className="cursor-pointer">
                                             <span
                                                 className="uppercase hover:text-rose-500 transition-colors">{`->> See more <<-`}</span>
