@@ -27,9 +27,9 @@ const TheHeader = () => {
 
                         <div className="flex flex-col items-center justify-center md:flex-row gap-4 mt-24 md:mt-0 px-1">
                             <NavLink active={pathname === "/admin"} href="/admin">Dashboard</NavLink>
-                            <NavLink active={pathname === "/admin/projects"} href="/admin/projects">Projects</NavLink>
-                            <NavLink active={pathname === '/admin/notes'} href="/admin/notes">Notes</NavLink>
-                            <NavLink active={pathname === '/admin/daydreams'} href="/admin/daydreams">Daydreams</NavLink>
+                            <NavLink active={pathname.startsWith('/admin/projects')} href="/admin/projects">Projects</NavLink>
+                            <NavLink active={pathname.startsWith('/admin/notes')} href="/admin/notes">Notes</NavLink>
+                            <NavLink active={pathname.startsWith('/admin/daydreams')} href="/admin/daydreams">Daydreams</NavLink>
                         </div>
 
                         <div className="absolute bottom-7 right-7 md:bottom-0 md:right-0 z-50 md:relative pl-8">

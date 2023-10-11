@@ -17,4 +17,8 @@ export * from "./Form"
 export * from "./Section"
 export * from "./Skill"
 export * from "./Code"
+export * from "./Select"
+export * from "./Button"
+export * from "./Tooltip"
+export * from "./Pagination"
 
