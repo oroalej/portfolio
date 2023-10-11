@@ -18,7 +18,7 @@ export const ProjectButton = ({className, children, ...remaining}: HTMLAttribute
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     isLoading?: boolean;
     variant?: Exclude<Variants, "outlined">;
-    color?: Extract<Colors, "dark" | "primary" | "danger" | "warning">;
+    color?: Exclude<Colors, "light" | "success">;
     block?: boolean;
     rounded?: boolean;
     icon?: boolean;
@@ -44,6 +44,11 @@ const styles = {
         default: "text-neutral-800 bg-yellow-500",
         text: "text-yellow-600 enabled:hover:bg-yellow-500 enabled:hover:text-neutral-800 enabled:active:bg-yellow-500 enabled:active:text-neutral-800",
         plain: "text-yellow-600 enabled:active:bg-yellow-500 enabled:active:text-neutral-800"
+    },
+    secondary: {
+        default: "text-neutral-800 bg-neutral-200",
+        text: "text-neutral-800 enabled:hover:bg-neutral-200 enabled:hover:text-neutral-800 enabled:active:bg-neutral-200 enabled:active:text-neutral-800",
+        plain: "text-neutral-800 enabled:active:bg-neutral-200 enabled:active:text-neutral-800"
     }
 }
 
@@ -66,14 +71,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) =>
             ref={ref}
             {...remaining}
             className={classNames(
-                className,
                 styles[color][variant],
                 "relative flex flex-row gap-2 items-center transition-colors hover:bg-opacity-90 active:bg-opacity-100 disabled:cursor-default disabled:bg-opacity-75 duration-200 cursor-pointer",
-                [icon ? "aspect-square p-2.5 text-[15px]": "px-4 py-2"],
+                [icon ? "aspect-square p-2 text-[15px]": "px-4 py-2"],
                 {
                     'w-full': block,
                     'rounded-md': rounded,
-                }
+                },
+                className,
             )}
             disabled={disabled || isLoading}
         >

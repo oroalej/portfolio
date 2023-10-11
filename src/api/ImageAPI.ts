@@ -1,28 +1,31 @@
 import supabase from "@/utils/supabase";
 
-const ImageAPI = {
-    get: (path: string): string => {
-        const {data} = supabase
-            .storage
-            .from('images')
-            .getPublicUrl(path);
+export type Buckets = 'images';
 
-        return data.publicUrl;
-    },
-
-    store: async (file: File) => {
-        const {data, error} = await supabase.storage
-            .from("images")
-            .upload(`daydreams/${file.name}`, file, {
-                cacheControl: "3600",
-                upsert: true,
-            });
-
-        if (error) throw error;
-
-        return data!.path;
-    }
+export interface StoreFileParams {
+    file: File,
+    pathname: string,
+    bucket: Buckets
 }
 
+export const getStoragePublicUrl = (path: string): string => {
+    const {data} = supabase
+        .storage
+        .from('images')
+        .getPublicUrl(path);
 
-export default ImageAPI;
+    return data.publicUrl;
+}
+
+export const storeFile = async ({file, pathname, bucket}: StoreFileParams) => {
+    const {data, error} = await supabase.storage
+        .from(bucket)
+        .upload(`${pathname}/${file.name}`, file, {
+            cacheControl: "3600",
+            upsert: true,
+        });
+
+    if (error) throw error;
+
+    return data!.path;
+}

@@ -1,10 +1,10 @@
 import {CreateDreamFormInterface} from "@/app/admin/daydreams/create/_types";
 import toast from "react-hot-toast";
-import ImageAPI from "@/api/ImageAPI";
+import {storeFile} from "@/api/ImageAPI";
 import {storeDaydream} from "@/api/DaydreamAPI";
 import {PostgrestError} from "@supabase/supabase-js";
 
-interface StoreDreamParams {
+export interface StoreDreamParams {
     formData: CreateDreamFormInterface,
     toasterId: string
 }
@@ -16,7 +16,11 @@ const DaydreamService = {
         try {
             toast.loading("Saving image to storage...", {id: toasterId});
 
-            const path = await ImageAPI.store(image![0]);
+            const path = await storeFile({
+                file: image![0],
+                pathname: 'daydreams',
+                bucket: 'images'
+            });
 
             toast.loading("Saving information to daydreams table...", {id: toasterId});
 

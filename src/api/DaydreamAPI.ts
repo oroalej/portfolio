@@ -1,5 +1,4 @@
 import supabase from "@/utils/supabase";
-import {DreamCardProps} from "@/app/(guest)/daydreams/_types";
 import {Tables} from "@/types";
 import {generatePaginationData, getRange, PaginationProps} from "@/utils/pagination";
 
@@ -51,7 +50,7 @@ const getDaydream = async (id: string) => {
     return data;
 }
 
-const storeDaydream = async (formData: Required<DreamCardProps>) => {
+const storeDaydream = async (formData: Required<Omit<Tables<'daydreams'>, 'created_at' | 'id'>>) => {
     const {data, error} = await supabase
         .from("daydreams")
         .insert(formData)

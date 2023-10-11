@@ -6,13 +6,13 @@ import {FaPencilAlt} from "react-icons/fa";
 import {FaTrash} from "react-icons/fa6";
 import {useEffect, useState} from "react";
 import {getAllDaydreams} from "@/api/DaydreamAPI";
-import ImageAPI from "@/api/ImageAPI";
+import {getStoragePublicUrl} from "@/api/ImageAPI";
 import {Tables} from "@/types";
 import {DEFAULT_PAGINATION_VALUES, PaginationProps} from "@/utils/pagination";
 import {SelectDataFormatter} from "@/utils";
 
 const DaydreamTable = () => {
-    const storagePublicUrl = ImageAPI.get("")
+    const storagePublicUrl = getStoragePublicUrl("")
 
     const [dreams, setDreams] = useState<Tables<'daydreams'>[]>([]);
     const [pagination, setPagination] = useState<PaginationProps>(DEFAULT_PAGINATION_VALUES);

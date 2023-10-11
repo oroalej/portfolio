@@ -295,7 +295,7 @@ const CreateDreamForm = () => {
                             disabled={formState.isDirty || formState.isSubmitting}
                             onClick={onResetFormHandler}
                             variant="plain"
-                            color="dark"
+                            color="secondary"
                         >
                             Cancel
                         </Button>

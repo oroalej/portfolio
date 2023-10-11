@@ -1,38 +1,61 @@
 "use client";
 
 import {Fragment, useEffect, useState} from "react";
-import DreamCard from "@/app/(guest)/daydreams/_components/DreamCard";
 import {getAllDaydreams} from "@/api/DaydreamAPI";
-import ImageAPI from "@/api/ImageAPI";
-import {DreamCardProps} from "@/app/(guest)/daydreams/_types";
+import {getStoragePublicUrl} from "@/api/ImageAPI";
+import {DaydreamCard, DaydreamCardLoading} from "@/app/(guest)/daydreams/_components/DaydreamCard";
+import {PreviewDreamDialog} from "@/app/(guest)/daydreams/_components/PreviewDreamDialog";
+import {useOpenable} from "@/hooks";
+import {useGalleryContext} from "@/context/GalleryContext";
 
 const DaydreamList = () => {
-    const [list, setList] = useState<DreamCardProps[]>([])
-    const storagePublicUrl = ImageAPI.get("")
+    const {list = [], setList, setSelectedIndex, selectedIndex} = useGalleryContext();
+    const [isLoading, setIsLoading] = useState(true);
+    const {isOpen, onOpen, onClose} = useOpenable()
+
+    const storagePublicUrl = getStoragePublicUrl("");
 
     useEffect(() => {
         try {
+            setIsLoading(true);
+
             getAllDaydreams().then(({data}) => {
-                setList(data)
+                setList(data);
             })
         } catch (error) {
             console.log(error)
+        } finally {
+            setIsLoading(false);
         }
-    }, [])
+    }, [setList])
+
+    const onSelectHandler = (index: number) => {
+        setSelectedIndex(index);
+        onOpen();
+    }
 
     return (
         <Fragment>
-            {list.map((item, index) => (
-                <DreamCard
+            {isLoading ? [...Array(2)].map((_, index) => (
+                <DaydreamCardLoading
+                    key={`daydream-loader-${index}`}
+                />
+            )) : list.map((item, index) => (
+                <DaydreamCard
+                    key={`image-${item.id}-${index}`}
                     image_path={`${storagePublicUrl}${item.image_path}`}
-                    key={`image-${index}`}
                     iso={item.iso}
                     shutter_speed={item.shutter_speed}
                     aperture={item.aperture}
                     year={item.year}
                     description={item.description}
+                    onSelect={() => onSelectHandler(index)}
                 />
             ))}
+
+            {Number.isInteger(selectedIndex) && (
+                <PreviewDreamDialog onClose={onClose} isOpen={isOpen}/>
+            )}
         </Fragment>
     )
 }
