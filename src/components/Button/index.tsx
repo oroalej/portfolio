@@ -54,33 +54,41 @@ const styles = {
     }
 }
 
-const getButtonClasses = (props: ButtonOrLinkProps) => {
-    const {className, block, rounded, icon, variant = "default", color = 'dark'} = props;
+const getButtonClasses = ({
+    className,
+    block,
+    rounded,
+    icon,
+    variant = "default",
+    color = 'dark'
+}: ButtonOrLinkProps) => classNames("relative flex flex-row gap-2 items-center transition-colors hover:bg-opacity-90 active:bg-opacity-100 disabled:cursor-default disabled:bg-opacity-75 duration-200 cursor-pointer",
+    [icon ? "aspect-square p-2 text-[15px]" : "px-4 py-2"],
+    {
+        'w-full': block,
+        'rounded-md': rounded,
+    },
+    styles[color][variant], className
+)
 
-    return classNames("relative flex flex-row gap-2 items-center transition-colors hover:bg-opacity-90 active:bg-opacity-100 disabled:cursor-default disabled:bg-opacity-75 duration-200 cursor-pointer",
-        [icon ? "aspect-square p-2 text-[15px]" : "px-4 py-2"],
-        {
-            'w-full': block,
-            'rounded-md': rounded,
-        },
-        styles[color][variant], className
-    )
-}
-
-const LinkComponent = forwardRef<HTMLAnchorElement, LinkProps>((props, ref) => (
-    <Link {...props} ref={ref}  className={getButtonClasses(props)}>
-        {props.children}
+const LinkComponent = forwardRef<HTMLAnchorElement, LinkProps>(({children, ...props}, ref) => (
+    <Link {...props} ref={ref} className={getButtonClasses(props)}>
+        {children}
     </Link>
 ))
 
-const ButtonComponent = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => (
+const ButtonComponent = forwardRef<HTMLButtonElement, ButtonProps>(({
+    children,
+    disabled,
+    isLoading,
+    ...props
+}, ref) => (
     <button
         {...props}
         ref={ref as Ref<HTMLButtonElement>}
         className={getButtonClasses(props)}
-        disabled={props.disabled || props.isLoading}
+        disabled={disabled || isLoading}
     >
-        {props.children}
+        {children}
     </button>
 ))
 
