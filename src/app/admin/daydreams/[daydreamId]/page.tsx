@@ -15,18 +15,16 @@ export async function generateMetadata({params: {daydreamId}}: DreamEditPageProp
     }
 }
 
-const DreamEditPage = async () => {
-    return (
-        <Container>
-            <div className="py-14">
-                <div className="mb-8">
-                    <Button href="/admin/daydreams">Back to list</Button>
-                </div>
-
-                <EditDaydreamWrapper/>
+const DreamEditPage = () => (
+    <Container>
+        <div className="py-14">
+            <div className="mb-8">
+                <Button href="/admin/daydreams">Back to list</Button>
             </div>
-        </Container>
-    )
-}
+
+            <EditDaydreamWrapper/>
+        </div>
+    </Container>
+)
 
 export default DreamEditPage
