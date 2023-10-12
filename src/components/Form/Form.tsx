@@ -31,16 +31,28 @@ export const FormErrorMessage = ({children}: BaseComponent) => (
 )
 
 export const Label = (props: LabelProps) => {
-    const {required, className, children, ...remaining} = props;
+    const {required, className, children, htmlFor, ...remaining} = props;
+
+    if (htmlFor) {
+        return (
+            <label htmlFor={htmlFor} className={classNames("text-sm inline-block mb-2", className)} {...remaining}>
+                <span className="text-neutral-600">{children}</span>
+
+                {required && (
+                    <span className="text-red-700 ml-1 leading-6">*</span>
+                )}
+            </label>
+        )
+    }
 
     return (
-        <label className={classNames("text-sm inline-block mb-2", className)} {...remaining}>
+        <span className={classNames("text-sm inline-block mb-2", className)} {...remaining}>
             <span className="text-neutral-600">{children}</span>
 
             {required && (
                 <span className="text-red-700 ml-1 leading-6">*</span>
             )}
-        </label>
+        </span>
     )
 }
 

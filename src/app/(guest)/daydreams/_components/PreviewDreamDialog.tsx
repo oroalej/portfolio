@@ -31,10 +31,12 @@ export const PreviewDreamDialog = (props: Required<Omit<DialogProps, 'children'>
                     <div
                         className="relative flex justify-between items-center px-3 overflow-hidden grow bg-neutral-200 rounded-md">
                         <Image
-                            src={`${storagePublicUrl}/${selectedItem.image_path}`}
+                            src={`${storagePublicUrl}/${selectedItem.file.storage_file_path}`}
                             alt={selectedItem.description}
                             fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             className="object-contain pointer-events-none"
+                            quality={75}
                         />
 
                         <Button

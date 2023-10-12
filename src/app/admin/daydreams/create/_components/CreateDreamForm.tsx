@@ -16,7 +16,14 @@ import {
 } from "@/components";
 import {Controller, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {APERTURE, DEFAULT_FORM_VALUES, ISO, SHUTTER_SPEED, YEARS} from "@/app/admin/daydreams/create/_data";
+import {
+    ACCEPTED_IMAGE_TYPES,
+    APERTURE,
+    DEFAULT_FORM_VALUES,
+    ISO,
+    SHUTTER_SPEED,
+    YEARS
+} from "@/app/admin/daydreams/create/_data";
 import {FormEvent, useRef, useState} from "react";
 import {PiImageLight, PiX} from "react-icons/pi";
 import Image from "next/image";
@@ -24,16 +31,14 @@ import classNames from "classnames";
 import {createDreamSchema} from "@/app/admin/daydreams/create/_validations";
 import {isEmpty} from "lodash";
 import {SelectDataFormatter} from "@/utils";
-import {CreateDreamFormInterface} from "@/app/admin/daydreams/create/_types";
+import {CreateDreamFormInterface, ImageFileData} from "@/app/admin/daydreams/create/_types";
 import toast from "react-hot-toast";
 import DaydreamService from "@/services/DaydreamService";
 
 const CreateDreamForm = () => {
     const imageInputRef = useRef<HTMLInputElement | null>(null);
-    const [localImage, setLocalImage] = useState({
-        blob: "",
-        filename: ""
-    })
+    const [fileDetails, setFileDetails] = useState<ImageFileData>(DEFAULT_FORM_VALUES.image);
+    const [localImage, setLocalImage] = useState<string>("")
 
     const {
         handleSubmit,
@@ -42,14 +47,16 @@ const CreateDreamForm = () => {
         getValues,
         register,
         reset,
-        resetField
+        resetField,
+        setValue,
+        trigger
     } = useForm<CreateDreamFormInterface>({
         mode: "onChange",
         defaultValues: DEFAULT_FORM_VALUES,
         resolver: zodResolver(createDreamSchema),
     })
 
-    const {ref: imageRegisterRef, onChange: imageRegisterChange, ...imageRegister} = register("image");
+    const {ref: imageRegisterRef, onChange: _, ...imageRegister} = register("image.file");
 
     const onSubmitHandler = async () => {
         const id = crypto.randomUUID();
@@ -71,25 +78,33 @@ const CreateDreamForm = () => {
     const onImageInputHandler = async (event: FormEvent<HTMLInputElement>) => {
         const files = event.currentTarget?.files || [];
 
-        await imageRegisterChange(event);
-
         if (files.length) {
             const imageFile = files[0];
 
-            setLocalImage({
-                blob: URL.createObjectURL(imageFile),
-                filename: imageFile.name
-            });
-        } else onResetImageInputHandler()
+            const details = {
+                ...fileDetails,
+                file: files as FileList,
+                name: imageFile.name,
+                type: imageFile.type,
+                size: imageFile.size,
+            }
+
+            if (ACCEPTED_IMAGE_TYPES.includes(imageFile.type)) {
+                setLocalImage(URL.createObjectURL(imageFile));
+            }
+
+            setFileDetails(details);
+            setValue('image', details);
+
+            await trigger('image.file');
+        } else onResetImageInputHandler();
     }
 
     const onResetImageInputHandler = () => {
         resetField('image', {keepDirty: false})
 
-        setLocalImage({
-            blob: "",
-            filename: ""
-        })
+        setFileDetails(DEFAULT_FORM_VALUES.image);
+        setLocalImage("");
 
         if (imageInputRef?.current) {
             imageInputRef.current.value = "";
@@ -99,6 +114,19 @@ const CreateDreamForm = () => {
     const onResetFormHandler = () => {
         onResetImageInputHandler();
         reset(DEFAULT_FORM_VALUES)
+    }
+
+    const getImageDetails = async (image: HTMLImageElement) => {
+        const details = {
+            ...fileDetails,
+            width: image.naturalWidth,
+            height: image.naturalHeight
+        }
+
+        setFileDetails(details);
+        setValue('image', details);
+
+        await trigger('image');
     }
 
     return (
@@ -125,19 +153,20 @@ const CreateDreamForm = () => {
                                     ])}>
                                     <div className="h-full w-full"
                                          onClick={() => imageInputRef && imageInputRef.current?.click()}>
-                                        {!!localImage.blob ? (
+                                        {!!localImage ? (
                                             <div className="relative w-full h-full bg-neutral-200">
                                                 <Image
-                                                    src={localImage.blob}
-                                                    alt={localImage.filename}
+                                                    src={localImage}
+                                                    alt={fileDetails.name}
                                                     className="w-full h-full object-contain pointer-events-none group-hover:opacity-90"
                                                     fill
+                                                    onLoadingComplete={getImageDetails}
                                                 />
                                             </div>
                                         ) : (
                                             <div
                                                 className={classNames("absolute inset-0 flex items-center justify-center z-10", [
-                                                    !!formState.errors?.image ? "bg-red-100 text-red-700" : "hover:bg-neutral-200 hover:bg-opacity-25 text-neutral-600"
+                                                    !!formState.errors?.image?.file ? "bg-red-100 text-red-700" : "hover:bg-neutral-200 hover:bg-opacity-25 text-neutral-600"
                                                 ])}>
                                                 <span
                                                     className="opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
@@ -147,7 +176,7 @@ const CreateDreamForm = () => {
                                         )}
                                     </div>
 
-                                    {!!localImage.blob && (
+                                    {!!localImage && (
                                         <button
                                             className="absolute top-1 right-2 p-2 text-neutral-700 transition-all opacity-0 group-hover:opacity-100 z-10"
                                             onClick={onResetImageInputHandler}
@@ -157,7 +186,7 @@ const CreateDreamForm = () => {
                                     )}
 
                                     <input
-                                        accept="image/jpg,.jpg,image/jpeg,.jpeg,image/png,.png,image/webp,.webp"
+                                        accept={ACCEPTED_IMAGE_TYPES.join(", ")}
                                         type="file"
                                         className="hidden"
                                         tabIndex={-1}
@@ -170,9 +199,9 @@ const CreateDreamForm = () => {
                                     />
                                 </div>
 
-                                {formState.errors?.image && (
+                                {formState.errors?.image?.file && (
                                     <div className="mt-1.5">
-                                        <FormErrorMessage>{formState.errors.image.message}</FormErrorMessage>
+                                        <FormErrorMessage>{formState.errors?.image?.file.message}</FormErrorMessage>
                                     </div>
                                 )}
                             </FormGroup>
@@ -181,7 +210,7 @@ const CreateDreamForm = () => {
                                 <h3 className="text-lg font-bold text-neutral-600 mb-3">Details: </h3>
 
                                 <FormGroup>
-                                    <Label required htmlFor="input-year">Year</Label>
+                                    <Label required>Year</Label>
 
                                     <Controller
                                         name="year"
@@ -225,7 +254,7 @@ const CreateDreamForm = () => {
                                 <h3 className="text-lg font-bold text-neutral-600 mb-3">Camera Setting: </h3>
 
                                 <FormGroup>
-                                    <Label required htmlFor="input-iso">ISO</Label>
+                                    <Label required>ISO</Label>
 
                                     <Controller
                                         name="iso"
@@ -246,7 +275,7 @@ const CreateDreamForm = () => {
                                 </FormGroup>
 
                                 <FormGroup>
-                                    <Label required htmlFor="input-shutter-speed">Shutter Speed</Label>
+                                    <Label required>Shutter Speed</Label>
 
                                     <Controller
                                         name="shutter_speed"
@@ -267,7 +296,7 @@ const CreateDreamForm = () => {
                                 </FormGroup>
 
                                 <FormGroup>
-                                    <Label required htmlFor="input-aperture">Aperture</Label>
+                                    <Label required>Aperture</Label>
 
                                     <Controller
                                         name="aperture"
@@ -292,7 +321,7 @@ const CreateDreamForm = () => {
                     <CardFooter className="justify-end gap-3">
                         <Button
                             type="button"
-                            disabled={formState.isDirty || formState.isSubmitting}
+                            disabled={!formState.isDirty || formState.isSubmitting}
                             onClick={onResetFormHandler}
                             variant="plain"
                             color="secondary"

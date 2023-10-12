@@ -1,8 +1,8 @@
 import {CreateDreamFormInterface} from "@/app/admin/daydreams/create/_types";
 import toast from "react-hot-toast";
 import {storeFile} from "@/api/ImageAPI";
-import {storeDaydream} from "@/api/DaydreamAPI";
 import {PostgrestError} from "@supabase/supabase-js";
+import {storeDaydream} from "@/api/DaydreamAPI";
 
 export interface StoreDreamParams {
     formData: CreateDreamFormInterface,
@@ -16,15 +16,18 @@ const DaydreamService = {
         try {
             toast.loading("Saving image to storage...", {id: toasterId});
 
-            const path = await storeFile({
-                file: image![0],
-                pathname: 'daydreams',
-                bucket: 'images'
+            const result = await storeFile({
+                data: {
+                    ...image,
+                    file: image.file![0],
+                },
+                pathname: "daydreams",
+                bucket_name: "images"
             });
 
             toast.loading("Saving information to daydreams table...", {id: toasterId});
 
-            return await storeDaydream({image_path: path, ...daydreamData});
+            return await storeDaydream({...daydreamData, file_id: result.id});
         } catch (error) {
             toast.error((error as PostgrestError).message, {id: toasterId})
         }

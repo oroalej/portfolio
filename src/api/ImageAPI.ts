@@ -1,11 +1,13 @@
 import supabase from "@/utils/supabase";
+import {UploadData} from "@/app/admin/daydreams/create/_types";
+import {Tables} from "@/types";
 
 export type Buckets = 'images';
 
 export interface StoreFileParams {
-    file: File,
-    pathname: string,
-    bucket: Buckets
+    pathname: string;
+    bucket_name: Buckets;
+    data: UploadData<File>;
 }
 
 export const getStoragePublicUrl = (path: string): string => {
@@ -17,15 +19,29 @@ export const getStoragePublicUrl = (path: string): string => {
     return data.publicUrl;
 }
 
-export const storeFile = async ({file, pathname, bucket}: StoreFileParams) => {
-    const {data, error} = await supabase.storage
-        .from(bucket)
-        .upload(`${pathname}/${file.name}`, file, {
+export const storeFile = async (props: StoreFileParams): Promise<Tables<'files'>> => {
+    const {data, pathname, bucket_name} = props;
+    const {file, ...files} = data;
+
+    const storageResult = await supabase.storage
+        .from(bucket_name)
+        .upload(`${pathname}/${data.name}`, file , {
             cacheControl: "3600",
             upsert: true,
         });
 
-    if (error) throw error;
+    if (storageResult.error) throw storageResult.error;
 
-    return data!.path;
+    const fileResult = await supabase.from('files')
+        .insert({
+            ...files,
+            bucket_name: bucket_name,
+            storage_file_path: storageResult.data!.path
+        })
+        .select()
+        .single();
+
+    if (fileResult.error) throw fileResult.error;
+
+    return fileResult.data;
 }

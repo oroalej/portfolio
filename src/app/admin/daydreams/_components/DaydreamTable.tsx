@@ -5,16 +5,15 @@ import {Button, CardFooter, CardRoot, SimplePagination, SingleSimpleSelect} from
 import {FaPencilAlt} from "react-icons/fa";
 import {FaTrash} from "react-icons/fa6";
 import {useEffect, useState} from "react";
-import {getAllDaydreams} from "@/api/DaydreamAPI";
+import {DaydreamDataStructure, getAllDaydreams} from "@/api/DaydreamAPI";
 import {getStoragePublicUrl} from "@/api/ImageAPI";
-import {Tables} from "@/types";
 import {DEFAULT_PAGINATION_VALUES, PaginationProps} from "@/utils/pagination";
 import {SelectDataFormatter} from "@/utils";
 
 const DaydreamTable = () => {
     const storagePublicUrl = getStoragePublicUrl("")
 
-    const [dreams, setDreams] = useState<Tables<'daydreams'>[]>([]);
+    const [dreams, setDreams] = useState<DaydreamDataStructure[]>([]);
     const [pagination, setPagination] = useState<PaginationProps>(DEFAULT_PAGINATION_VALUES);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -58,7 +57,7 @@ const DaydreamTable = () => {
                         <td className="text-center">
                             <div className="relative block aspect-square w-32 h-32 overflow-hidden">
                                 <Image
-                                    src={`${storagePublicUrl}${item.image_path}`}
+                                    src={`${storagePublicUrl}${item.file.storage_file_path}`}
                                     alt="Something"
                                     height={128}
                                     width={128}
@@ -101,7 +100,7 @@ const DaydreamTable = () => {
                     </tr>
                 )) : (
                     <tr>
-                        <td></td>
+                        <td colSpan={6} className="text-center">No result</td>
                     </tr>
                 )}
                 </tbody>

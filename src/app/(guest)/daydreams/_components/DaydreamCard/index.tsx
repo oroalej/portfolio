@@ -2,8 +2,9 @@ import Image from "next/image";
 import {BaseSkeletonLoader, ImageSkeletonLoader} from "@/components";
 import {Tables} from "@/types";
 
-export interface DaydreamCardProps extends Omit<Tables<'daydreams'>, "created_at" | "id"> {
+export interface DaydreamCardProps extends Omit<Tables<'daydreams'>, "created_at" | "id" | "file_id"> {
     onSelect: () => void;
+    image_path: string
 }
 
 export const DaydreamCard = (props: DaydreamCardProps) => {
@@ -21,7 +22,9 @@ export const DaydreamCard = (props: DaydreamCardProps) => {
                     src={image_path}
                     alt={description}
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover object-center point-events-none"
+                    quality={75}
                 />
             </div>
 

@@ -82,6 +82,7 @@ export const SearchableSelect = <ValueType extends string | number = number, >(p
             <div ref={ref}>
                 <div className="relative">
                     <input
+                        name="searchable-input"
                         type="text"
                         className={classNames("border min-w-[24rem] w-full min-h-[46px] gap-2 outline-none px-3 py-2.5 outline-none", [
                             !!error ? "focus:ring-1 border-red-600 text-red-600 ring-red-600" : "focus:ring-2 border-neutral-200 text-neutral-600 ring-neutral-600"

@@ -40,10 +40,10 @@ const DaydreamList = () => {
                 <DaydreamCardLoading
                     key={`daydream-loader-${index}`}
                 />
-            )) : list.map((item, index) => (
+            )) : list.length ? list.map((item, index) => (
                 <DaydreamCard
                     key={`image-${item.id}-${index}`}
-                    image_path={`${storagePublicUrl}${item.image_path}`}
+                    image_path={`${storagePublicUrl}${item.file.storage_file_path}`}
                     iso={item.iso}
                     shutter_speed={item.shutter_speed}
                     aperture={item.aperture}
@@ -51,7 +51,11 @@ const DaydreamList = () => {
                     description={item.description}
                     onSelect={() => onSelectHandler(index)}
                 />
-            ))}
+            )): (
+                <div className="text-center col-span-2">
+                    {"I'm sorry, I haven't uploaded yet..."}
+                </div>
+            )}
 
             {Number.isInteger(selectedIndex) && (
                 <PreviewDreamDialog onClose={onClose} isOpen={isOpen}/>

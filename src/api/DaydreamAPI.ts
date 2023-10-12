@@ -9,14 +9,18 @@ interface getAllDaydreamsProps {
     asc?: boolean
 }
 
+export interface DaydreamDataStructure extends Tables<'daydreams'> {
+    file: Omit<Tables<'files'>, "bucket_name" | "duration" | "created_at" | "type">
+}
+
 const getAllDaydreams = async (props: getAllDaydreamsProps = {}): Promise<{
-    data: Tables<'daydreams'>[],
+    data: DaydreamDataStructure[],
     pagination?: PaginationProps
 }> => {
     const {page, per_page, sort = 'created_at', asc = false} = props;
     const query = supabase
         .from('daydreams')
-        .select("id, year, description, iso, shutter_speed, aperture, image_path, created_at", {count: "exact"})
+        .select("id, year, description, iso, shutter_speed, aperture, created_at, file:file_id(id, name, width, height, size, storage_file_path)", {count: "exact"})
         .order(sort, {ascending: asc});
 
     if (Number.isInteger(page) && Number.isInteger(per_page)) {
@@ -30,7 +34,7 @@ const getAllDaydreams = async (props: getAllDaydreamsProps = {}): Promise<{
     if (error) throw error;
 
     return {
-        data: data || [],
+        data: data as any || [],
         ...(Number.isInteger(page) && Number.isInteger(per_page) && {
             pagination: generatePaginationData(Number(per_page), Number(page), count || 0)
         })
@@ -40,7 +44,7 @@ const getAllDaydreams = async (props: getAllDaydreamsProps = {}): Promise<{
 const getDaydream = async (id: string) => {
     const {data, error} = await supabase
         .from('daydreams')
-        .select("id, year, description, iso, shutter_speed, aperture, image_path")
+        .select("id, year, description, iso, shutter_speed, aperture, file:file_id(id, name, width, height, size, storage_file_path)")
         .eq('id', id)
         .limit(1)
         .single();
@@ -54,7 +58,7 @@ const storeDaydream = async (formData: Required<Omit<Tables<'daydreams'>, 'creat
     const {data, error} = await supabase
         .from("daydreams")
         .insert(formData)
-        .select()
+        .select("id, year, description, iso, shutter_speed, aperture, file:file_id(id, name, width, height, size, storage_file_path)")
         .single();
 
     if (error) throw error;

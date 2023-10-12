@@ -29,7 +29,7 @@ const GalleryContext = createContext<GalleryContextProps>({
 
 export const useGalleryContext = () => useContext(GalleryContext);
 
-export const GalleryProvider = <CollectionType extends {}, >({children}: BaseComponent) => {
+export const GalleryProvider = <CollectionType, >({children}: BaseComponent) => {
     const [list, setList] = useState<CollectionType[]>([]);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
 
@@ -54,7 +54,7 @@ export const GalleryProvider = <CollectionType extends {}, >({children}: BaseCom
                 onPrev,
                 selectedIndex,
                 list,
-                selectedItem: list[selectedIndex as number],
+                selectedItem: list[selectedIndex as number] as CollectionType,
                 isFirst: selectedIndex === 0,
                 isLast: selectedIndex === list.length - 1,
             }}
