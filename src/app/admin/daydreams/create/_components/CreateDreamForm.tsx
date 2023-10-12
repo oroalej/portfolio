@@ -116,7 +116,7 @@ const CreateDreamForm = () => {
         reset(DEFAULT_FORM_VALUES)
     }
 
-    const getImageDetails = async (image: HTMLImageElement) => {
+    const getImageDimensions = async (image: HTMLImageElement) => {
         const details = {
             ...fileDetails,
             width: image.naturalWidth,
@@ -160,7 +160,7 @@ const CreateDreamForm = () => {
                                                     alt={fileDetails.name}
                                                     className="w-full h-full object-contain pointer-events-none group-hover:opacity-90"
                                                     fill
-                                                    onLoadingComplete={getImageDetails}
+                                                    onLoadingComplete={getImageDimensions}
                                                 />
                                             </div>
                                         ) : (
@@ -201,7 +201,7 @@ const CreateDreamForm = () => {
 
                                 {formState.errors?.image?.file && (
                                     <div className="mt-1.5">
-                                        <FormErrorMessage>{formState.errors?.image?.file.message}</FormErrorMessage>
+                                        <FormErrorMessage>{formState.errors!.image!.file.message}</FormErrorMessage>
                                     </div>
                                 )}
                             </FormGroup>
