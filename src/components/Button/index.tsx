@@ -1,21 +1,13 @@
 "use client";
 
 import classNames from "classnames";
-import {ButtonHTMLAttributes, forwardRef, HTMLAttributes} from "react";
+import {ButtonHTMLAttributes, forwardRef, Fragment, HTMLProps, Ref} from "react";
 import {Colors, Variants} from "@/types";
 import {FaSpinner} from "react-icons/fa6";
+import type {LinkProps as NextLinkProps} from "next/link";
+import Link from "next/link";
 
-export const ProjectButton = ({className, children, ...remaining}: HTMLAttributes<HTMLButtonElement>) => {
-    return (
-        <button
-            {...remaining}
-            className={classNames("hover:bg-neutral-800 active:bg-neutral-800 active:bg-opacity-80 bg-neutral-800 transition-colors px-4 py-2 rounded-md", className)}>
-            {children}
-        </button>
-    )
-}
-
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface BaseButtonProps {
     isLoading?: boolean;
     variant?: Exclude<Variants, "outlined">;
     color?: Exclude<Colors, "light" | "success">;
@@ -23,6 +15,16 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     rounded?: boolean;
     icon?: boolean;
 }
+
+export interface ButtonProps extends BaseButtonProps, Omit<ButtonHTMLAttributes<HTMLButtonElement>, "color"> {
+
+}
+
+export interface LinkProps extends BaseButtonProps, NextLinkProps, Omit<HTMLProps<HTMLAnchorElement>, "color" | "as" | "href" | "ref"> {
+
+}
+
+type ButtonOrLinkProps = ButtonProps | LinkProps;
 
 const styles = {
     dark: {
@@ -52,47 +54,66 @@ const styles = {
     }
 }
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
-    const {
-        children,
-        className,
-        isLoading,
-        block,
-        disabled,
-        rounded,
-        icon,
-        variant = "default",
-        color = 'dark',
-        ...remaining
-    } = props;
+const getButtonClasses = (props: ButtonOrLinkProps) => {
+    const {className, block, rounded, icon, variant = "default", color = 'dark'} = props;
+
+    return classNames("relative flex flex-row gap-2 items-center transition-colors hover:bg-opacity-90 active:bg-opacity-100 disabled:cursor-default disabled:bg-opacity-75 duration-200 cursor-pointer",
+        [icon ? "aspect-square p-2 text-[15px]" : "px-4 py-2"],
+        {
+            'w-full': block,
+            'rounded-md': rounded,
+        },
+        styles[color][variant], className
+    )
+}
+
+const LinkComponent = forwardRef<HTMLAnchorElement, LinkProps>((props, ref) => (
+    <Link {...props} ref={ref}  className={getButtonClasses(props)}>
+        {props.children}
+    </Link>
+))
+
+const ButtonComponent = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => (
+    <button
+        {...props}
+        ref={ref as Ref<HTMLButtonElement>}
+        className={getButtonClasses(props)}
+        disabled={props.disabled || props.isLoading}
+    >
+        {props.children}
+    </button>
+))
+
+export const Button = forwardRef<HTMLElement, ButtonOrLinkProps>((props, ref) => {
+    const {isLoading, children} = props;
+
+    const innerChild = <Fragment>
+        {isLoading && (
+            <span className="absolute inset-0 z-10 flex items-center justify-center">
+                <FaSpinner className="animate-spin ease-in-out" size={22}/>
+            </span>
+        )}
+
+        <span className={isLoading ? "invisible" : ""}>
+            {children}
+        </span>
+    </Fragment>
+
+    if ('href' in props) {
+        return (
+            <LinkComponent {...(props as LinkProps)} ref={ref as Ref<HTMLAnchorElement>}>
+                {innerChild}
+            </LinkComponent>
+        );
+    }
 
     return (
-        <button
-            ref={ref}
-            {...remaining}
-            className={classNames(
-                styles[color][variant],
-                "relative flex flex-row gap-2 items-center transition-colors hover:bg-opacity-90 active:bg-opacity-100 disabled:cursor-default disabled:bg-opacity-75 duration-200 cursor-pointer",
-                [icon ? "aspect-square p-2 text-[15px]": "px-4 py-2"],
-                {
-                    'w-full': block,
-                    'rounded-md': rounded,
-                },
-                className,
-            )}
-            disabled={disabled || isLoading}
-        >
-            {isLoading && (
-                <span className="absolute inset-0 z-10 flex items-center justify-center">
-                    <FaSpinner className="animate-spin ease-in-out" size={22}/>
-                </span>
-            )}
+        <ButtonComponent {...(props as ButtonProps)} ref={ref as Ref<HTMLButtonElement>}>
+            {innerChild}
+        </ButtonComponent>
+    );
+});
 
-            <span className={isLoading ? "invisible" : ""}>
-                {children}
-            </span>
-        </button>
-    )
-})
-
+ButtonComponent.displayName = "ButtonComponent";
+LinkComponent.displayName = "LinkComponent";
 Button.displayName = "Button"
