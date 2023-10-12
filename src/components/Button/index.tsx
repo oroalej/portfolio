@@ -61,12 +61,12 @@ const getButtonClasses = ({
     icon,
     variant = "default",
     color = 'dark'
-}: ButtonOrLinkProps) => classNames("relative flex flex-row gap-2 items-center transition-colors hover:bg-opacity-90 active:bg-opacity-100 disabled:cursor-default disabled:bg-opacity-75 duration-200 cursor-pointer",
-    [icon ? "aspect-square p-2 text-[15px]" : "px-4 py-2"],
-    {
-        'w-full': block,
-        'rounded-md': rounded,
-    },
+}: ButtonOrLinkProps) => classNames("relative transition-colors hover:bg-opacity-90 active:bg-opacity-100 disabled:cursor-default disabled:bg-opacity-75 duration-200 cursor-pointer",
+    [
+        icon ? "aspect-square p-2 text-[15px]" : "px-4 py-2",
+        block ? "w-full" : "inline-block"
+    ],
+    {'rounded-md': rounded},
     styles[color][variant], className
 )
 

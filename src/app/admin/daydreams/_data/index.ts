@@ -1,4 +1,4 @@
-import {CreateDreamFormInterface} from "@/app/admin/daydreams/create/_types";
+import {CreateDreamFormInterface} from "@/app/admin/daydreams/_types";
 
 export const MAX_FILE_SIZE = 15728640; // 15MB
 export const ACCEPTED_IMAGE_TYPES = [

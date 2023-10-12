@@ -9,18 +9,18 @@ interface getAllDaydreamsProps {
     asc?: boolean
 }
 
-export interface DaydreamDataStructure extends Tables<'daydreams'> {
-    file: Omit<Tables<'files'>, "bucket_name" | "duration" | "created_at" | "type">
+export interface DaydreamAPIDataStructure extends Omit<Tables<'daydreams'>, "file_id"> {
+    file: Omit<Tables<'files'>, "bucket_name" | "duration" | "created_at">
 }
 
-const getAllDaydreams = async (props: getAllDaydreamsProps = {}): Promise<{
-    data: DaydreamDataStructure[],
+export const getAllDaydreams = async (props: getAllDaydreamsProps = {}): Promise<{
+    data: DaydreamAPIDataStructure[],
     pagination?: PaginationProps
 }> => {
     const {page, per_page, sort = 'created_at', asc = false} = props;
     const query = supabase
         .from('daydreams')
-        .select("id, year, description, iso, shutter_speed, aperture, created_at, file:file_id(id, name, width, height, size, storage_file_path)", {count: "exact"})
+        .select("id, year, description, iso, shutter_speed, aperture, created_at, file:file_id(id, name, width, height, size, storage_file_path, type)", {count: "exact"})
         .order(sort, {ascending: asc});
 
     if (Number.isInteger(page) && Number.isInteger(per_page)) {
@@ -34,40 +34,47 @@ const getAllDaydreams = async (props: getAllDaydreamsProps = {}): Promise<{
     if (error) throw error;
 
     return {
-        data: data as any || [],
+        data: data as unknown as DaydreamAPIDataStructure[] || [],
         ...(Number.isInteger(page) && Number.isInteger(per_page) && {
             pagination: generatePaginationData(Number(per_page), Number(page), count || 0)
         })
     };
 }
 
-const getDaydream = async (id: string) => {
+export const getDaydream = async (id: string): Promise<DaydreamAPIDataStructure | null> => {
     const {data, error} = await supabase
         .from('daydreams')
-        .select("id, year, description, iso, shutter_speed, aperture, file:file_id(id, name, width, height, size, storage_file_path)")
+        .select("id, year, description, iso, shutter_speed, aperture, created_at, file:file_id(id, name, width, height, size, storage_file_path, type)")
         .eq('id', id)
         .limit(1)
         .single();
 
     if (error) throw error;
 
-    return data;
+    return (data as unknown as DaydreamAPIDataStructure);
 }
 
-const storeDaydream = async (formData: Required<Omit<Tables<'daydreams'>, 'created_at' | 'id'>>) => {
+export const storeDaydream = async (formData: Required<Omit<Tables<'daydreams'>, 'created_at' | 'id'>>): Promise<DaydreamAPIDataStructure> => {
     const {data, error} = await supabase
         .from("daydreams")
         .insert(formData)
-        .select("id, year, description, iso, shutter_speed, aperture, file:file_id(id, name, width, height, size, storage_file_path)")
+        .select("id, year, description, iso, shutter_speed, aperture, created_at, file:file_id(id, name, width, height, size, storage_file_path, type)")
         .single();
 
     if (error) throw error;
 
-    return data;
+    return data as unknown as DaydreamAPIDataStructure;
 }
 
-export {
-    getAllDaydreams,
-    getDaydream,
-    storeDaydream
+export const updateDaydream = async (id: string, formData: Required<Omit<Tables<'daydreams'>, 'created_at' | 'id'>>): Promise<DaydreamAPIDataStructure> => {
+    const {data, error} = await supabase
+        .from("daydreams")
+        .update(formData)
+        .eq('id', id)
+        .select("id, year, description, iso, shutter_speed, aperture, created_at, file:file_id(id, name, width, height, size, storage_file_path, type)")
+        .single();
+
+    if (error) throw error;
+
+    return data as unknown as DaydreamAPIDataStructure;
 }

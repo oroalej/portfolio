@@ -1,11 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import {Button, CardFooter, CardRoot, SimplePagination, SingleSimpleSelect} from "@/components";
+import {
+    BaseSkeletonLoader,
+    Button,
+    CardFooter,
+    CardRoot,
+    ImageSkeletonLoader,
+    SimplePagination,
+    SingleSimpleSelect
+} from "@/components";
 import {FaPencilAlt} from "react-icons/fa";
 import {FaTrash} from "react-icons/fa6";
 import {useEffect, useState} from "react";
-import {DaydreamDataStructure, getAllDaydreams} from "@/api/DaydreamAPI";
+import {DaydreamAPIDataStructure, getAllDaydreams} from "@/api/DaydreamAPI";
 import {getStoragePublicUrl} from "@/api/ImageAPI";
 import {DEFAULT_PAGINATION_VALUES, PaginationProps} from "@/utils/pagination";
 import {SelectDataFormatter} from "@/utils";
@@ -13,14 +21,12 @@ import {SelectDataFormatter} from "@/utils";
 const DaydreamTable = () => {
     const storagePublicUrl = getStoragePublicUrl("")
 
-    const [dreams, setDreams] = useState<DaydreamDataStructure[]>([]);
+    const [dreams, setDreams] = useState<DaydreamAPIDataStructure[]>([]);
     const [pagination, setPagination] = useState<PaginationProps>(DEFAULT_PAGINATION_VALUES);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const controller = new AbortController();
-
-        setIsLoading(true);
 
         getAllDaydreams({
             page: pagination.current_page,
@@ -28,9 +34,7 @@ const DaydreamTable = () => {
         }).then(({data, pagination}) => {
             setDreams(data)
 
-            if (pagination) {
-                setPagination(pagination);
-            }
+            if (pagination) setPagination(pagination)
 
             setIsLoading(false);
         })
@@ -52,7 +56,20 @@ const DaydreamTable = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {dreams.length ? dreams.map(item => (
+                {isLoading ? [...Array(2)].map((_, index) => (
+                    <tr key={`loading-row-${index}`}>
+                        <td><ImageSkeletonLoader/></td>
+                        <td><BaseSkeletonLoader/></td>
+                        <td><BaseSkeletonLoader/></td>
+                        <td>
+                            <BaseSkeletonLoader className="mb-1.5"/>
+                            <BaseSkeletonLoader className="mb-1.5"/>
+                            <BaseSkeletonLoader className="mb-1.5"/>
+                        </td>
+                        <td><BaseSkeletonLoader/></td>
+                        <td></td>
+                    </tr>
+                )) : dreams.length ? dreams.map(item => (
                     <tr key={`dream-${item.id}`}>
                         <td className="text-center">
                             <div className="relative block aspect-square w-32 h-32 overflow-hidden">
@@ -83,6 +100,7 @@ const DaydreamTable = () => {
                                     data-tooltip-id="admin-tooltip"
                                     data-tooltip-content="Edit"
                                     rounded
+                                    href={`/admin/daydreams/${item.id}`}
                                 >
                                     <FaPencilAlt/>
                                 </Button>

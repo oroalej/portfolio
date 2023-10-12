@@ -23,22 +23,39 @@ import {
     ISO,
     SHUTTER_SPEED,
     YEARS
-} from "@/app/admin/daydreams/create/_data";
-import {FormEvent, useRef, useState} from "react";
+} from "@/app/admin/daydreams/_data";
+import {FormEvent, useEffect, useMemo, useRef, useState} from "react";
 import {PiImageLight, PiX} from "react-icons/pi";
 import Image from "next/image";
 import classNames from "classnames";
-import {createDreamSchema} from "@/app/admin/daydreams/create/_validations";
 import {isEmpty} from "lodash";
 import {SelectDataFormatter} from "@/utils";
-import {CreateDreamFormInterface, ImageFileData} from "@/app/admin/daydreams/create/_types";
-import toast from "react-hot-toast";
-import DaydreamService from "@/services/DaydreamService";
+import {CreateDreamFormInterface} from "@/app/admin/daydreams/_types";
+import {ZodObject} from "zod";
+import {ImageFileData} from "@/types";
 
-const CreateDreamForm = () => {
+interface DaydreamFormComponentProps {
+    item?: CreateDreamFormInterface;
+    onSubmit: (value: CreateDreamFormInterface) => void;
+    defaultImage: string;
+    schema: ZodObject<any>;
+    title: string;
+    submitButtonText?: string;
+    cancelButtonText?: string;
+}
+
+const DaydreamForm = ({
+    item = DEFAULT_FORM_VALUES,
+    onSubmit,
+    schema,
+    title,
+    defaultImage = '',
+    submitButtonText = "Submit",
+    cancelButtonText = "Cancel"
+}: DaydreamFormComponentProps) => {
     const imageInputRef = useRef<HTMLInputElement | null>(null);
-    const [fileDetails, setFileDetails] = useState<ImageFileData>(DEFAULT_FORM_VALUES.image);
-    const [localImage, setLocalImage] = useState<string>("")
+    const [fileDetails, setFileDetails] = useState<ImageFileData>(item!.image);
+    const [localImage, setLocalImage] = useState<string>(defaultImage);
 
     const {
         handleSubmit,
@@ -49,31 +66,20 @@ const CreateDreamForm = () => {
         reset,
         resetField,
         setValue,
-        trigger
+        trigger,
     } = useForm<CreateDreamFormInterface>({
         mode: "onChange",
-        defaultValues: DEFAULT_FORM_VALUES,
-        resolver: zodResolver(createDreamSchema),
+        defaultValues: useMemo(() => item, [item]),
+        resolver: zodResolver(schema),
     })
+
+    useEffect(() => {
+        reset(item);
+    }, [item])
 
     const {ref: imageRegisterRef, onChange: _, ...imageRegister} = register("image.file");
 
-    const onSubmitHandler = async () => {
-        const id = crypto.randomUUID();
-
-        await toast.promise(DaydreamService.store({
-            formData: getValues(),
-            toasterId: id
-        }), {
-            loading: `Saving your dream...`,
-            success: "Your data has been saved successfully!",
-            error: "I'm sorry, something went wrong"
-        }, {
-            id
-        });
-
-        onResetFormHandler();
-    }
+    const onSubmitHandler = async () => onSubmit(getValues())
 
     const onImageInputHandler = async (event: FormEvent<HTMLInputElement>) => {
         const files = event.currentTarget?.files || [];
@@ -94,7 +100,7 @@ const CreateDreamForm = () => {
             }
 
             setFileDetails(details);
-            setValue('image', details);
+            setValue('image', details, {shouldDirty: true});
 
             await trigger('image.file');
         } else onResetImageInputHandler();
@@ -104,7 +110,7 @@ const CreateDreamForm = () => {
         resetField('image', {keepDirty: false})
 
         setFileDetails(DEFAULT_FORM_VALUES.image);
-        setLocalImage("");
+        setLocalImage(defaultImage);
 
         if (imageInputRef?.current) {
             imageInputRef.current.value = "";
@@ -113,7 +119,7 @@ const CreateDreamForm = () => {
 
     const onResetFormHandler = () => {
         onResetImageInputHandler();
-        reset(DEFAULT_FORM_VALUES)
+        reset(item);
     }
 
     const getImageDimensions = async (image: HTMLImageElement) => {
@@ -136,7 +142,7 @@ const CreateDreamForm = () => {
             <fieldset className="disabled:opacity-95" disabled={formState.isSubmitting}>
                 <CardRoot>
                     <CardHeader>
-                        <CardTitle>Create Dream</CardTitle>
+                        <CardTitle>{title}</CardTitle>
                     </CardHeader>
                     <CardBody>
                         <div className="grid gap-6 grid-cols-2">
@@ -159,6 +165,9 @@ const CreateDreamForm = () => {
                                                     src={localImage}
                                                     alt={fileDetails.name}
                                                     className="w-full h-full object-contain pointer-events-none group-hover:opacity-90"
+                                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                    quality={75}
+                                                    priority={fileDetails.size > 1280}
                                                     fill
                                                     onLoadingComplete={getImageDimensions}
                                                 />
@@ -176,7 +185,7 @@ const CreateDreamForm = () => {
                                         )}
                                     </div>
 
-                                    {!!localImage && (
+                                    {localImage !== defaultImage && (
                                         <button
                                             className="absolute top-1 right-2 p-2 text-neutral-700 transition-all opacity-0 group-hover:opacity-100 z-10"
                                             onClick={onResetImageInputHandler}
@@ -326,15 +335,15 @@ const CreateDreamForm = () => {
                             variant="plain"
                             color="secondary"
                         >
-                            Cancel
+                            {cancelButtonText}
                         </Button>
 
                         <Button
                             type="submit"
-                            disabled={!isEmpty(formState.errors) || !formState.isValid}
+                            disabled={!isEmpty(formState.errors) || !formState.isValid || !formState.isDirty}
                             isLoading={formState.isSubmitting}
                         >
-                            Submit
+                            {submitButtonText}
                         </Button>
                     </CardFooter>
                 </CardRoot>
@@ -343,4 +352,4 @@ const CreateDreamForm = () => {
     )
 };
 
-export default CreateDreamForm;
+export default DaydreamForm;
