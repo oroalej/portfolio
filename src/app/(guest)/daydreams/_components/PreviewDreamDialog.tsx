@@ -53,6 +53,7 @@ export const PreviewDreamDialog = (props: Required<Omit<DialogProps, 'children'>
                             rounded
                             variant="plain"
                             color="secondary"
+                            size="small"
                             onClick={onClose}
                         >
                             <MdClose size={22}/>
@@ -60,7 +61,8 @@ export const PreviewDreamDialog = (props: Required<Omit<DialogProps, 'children'>
                     </div>
 
                     <div
-                        className="relative flex justify-between items-center lg:px-3 overflow-hidden grow bg-neutral-200 rounded-md mt-9 lg:mt-0">
+                        className="relative flex justify-between items-center lg:px-3 overflow-hidden grow bg-neutral-200 rounded-md mt-12 lg:mt-0"
+                    >
                         {isLoading && (
                             <div className="absolute inset-0 z-10 bg-neutral-100">
                                 <ImageSkeletonLoader/>
@@ -73,6 +75,7 @@ export const PreviewDreamDialog = (props: Required<Omit<DialogProps, 'children'>
                                 rounded
                                 variant="plain"
                                 color="secondary"
+                                size="small"
                                 disabled={isFirst}
                                 className={isFirst ? "invisible !pointer-events-none" : ""}
                                 onClick={onPrev}
@@ -101,6 +104,7 @@ export const PreviewDreamDialog = (props: Required<Omit<DialogProps, 'children'>
                                 rounded
                                 variant="plain"
                                 color="secondary"
+                                size="small"
                                 disabled={isLast}
                                 className={isLast ? "invisible !pointer-events-none" : ""}
                                 onClick={onNext}
@@ -143,7 +147,10 @@ export const PreviewDreamDialog = (props: Required<Omit<DialogProps, 'children'>
                             </FormGroup>
 
                             <FormGroup>
-                                <Label className="!mb-0">Shutter Speed</Label>
+                                <Label className="!mb-0">
+                                    <span className="hidden xs:block">Shutter Speed</span>
+                                    <span className="xs:hidden"><abbr title="Shutter Speed">SS</abbr></span>
+                                </Label>
                                 {isLoading ? <BaseSkeletonLoader style={{height: "28px"}}/> : (
                                     <p className="text-neutral-700 text-sm lg:text-lg">{selectedItem.shutter_speed}</p>
                                 )}
