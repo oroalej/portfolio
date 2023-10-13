@@ -23,7 +23,7 @@ const TheHeader: FC = () => {
 
     return (
         <div
-            className="sm:fixed sm:top-0 sm:left-2.5 sm:right-2.5 z-50 dark:bg-slate-800 bg-neutral-100 py-3 sm:py-[22px] border-b border-solid border-slate-200 dark:border-slate-700 dark:border-opacity-60">
+            className="sm:fixed sm:top-0 sm:left-2.5 sm:right-2.5 z-50 dark:bg-neutral-900 bg-neutral-100 py-3 sm:py-[22px] border-b border-solid border-slate-200 dark:border-neutral-900 dark:border-opacity-60">
 
             <Container>
                 <div className="z-50 flex justify-between items-center flex-row w-full">
@@ -36,7 +36,7 @@ const TheHeader: FC = () => {
                     </Link>
 
                     <div
-                        className={`fixed top-0 bottom-0 left-0 right-0 z-[100] mt-[72px] md:flex flex-row items-center justify-between flex-1 md:relative md:mt-0 dark:bg-slate-800 bg-neutral-100 ${isOpen ? 'block' : 'hidden'}`}>
+                        className={`fixed top-0 bottom-0 left-0 right-0 z-[100] mt-[72px] md:flex flex-row items-center justify-between flex-1 md:relative md:mt-0 dark:bg-neutral-900 bg-neutral-100 ${isOpen ? 'block' : 'hidden'}`}>
                         <span className="invisible"/>
 
                         <div className="flex flex-col items-center justify-center md:flex-row gap-4 mt-24 md:mt-0 px-1">

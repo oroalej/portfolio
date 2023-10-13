@@ -1,8 +1,8 @@
-import {SectionWrapper} from "@/components";
 import {Metadata} from "next";
 import DaydreamList from "@/app/(guest)/daydreams/_components/DaydreamList";
 import {GalleryProvider} from "@/context/GalleryContext";
 import {DaydreamAPIDataStructure} from "@/api/DaydreamAPI";
+import {Container} from "@/components";
 
 export const metadata: Metadata = {
     title: "Alexander Jeam Oro - I'm daydreaming"
@@ -10,11 +10,17 @@ export const metadata: Metadata = {
 
 const EchoPage = () => {
     return (
-        <SectionWrapper>
-            <GalleryProvider<DaydreamAPIDataStructure>>
-                <DaydreamList/>
-            </GalleryProvider>
-        </SectionWrapper>
+        <div className="py-14 dark:text-neutral-300">
+           <Container>
+               <h1 className="text-xl text-neutral-700 font-bold mb-14 text-left dark:text-neutral-200">
+                   We are all daydreaming.
+               </h1>
+
+               <GalleryProvider<DaydreamAPIDataStructure>>
+                   <DaydreamList/>
+               </GalleryProvider>
+           </Container>
+        </div>
     )
 }
 

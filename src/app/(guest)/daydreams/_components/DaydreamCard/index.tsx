@@ -13,7 +13,7 @@ export const DaydreamCard = (props: DaydreamCardProps) => {
 
     return (
         <div
-            className="bg-white p-4 overflow-hidden cursor-pointer transition-all"
+            className="bg-white p-4 overflow-hidden cursor-pointer transition-all dark:bg-neutral-100"
             onClick={onSelect}
         >
             <div className="relative aspect-square mb-4 group overflow-hidden">
