@@ -7,7 +7,7 @@ export const BaseSkeletonLoader = (props: HTMLAttributes<HTMLDivElement>) => {
     return (
         <span
             className={classNames(
-                "animate-pulse min-h-[1rem] bg-gray-300/70 block",
+                "animate-pulse min-h-[1rem] bg-gray-300 block",
                 className,
             )}
             {...remaining}
