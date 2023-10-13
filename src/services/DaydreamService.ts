@@ -2,7 +2,7 @@ import {CreateDreamFormInterface} from "@/app/admin/daydreams/_types";
 import toast from "react-hot-toast";
 import {deleteFile, storeFile} from "@/api/ImageAPI";
 import {PostgrestError} from "@supabase/supabase-js";
-import {DaydreamAPIDataStructure, storeDaydream, updateDaydream} from "@/api/DaydreamAPI";
+import {DaydreamAPIDataStructure, deleteDaydream, storeDaydream, updateDaydream} from "@/api/DaydreamAPI";
 
 export interface StoreDreamParams {
     formData: CreateDreamFormInterface,
@@ -44,7 +44,7 @@ const DaydreamService = {
 
                 await deleteFile({
                     fileId: item.file.id,
-                    pathname: "daydreams",
+                    pathname: item.file.storage_file_path,
                     bucket_name: "images"
                 })
 
@@ -65,6 +65,24 @@ const DaydreamService = {
             toast.loading("Updating information to daydreams table...", {id: toasterId});
 
             return await updateDaydream(item.id, {...daydreamData, file_id: id});
+        } catch (error) {
+            toast.error((error as PostgrestError).message, {id: toasterId})
+        }
+    },
+
+    delete: async ({item, toasterId}: { item: DaydreamAPIDataStructure, toasterId: string }) => {
+        try {
+            toast.loading("Deleting information in daydreams table...", {id: toasterId});
+
+            await deleteDaydream(item.id);
+
+            toast.loading(`Deleting ${item.file.name} image to storage...`, {id: toasterId});
+
+            await deleteFile({
+                fileId: item.file.id,
+                pathname: item.file.storage_file_path,
+                bucket_name: "images"
+            })
         } catch (error) {
             toast.error((error as PostgrestError).message, {id: toasterId})
         }

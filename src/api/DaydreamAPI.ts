@@ -78,3 +78,11 @@ export const updateDaydream = async (id: string, formData: Required<Omit<Tables<
 
     return data as unknown as DaydreamAPIDataStructure;
 }
+
+export const deleteDaydream = async (id: string): Promise<void> => {
+    const {error} = await supabase.from('daydreams')
+        .delete()
+        .eq('id', id);
+
+    if (error) throw error;
+}

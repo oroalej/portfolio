@@ -40,7 +40,7 @@ const DaydreamFormLoading = () => {
                         </FormGroup>
 
                         <FormGroup>
-                            <Label required htmlFor="input-description">Description</Label>
+                            <Label required>Description</Label>
 
                             <BaseSkeletonLoader style={{height: "94px"}}/>
                         </FormGroup>

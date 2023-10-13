@@ -8,11 +8,11 @@ export interface CardRootProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivE
 }
 
 export const CardRoot = forwardRef<HTMLDivElement, CardRootProps>((props, ref) => {
-    const {children, className, rounded, ...remaining} = props;
+    const {children, className, rounded = false, ...remaining} = props;
 
     return (
         <div ref={ref} className={classNames("relative block bg-white", className, {
-            'rounded-md': rounded
+            'rounded-md': +rounded
         })} {...remaining}>
             {children}
         </div>
@@ -31,7 +31,7 @@ export const CardBody = ({children, className, ...remaining}: HTMLAttributes<HTM
 
 export const CardFooter = ({children, className, ...remaining}: HTMLAttributes<HTMLDivElement>) => {
     return (
-        <div className={classNames("p-4 flex flex-row", className)} {...remaining}>
+        <div className={classNames("p-4 flex flex-row gap-2", className)} {...remaining}>
             {children}
         </div>
     )
@@ -47,6 +47,6 @@ export const CardHeader = ({children, className, ...remaining}: HTMLAttributes<H
 
 export const CardTitle = ({children, className, ...remaining}: HTMLAttributes<HTMLHeadElement>) => {
     return (
-        <h3 className={classNames("text-xl text-neutral-700", className)} {...remaining}>{children}</h3>
+        <h3 className={classNames("text-lg text-neutral-700 font-bold", className)} {...remaining}>{children}</h3>
     )
 }

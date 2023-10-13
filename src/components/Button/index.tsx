@@ -6,8 +6,9 @@ import {Colors, Variants} from "@/types";
 import {FaSpinner} from "react-icons/fa6";
 import type {LinkProps as NextLinkProps} from "next/link";
 import Link from "next/link";
+import {omit} from "lodash";
 
-interface BaseButtonProps {
+export interface BaseButtonProps {
     isLoading?: boolean;
     variant?: Exclude<Variants, "outlined">;
     color?: Exclude<Colors, "light" | "success">;
@@ -56,22 +57,26 @@ const styles = {
 
 const getButtonClasses = ({
     className,
-    block,
-    rounded,
-    icon,
+    rounded = false,
+    block = false,
+    icon = false,
     variant = "default",
     color = 'dark'
-}: ButtonOrLinkProps) => classNames("relative transition-colors hover:bg-opacity-90 active:bg-opacity-100 disabled:cursor-default disabled:bg-opacity-75 duration-200 cursor-pointer",
+}: Partial<ButtonOrLinkProps>) => classNames("relative transition-colors hover:bg-opacity-90 active:bg-opacity-100 disabled:cursor-default disabled:bg-opacity-75 duration-200 cursor-pointer",
     [
-        icon ? "aspect-square p-2 text-[15px]" : "px-4 py-2",
-        block ? "w-full" : "inline-block"
+        +icon ? "aspect-square p-2 text-[15px]" : "px-4 py-2",
+        +block ? "w-full" : "inline-block"
     ],
-    {'rounded-md': rounded},
+    {'rounded-md': +rounded},
     styles[color][variant], className
 )
 
 const LinkComponent = forwardRef<HTMLAnchorElement, LinkProps>(({children, ...props}, ref) => (
-    <Link {...props} ref={ref} className={getButtonClasses(props)}>
+    <Link
+        {...omit(props, ['rounded', 'block', 'icon'])}
+        ref={ref}
+        className={getButtonClasses(props)}
+    >
         {children}
     </Link>
 ))
@@ -83,7 +88,7 @@ const ButtonComponent = forwardRef<HTMLButtonElement, ButtonProps>(({
     ...props
 }, ref) => (
     <button
-        {...props}
+        {...omit(props, ['rounded', 'block', 'icon'])}
         ref={ref as Ref<HTMLButtonElement>}
         className={getButtonClasses(props)}
         disabled={disabled || isLoading}
@@ -92,7 +97,7 @@ const ButtonComponent = forwardRef<HTMLButtonElement, ButtonProps>(({
     </button>
 ))
 
-export const Button = forwardRef<HTMLElement, ButtonOrLinkProps>((props, ref) => {
+export const Button = forwardRef<HTMLButtonElement, ButtonOrLinkProps>((props, ref) => {
     const {isLoading, children} = props;
 
     const innerChild = <Fragment>
