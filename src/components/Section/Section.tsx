@@ -13,7 +13,7 @@ interface SectionWrapperInterface extends BaseComponent {
 }
 
 interface SectionTitleInterface extends BaseComponent {
-    anchor: string,
+    anchor?: string,
 }
 
 export const SectionWrapper = ({children, id, className = ''}: SectionWrapperInterface) => (

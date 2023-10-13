@@ -179,7 +179,7 @@ const DaydreamTable = () => {
                     <div className="flex flex-row items-center gap-2 text-sm">
                         <span>Items: </span>
                         <SingleSimpleSelect<number>
-                            options={SelectDataFormatter([15, 25, 50, 100])}
+                            options={SelectDataFormatter([15, 20, 25, 50, 100])}
                             onChange={(value) => setPagination((prevState) => ({
                                 ...prevState,
                                 per_page: value

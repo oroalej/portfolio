@@ -44,7 +44,7 @@ const DaydreamList = () => {
 
     return (
         <Fragment>
-            <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+            <div className="grid gap-5 grid-cols-1 md:grid-cols-2">
                 {isLoading ? [...Array(2)].map((_, index) => (
                     <DaydreamCardLoading
                         key={`daydream-loader-${index}`}
@@ -80,7 +80,7 @@ const DaydreamList = () => {
                         }))}
                         current_page={pagination.current_page}
                         last_page={pagination.last_page}
-                        size="small"
+                        size="large"
                     />
                 </div>
             )}

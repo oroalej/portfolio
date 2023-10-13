@@ -11,7 +11,7 @@ const GuestLayout = ({children}: Pick<BaseComponent, 'children'>) => {
         <Fragment>
             <TheHeader/>
 
-            <main className="bg-neutral-100 rounded-lg dark:bg-slate-800 font-mono sm:mt-[93px] xs:p-2.5">
+            <main className="bg-neutral-100 rounded-lg dark:bg-neutral-900 font-mono sm:mt-[93px] xs:p-2.5">
                 <div className={`hidden xs:block fixed w-full z-50 dark:bg-slate-800 bg-neutral-100 top-0 h-2.5`}/>
                 <div className={`hidden xs:block fixed w-full z-50 dark:bg-slate-800 bg-neutral-100 bottom-0 h-2.5`}/>
                 <div

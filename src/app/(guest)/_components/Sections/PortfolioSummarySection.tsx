@@ -24,7 +24,7 @@ const PortfolioSummarySection = () => {
             <Container>
                 <div className="flex items-center">
                     <div
-                        className="text-xs sm:text-base flex flex-col flex-wrap gap-5 min-h-full tracking-normal bg-neutral-800 dark:bg-neutral-900 transition-colors px-3 sm:pl-6 sm:pr-8 py-6 rounded-lg shadow-xl mx-auto">
+                        className="text-xs sm:text-base flex flex-col flex-wrap gap-5 min-h-full tracking-normal bg-neutral-800 dark:bg-gray-800 transition-colors px-3 sm:pl-6 sm:pr-8 py-6 rounded-lg shadow-xl mx-auto">
                         <FauxMenu/>
 
                         <div className="leading-loose flex flex-row gap-3 sm:gap-8 relative">
