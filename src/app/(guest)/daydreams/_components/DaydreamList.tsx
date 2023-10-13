@@ -15,25 +15,27 @@ const DaydreamList = () => {
     const [pagination, setPagination] = useState<PaginationProps>(DEFAULT_PAGINATION_VALUES)
     const {isOpen, onOpen, onClose} = useOpenable();
 
-    // const storagePublicUrl = getStoragePublicUrl("");
-
     useEffect(() => {
-        try {
-            setIsLoading(true);
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        })
 
-            getAllDaydreams({
-                sort: [{column: "year", order: "desc"}, {column: "created_at", order: "desc"}]
-            }).then(({data, pagination}) => {
-                setList(data);
+        getAllDaydreams({
+            per_page: pagination.per_page,
+            page: pagination.current_page,
+            sort: [
+                {column: "year", order: "desc"},
+                {column: "created_at", order: "desc"}
+            ]
+        }).then(({data, pagination}) => {
+            setList(data);
 
-                if (pagination) setPagination(pagination)
+            if (pagination) setPagination(pagination)
 
-                setIsLoading(false);
-            })
-        } catch (error) {
-            console.log(error)
-        }
-    }, [setList])
+            setIsLoading(false);
+        })
+    }, [pagination.current_page])
 
     const onSelectHandler = (index: number) => {
         setSelectedIndex(index);
@@ -70,11 +72,11 @@ const DaydreamList = () => {
             )}
 
             {pagination.last_page !== 1 && (
-                <div className="flex justify-center my-10">
+                <div className="flex justify-center my-16">
                     <SimplePagination
-                        onChange={(value) => setPagination((prevState) => ({
+                        onChange={value => setPagination((prevState) => ({
                             ...prevState,
-                            per_page: value
+                            current_page: value
                         }))}
                         current_page={pagination.current_page}
                         last_page={pagination.last_page}

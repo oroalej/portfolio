@@ -1,4 +1,4 @@
-import {Container, SectionWrapper} from "@/components";
+import {SectionWrapper} from "@/components";
 import {Metadata} from "next";
 import DaydreamList from "@/app/(guest)/daydreams/_components/DaydreamList";
 import {GalleryProvider} from "@/context/GalleryContext";
@@ -10,13 +10,11 @@ export const metadata: Metadata = {
 
 const EchoPage = () => {
     return (
-        <Container>
-            <SectionWrapper>
-                <GalleryProvider<DaydreamAPIDataStructure>>
-                    <DaydreamList/>
-                </GalleryProvider>
-            </SectionWrapper>
-        </Container>
+        <SectionWrapper>
+            <GalleryProvider<DaydreamAPIDataStructure>>
+                <DaydreamList/>
+            </GalleryProvider>
+        </SectionWrapper>
     )
 }
 
