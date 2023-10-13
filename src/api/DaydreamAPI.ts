@@ -5,8 +5,10 @@ import {generatePaginationData, getRange, PaginationProps} from "@/utils/paginat
 interface getAllDaydreamsProps {
     per_page?: number;
     page?: number;
-    sort?: keyof Pick<Tables<'daydreams'>, "created_at" | "iso" | "year" | "aperture" | "shutter_speed">,
-    asc?: boolean
+    sort?: {
+        column: keyof Pick<Tables<'daydreams'>, "created_at" | "iso" | "year" | "aperture" | "shutter_speed">,
+        order: "asc" | "desc"
+    }[]
 }
 
 export interface DaydreamAPIDataStructure extends Omit<Tables<'daydreams'>, "file_id"> {
@@ -17,11 +19,14 @@ export const getAllDaydreams = async (props: getAllDaydreamsProps = {}): Promise
     data: DaydreamAPIDataStructure[],
     pagination?: PaginationProps
 }> => {
-    const {page, per_page, sort = 'created_at', asc = false} = props;
+    const {page, per_page, sort = [{column: "created_at", order: "desc"}]} = props;
     const query = supabase
         .from('daydreams')
-        .select("id, year, description, iso, shutter_speed, aperture, created_at, file:file_id(id, name, width, height, size, storage_file_path, type)", {count: "exact"})
-        .order(sort, {ascending: asc});
+        .select("id, year, description, iso, shutter_speed, aperture, created_at, file:file_id(id, name, width, height, size, storage_file_path, type)", {count: "exact"});
+
+    sort.forEach(item => {
+        query.order(item.column, {ascending: item.order === 'asc'})
+    })
 
     if (Number.isInteger(page) && Number.isInteger(per_page)) {
         const {from, to} = getRange(Number(per_page), Number(page))

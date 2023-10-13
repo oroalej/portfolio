@@ -1,6 +1,7 @@
 import Image from "next/image";
 import {BaseSkeletonLoader, ImageSkeletonLoader} from "@/components";
 import {Tables} from "@/types";
+import {getStoragePublicUrl} from "@/api/ImageAPI";
 
 export interface DaydreamCardProps extends Omit<Tables<'daydreams'>, "created_at" | "id" | "file_id"> {
     onSelect: () => void;
@@ -15,15 +16,16 @@ export const DaydreamCard = (props: DaydreamCardProps) => {
             className="bg-white p-4 overflow-hidden cursor-pointer transition-all"
             onClick={onSelect}
         >
-            <div className="relative aspect-square mb-4 group">
+            <div className="relative aspect-square mb-4 group overflow-hidden">
                 <div className="absolute inset-0 z-10"/>
 
                 <Image
-                    src={image_path}
+                    src={getStoragePublicUrl(image_path)}
                     alt={description}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover object-center point-events-none"
+                    width={430}
+                    height={430}
+                    style={{width: '100%', height: '100%'}}
+                    className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 point-events-none object-cover"
                     quality={75}
                 />
             </div>

@@ -147,6 +147,7 @@ const DaydreamTable = () => {
                                     <Button
                                         icon
                                         rounded
+                                        size="small"
                                         data-tooltip-id="admin-tooltip"
                                         data-tooltip-content="Edit"
                                         href={`/admin/daydreams/${item.id}`}
@@ -157,6 +158,7 @@ const DaydreamTable = () => {
                                     <Button
                                         icon
                                         rounded
+                                        size="small"
                                         data-tooltip-id="admin-tooltip"
                                         data-tooltip-content="Delete"
                                         onClick={() => onSelectHandler(item)}
@@ -199,6 +201,7 @@ const DaydreamTable = () => {
                                 current_page: value
                             }))}
                             isLoading={isGetAPILoading}
+                            size="small"
                         />
                     </div>
                 </CardFooter>

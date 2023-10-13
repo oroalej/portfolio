@@ -98,7 +98,7 @@ Textarea.displayName = "Textarea";
 
 export const FormGroup = ({className, children}: HTMLAttributes<HTMLDivElement>) => {
     return (
-        <div className={classNames("mb-4 relative block", className)}>
+        <div className={classNames("mb-1.5 lg:mb-4 relative block", className)}>
             {children}
         </div>
     )

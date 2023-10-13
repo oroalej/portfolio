@@ -1,7 +1,7 @@
 export const DEFAULT_PAGINATION_VALUES = {
     last_page: 1,
     total: 1,
-    per_page: 25,
+    per_page: 15,
     current_page: 1,
     from: 1,
     to: 1

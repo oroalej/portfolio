@@ -12,11 +12,9 @@ const EchoPage = () => {
     return (
         <Container>
             <SectionWrapper>
-                <div className="grid gap-4 grid-cols-2">
-                    <GalleryProvider<DaydreamAPIDataStructure>>
-                        <DaydreamList/>
-                    </GalleryProvider>
-                </div>
+                <GalleryProvider<DaydreamAPIDataStructure>>
+                    <DaydreamList/>
+                </GalleryProvider>
             </SectionWrapper>
         </Container>
     )
