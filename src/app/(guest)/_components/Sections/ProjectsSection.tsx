@@ -80,7 +80,7 @@ const ProjectsSection = () => {
             </Section>
 
             <ProjectImagePreviewDialog
-                project={activeProject}
+                item={activeProject}
                 isOpen={isOpen}
                 onClose={onClose}
             />

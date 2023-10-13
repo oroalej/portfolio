@@ -43,7 +43,7 @@ const TheHeader: FC = () => {
                             <NavLink active={pathname === "/"} href="/">Home</NavLink>
                             <NavLink active={pathname === '/resume'} href="/resume">Résumé</NavLink>
                             <NavLink disabled>Notes</NavLink>
-                            <NavLink disabled>Echo</NavLink>
+                            <NavLink active={pathname === '/daydreams'} href="/daydreams">Daydreams</NavLink>
                         </div>
 
                         <div className="absolute bottom-7 right-7 md:bottom-0 md:right-0 z-50 md:relative pl-8">

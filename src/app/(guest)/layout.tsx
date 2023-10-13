@@ -1,4 +1,3 @@
-import ScrollProgress from "@/app/(guest)/_components/ScrollProgress";
 import ContactMeSection from "@/app/(guest)/_components/Sections/ContactMeSection";
 import ScrollTopButton from "@/app/(guest)/_components/ScrollTopButton";
 import TheHeader from "@/app/(guest)/_components/Layout/TheHeader";
@@ -19,7 +18,6 @@ const GuestLayout = ({children}: Pick<BaseComponent, 'children'>) => {
                     className={`hidden xs:block fixed h-full z-50 dark:bg-slate-800 bg-neutral-100 left-0 top-0 w-2.5`}/>
                 <div
                     className={`hidden xs:block fixed h-full z-50 dark:bg-slate-800 bg-neutral-100 right-0 top-0 w-2.5`}/>
-                <ScrollProgress/>
 
                 <div className="min-h-screen">
                     {children}

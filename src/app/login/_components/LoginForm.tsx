@@ -1,6 +1,6 @@
 "use client";
 
-import {FormEvent, Fragment} from "react";
+import {FormEvent} from "react";
 import {CardBody, CardFooter, CardHeader, CardRoot, CardTitle, FormGroup, Input, Label} from "@/components";
 import {Controller, useForm} from "react-hook-form";
 import {isEmpty} from "lodash";
@@ -62,24 +62,16 @@ const LoginForm = () => {
                             rules={{required: true}}
                             defaultValue={defaultValues.email}
                             render={({field: {onChange, value}, fieldState}) => (
-                                <Fragment>
-                                    <Input
-                                        type="email"
-                                        id="inputEmail"
-                                        placeholder="juandelacruz@gmail.com"
-                                        name="email"
-                                        spellCheck={false}
-                                        value={value}
-                                        onChange={onChange}
-                                        isError={fieldState.invalid}
-                                    />
-
-                                    {fieldState.invalid && (
-                                        <span className="text-red-600 mt-1.5 text-xs block">
-                                            {fieldState.error?.message}
-                                        </span>
-                                    )}
-                                </Fragment>
+                                <Input
+                                    type="email"
+                                    id="inputEmail"
+                                    placeholder="juandelacruz@gmail.com"
+                                    name="email"
+                                    spellCheck={false}
+                                    value={value}
+                                    onChange={onChange}
+                                    error={fieldState.error?.message}
+                                />
                             )}
                         />
                     </FormGroup>
@@ -92,23 +84,15 @@ const LoginForm = () => {
                             rules={{required: true}}
                             defaultValue={defaultValues.password}
                             render={({field: {onChange, value}, fieldState}) => (
-                                <Fragment>
-                                    <Input
-                                        type="password"
-                                        id="inputPassword"
-                                        name="password"
-                                        autoCorrect="off"
-                                        value={value}
-                                        onChange={onChange}
-                                        isError={fieldState.invalid}
-                                    />
-
-                                    {fieldState.invalid && (
-                                        <span className="text-red-600 mt-1.5 text-xs block">
-                                            {fieldState.error?.message}
-                                        </span>
-                                    )}
-                                </Fragment>
+                                <Input
+                                    type="password"
+                                    id="inputPassword"
+                                    name="password"
+                                    autoCorrect="off"
+                                    value={value}
+                                    onChange={onChange}
+                                    error={fieldState.error?.message}
+                                />
                             )}
                         />
 
