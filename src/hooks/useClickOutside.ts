@@ -1,6 +1,6 @@
 "use client";
 
-import {useCallback, useEffect, useRef} from "react";
+import {useEffect, useRef} from "react";
 
 interface clickOutsideProps {
     onTriggered: () => void
@@ -9,17 +9,19 @@ interface clickOutsideProps {
 const useClickOutside = ({onTriggered}: clickOutsideProps) => {
     const ref = useRef(null)
 
-    const handleClick = useCallback((e: MouseEvent) => {
-        if (ref.current && !(ref.current as any).contains(e.target)) {
-            onTriggered();
-        }
-    }, [ref.current, onTriggered])
-
     useEffect(() => {
-        document.addEventListener("click", handleClick);
+        const handler = (e: MouseEvent | TouchEvent) => {
+            if (ref.current && !(ref.current as any).contains(e.target)) {
+                onTriggered();
+            }
+        }
+
+        document.addEventListener("mousedown", handler);
+        document.addEventListener("touchstart", handler);
 
         return () => {
-            document.removeEventListener("click", handleClick);
+            document.removeEventListener("mousedown", handler);
+            document.removeEventListener("touchstart", handler);
         };
     }, []);
 
