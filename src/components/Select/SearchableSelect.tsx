@@ -6,6 +6,7 @@ import {ReactNode, useEffect, useState} from "react";
 import {useOpenable} from "@/hooks";
 import useClickOutside from "@/hooks/useClickOutside";
 import {PiXBold} from "react-icons/pi";
+import {find} from "lodash";
 
 export interface SearchableSelectProps<Type> {
     value: Type;
@@ -61,11 +62,8 @@ export const SearchableSelect = <ValueType extends string | number = number, >(p
     const {isOpen, onOpen, onClose} = useOpenable();
     const ref = useClickOutside({onTriggered: onClose})
 
-    useEffect(() => setQuery((value || "").toString()), [value])
-
     useEffect(() => {
-        if (!isOpen && query !== value)
-            setQuery((value || "").toString())
+        if (!isOpen) setQuery("")
     }, [isOpen])
 
     const filteredOptions = query === '' ?
@@ -75,6 +73,13 @@ export const SearchableSelect = <ValueType extends string | number = number, >(p
     const onSelectHandler = (value: ValueType) => {
         onChange(value);
         onClose();
+    }
+
+    const getDisplayValue = (): string => {
+        if (query) return query;
+        if (value) return find<SelectItem<any>>(options, {value})?.text || ""
+
+        return "";
     }
 
     return (
@@ -87,9 +92,12 @@ export const SearchableSelect = <ValueType extends string | number = number, >(p
                         className={classNames("border min-w-[24rem] w-full min-h-[46px] gap-2 outline-none px-3 py-2.5 outline-none", [
                             !!error ? "focus:ring-1 border-red-600 text-red-600 ring-red-600" : "focus:ring-2 border-neutral-200 text-neutral-600 ring-neutral-600"
                         ])}
-                        onChange={(event) => setQuery(event.target.value)}
+                        onChange={(event) => {
+                            setQuery(event.target.value)
+                            onChange(null as any)
+                        }}
                         onFocus={onOpen}
-                        value={query}
+                        value={getDisplayValue()}
                     />
 
                     {clearable && value !== defaultValue && (
@@ -106,6 +114,7 @@ export const SearchableSelect = <ValueType extends string | number = number, >(p
                         <SearchableSelectItem
                             key={`searchable-select-${item.text}-${index}`}
                             onSelect={() => onSelectHandler(item.value)}
+                            selected={value === item.value}
                         >
                             {item.text}
                         </SearchableSelectItem>
