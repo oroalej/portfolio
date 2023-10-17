@@ -12,18 +12,16 @@ export interface BaseButtonProps {
     isLoading?: boolean;
     variant?: Exclude<Variants, "outlined">;
     color?: Exclude<Colors, "light" | "success">;
-    size?: Extract<Sizes, "default" | "small" | "large">;
+    size?: Exclude<Sizes, "extra-large">;
     block?: boolean;
     rounded?: boolean;
     icon?: boolean;
 }
 
 export interface ButtonProps extends BaseButtonProps, Omit<ButtonHTMLAttributes<HTMLButtonElement>, "color"> {
-
 }
 
 export interface LinkProps extends BaseButtonProps, NextLinkProps, Omit<HTMLProps<HTMLAnchorElement>, "color" | "as" | "href" | "ref" | "size"> {
-
 }
 
 type ButtonOrLinkProps = ButtonProps | LinkProps;
@@ -59,7 +57,8 @@ const styles = {
 const sizes = {
     large: "px-4 py-2.5 text-lg",
     default: "px-3.5 py-2 text-base",
-    small: "px-3 py-2 text-sm"
+    small: "px-3 py-2 text-sm",
+    'extra-small': "px-2.5 py-1.5 text-xs"
 }
 
 const getButtonClasses = ({
@@ -70,11 +69,11 @@ const getButtonClasses = ({
     variant = "default",
     size = "default",
     color = 'dark'
-}: Partial<ButtonOrLinkProps>) => classNames("relative flex flex-row items-center transition-colors hover:bg-opacity-90 active:bg-opacity-100 disabled:cursor-default disabled:bg-opacity-75 duration-200 cursor-pointer",
+}: Partial<ButtonOrLinkProps>) => classNames("relative transition-colors hover:bg-opacity-90 active:bg-opacity-100 disabled:cursor-default disabled:bg-opacity-75 duration-200 cursor-pointer",
     {
         "rounded-md": rounded,
-        "aspect-square" : icon,
-        "w-full": block
+        "aspect-square flex flex-row items-center": icon,
+        "w-full": block,
     },
     sizes[size], styles[color][variant], className
 )

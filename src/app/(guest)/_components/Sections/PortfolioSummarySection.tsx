@@ -2,9 +2,7 @@
 
 import {CodeBlock, Container, ExternalLink, FauxMenu, MultiLineComment, Object, SingleLineComment} from "@/components";
 import toast from "react-hot-toast";
-import {Tooltip} from 'react-tooltip'
 import {FiExternalLink} from "react-icons/fi";
-
 
 const PortfolioSummarySection = () => {
     const primary_skills = ['Laravel', 'PHP', 'Javascript', 'Typescript', 'VueJS', 'ReactJS'];
@@ -47,7 +45,7 @@ const PortfolioSummarySection = () => {
                                             {`'`}
                                             <span className="select-all">
                                                 <span
-                                                    data-tooltip-id="summary-tooltip"
+                                                    data-tooltip-id="guest-tooltip"
                                                     data-tooltip-content="Yes, that's my nickname."
                                                     className="underline underline-offset-2 decoration-4">
                                                     Alex
@@ -140,7 +138,7 @@ const PortfolioSummarySection = () => {
                                 <CodeBlock line={17} className="ml-4 sm:ml-8">
                                     <Object name="mobile">
                                         <span
-                                            data-tooltip-id="summary-tooltip"
+                                            data-tooltip-id="guest-tooltip"
                                             data-tooltip-content="Click me to copy."
                                             className="select-all cursor-pointer text-green-400"
                                             onClick={() => onCopyHandler("09955604073")}
@@ -179,12 +177,6 @@ const PortfolioSummarySection = () => {
                     </div>
                 </div>
             </Container>
-
-            <Tooltip
-                id="summary-tooltip"
-                place="top"
-                className="!bg-neutral-300 !opacity-100 !text-neutral-800"
-            />
         </div>
     )
 }

@@ -39,7 +39,7 @@ export const CardFooter = ({children, className, ...remaining}: HTMLAttributes<H
 
 export const CardHeader = ({children, className, ...remaining}: HTMLAttributes<HTMLDivElement>) => {
     return (
-        <div className={classNames("px-4 pt-4 pb-5", className)} {...remaining}>
+        <div className={classNames("p-4", className)} {...remaining}>
             {children}
         </div>
     )
@@ -47,6 +47,6 @@ export const CardHeader = ({children, className, ...remaining}: HTMLAttributes<H
 
 export const CardTitle = ({children, className, ...remaining}: HTMLAttributes<HTMLHeadElement>) => {
     return (
-        <h3 className={classNames("text-lg text-neutral-700 font-bold", className)} {...remaining}>{children}</h3>
+        <h3 className={classNames("text-base text-neutral-700 font-bold", className)} {...remaining}>{children}</h3>
     )
 }

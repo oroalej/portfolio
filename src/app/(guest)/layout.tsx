@@ -5,6 +5,8 @@ import TheFooter from "@/app/(guest)/_components/Layout/TheFooter";
 
 import {Fragment} from "react";
 import {BaseComponent} from "@/types";
+import {Toaster} from "react-hot-toast";
+import {Tooltip} from "@/components";
 
 const GuestLayout = ({children}: Pick<BaseComponent, 'children'>) => {
     return (
@@ -26,6 +28,14 @@ const GuestLayout = ({children}: Pick<BaseComponent, 'children'>) => {
                 <ContactMeSection/>
                 <TheFooter/>
                 <ScrollTopButton/>
+
+                <Tooltip
+                    id="guest-tooltip"
+                    place="top"
+                    className="!bg-neutral-300 !opacity-100 !text-neutral-800"
+                />
+
+                <Toaster position="top-right" gutter={8} containerClassName="text-sm"/>
             </main>
         </Fragment>
     )
