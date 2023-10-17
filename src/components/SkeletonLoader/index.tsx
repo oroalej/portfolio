@@ -1,5 +1,6 @@
 import {HTMLAttributes} from "react";
 import classNames from "classnames";
+import {BaseComponent} from "@/types";
 
 export const BaseSkeletonLoader = (props: HTMLAttributes<HTMLDivElement>) => {
     const {className, ...remaining} = props;
@@ -26,4 +27,8 @@ export const ImageSkeletonLoader = ({aspectRatio = "1/1"}: ImageSkeletonLoaderPr
     />
 )
 
-export const TextSkeletonLoader = () => <BaseSkeletonLoader className="h-5"/>
+export const TextSkeletonLoader = ({className}: Pick<BaseComponent, "className">) => (
+    <BaseSkeletonLoader
+        className={["h-5", className].join(" ")}
+    />
+)

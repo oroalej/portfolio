@@ -42,7 +42,7 @@ const TheHeader: FC = () => {
                         <div className="flex flex-col items-center justify-center md:flex-row gap-4 mt-24 md:mt-0 px-1">
                             <NavLink active={pathname === "/"} href="/">Home</NavLink>
                             <NavLink active={pathname === '/resume'} href="/resume">Résumé</NavLink>
-                            <NavLink disabled>Notes</NavLink>
+                            <NavLink active={pathname.startsWith("/quotes")} href="/quotes">Quotes</NavLink>
                             <NavLink active={pathname === '/daydreams'} href="/daydreams">Daydreams</NavLink>
                         </div>
 

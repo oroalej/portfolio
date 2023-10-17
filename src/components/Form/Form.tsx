@@ -39,7 +39,7 @@ export const Label = (props: LabelProps) => {
                 <span className="text-neutral-600">{children}</span>
 
                 {required && (
-                    <span className="text-red-700 ml-1 leading-6">*</span>
+                    <span className="text-red-700 ml-1 leading-4">*</span>
                 )}
             </label>
         )
@@ -63,7 +63,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         <Fragment>
             <input
                 ref={ref}
-                className={classNames("block relative border border-solid px-3 py-2.5 min-w-[24rem] w-full outline-none", className, [
+                className={classNames("block relative border border-solid px-3 py-2 min-w-[12rem] w-full outline-none", className, [
                     !!error ? "focus:ring-1 border-red-600 text-red-600 ring-red-600" : "focus:ring-2 border-neutral-200 text-neutral-600 ring-neutral-600"
                 ])}
                 {...remaining}
@@ -98,7 +98,7 @@ Textarea.displayName = "Textarea";
 
 export const FormGroup = ({className, children}: HTMLAttributes<HTMLDivElement>) => {
     return (
-        <div className={classNames("mb-1.5 lg:mb-4 relative block", className)}>
+        <div className={classNames("mb-1.5 lg:mb-4 relative block w-full", className)}>
             {children}
         </div>
     )

@@ -43,11 +43,11 @@ export const SelectButton = (props: SelectButtonProps) => {
 
     return (
         <div
-            className={classNames("flex flex-row justify-between items-stretch relative border min-w-[5rem] w-full min-h-[46px] gap-2", [
+            className={classNames("flex flex-row justify-between items-stretch relative border min-w-[5rem] w-full min-h-[40px] gap-2", [
                 isError ? "border-red-600 text-red-600" : "border-neutral-200 text-neutral-700",
                 isOpen ? isError ? "ring-1 ring-red-600" : "ring-2 ring-neutral-600" : ""
             ])}>
-            <Listbox.Button className="grow text-left block relative px-3 py-2.5">{children}</Listbox.Button>
+            <Listbox.Button className="grow text-left block relative px-3 py-2">{children}</Listbox.Button>
 
             {clearable && isChanged && (
                 <button

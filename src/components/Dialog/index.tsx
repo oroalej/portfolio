@@ -43,6 +43,7 @@ export const Dialog = (props: DialogProps) => {
 interface AlertDialogProps extends DialogProps {
     title?: string;
     onConfirm: () => void;
+    cancelButtonText?: string;
     confirmButtonText?: string;
     confirmButtonColor?: PropType<BaseButtonProps, "color">
     isLoading?: boolean;
@@ -55,6 +56,7 @@ export const AlertDialog = ({
     onConfirm,
     isLoading,
     children,
+    cancelButtonText = "Cancel",
     confirmButtonText = "Yes",
     confirmButtonColor = "dark",
 }: AlertDialogProps) => (
@@ -65,18 +67,22 @@ export const AlertDialog = ({
                     <CardTitle>{title}</CardTitle>
                 </CardHeader>
             )}
-            <CardBody>{children}</CardBody>
+            {children && (
+                <CardBody className="text-neutral-600">{children}</CardBody>
+            )}
             <CardFooter className="justify-end">
                 <Button
+                    rounded
                     variant="plain"
                     color="secondary"
                     onClick={onClose}
                     disabled={isLoading}
                 >
-                    Cancel
+                    {cancelButtonText}
                 </Button>
 
                 <Button
+                    rounded
                     color={confirmButtonColor}
                     onClick={onConfirm}
                     isLoading={isLoading}

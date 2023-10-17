@@ -23,8 +23,20 @@ const TheFooter = () => (
                     >
                         Résumé
                     </Link>
-                    <span className="opacity-30 cursor-default italic">Notes</span>
-                    <span className="opacity-30 cursor-default italic">Echo</span>
+                    <Link
+                        scroll
+                        href={"/quotes"}
+                        className="hover:underline underline-offset-[5px] decoration-4"
+                    >
+                        Quotes
+                    </Link>
+                    <Link
+                        scroll
+                        href={"/daydreams"}
+                        className="hover:underline underline-offset-[5px] decoration-4"
+                    >
+                        Daydreams
+                    </Link>
                 </nav>
 
                 <div className="flex flex-col sm:flex-row gap-7 items-center">
