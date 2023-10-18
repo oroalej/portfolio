@@ -37,6 +37,7 @@ import {ImageFileData} from "@/types";
 interface DaydreamFormComponentProps {
     item?: CreateDreamFormInterface;
     onSubmit: (value: CreateDreamFormInterface) => void;
+    onDelete?: () => void;
     defaultImage: string;
     schema: ZodObject<any>;
     title: string;
@@ -47,6 +48,7 @@ interface DaydreamFormComponentProps {
 const DaydreamForm = ({
     item = DEFAULT_FORM_VALUES,
     onSubmit,
+    onDelete,
     schema,
     title,
     defaultImage = '',
@@ -79,7 +81,10 @@ const DaydreamForm = ({
 
     const {ref: imageRegisterRef, onChange: _, ...imageRegister} = register("image.file");
 
-    const onSubmitHandler = async () => onSubmit(getValues())
+    const onSubmitHandler = async () => {
+        await onSubmit(getValues())
+        onResetFormHandler();
+    }
 
     const onImageInputHandler = async (event: FormEvent<HTMLInputElement>) => {
         const files = event.currentTarget?.files || [];
@@ -327,24 +332,38 @@ const DaydreamForm = ({
                             </div>
                         </div>
                     </CardBody>
-                    <CardFooter className="justify-end gap-3">
-                        <Button
-                            type="button"
-                            disabled={!formState.isDirty || formState.isSubmitting}
-                            onClick={onResetFormHandler}
-                            variant="plain"
-                            color="secondary"
-                        >
-                            {cancelButtonText}
-                        </Button>
+                    <CardFooter className="justify-between gap-3">
+                        <div>
+                            {!!onDelete && (
+                                <Button
+                                    color="danger"
+                                    type="button"
+                                    onClick={onDelete}
+                                >
+                                    Delete
+                                </Button>
+                            )}
+                        </div>
 
-                        <Button
-                            type="submit"
-                            disabled={!isEmpty(formState.errors) || !formState.isValid || !formState.isDirty}
-                            isLoading={formState.isSubmitting}
-                        >
-                            {submitButtonText}
-                        </Button>
+                        <div className="flex flex-row gap-3">
+                            <Button
+                                type="button"
+                                variant="plain"
+                                color="secondary"
+                                disabled={!formState.isDirty || formState.isSubmitting}
+                                onClick={onResetFormHandler}
+                            >
+                                {cancelButtonText}
+                            </Button>
+
+                            <Button
+                                type="submit"
+                                disabled={!isEmpty(formState.errors) || !formState.isValid || !formState.isDirty}
+                                isLoading={formState.isSubmitting}
+                            >
+                                {submitButtonText}
+                            </Button>
+                        </div>
                     </CardFooter>
                 </CardRoot>
             </fieldset>

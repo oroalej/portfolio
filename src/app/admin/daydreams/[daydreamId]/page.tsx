@@ -2,6 +2,8 @@ import {Button, Container} from "@/components";
 import {getDaydream} from "@/api/DaydreamAPI";
 import EditDaydreamWrapper from "@/app/admin/daydreams/[daydreamId]/_components/EditDaydreamWrapper";
 import {Metadata} from "next";
+import {Suspense} from "react";
+import DaydreamFormLoading from "@/app/admin/daydreams/_components/Loading/DaydreamFormLoading";
 
 interface DreamEditPageProps {
     params: { daydreamId: string }
@@ -22,7 +24,15 @@ const DreamEditPage = () => (
                 <Button href="/admin/daydreams">Back to list</Button>
             </div>
 
-            <EditDaydreamWrapper/>
+            <Suspense fallback={
+                <DaydreamFormLoading
+                    title="Update Daydream"
+                    cancelButtonText="Reset"
+                    submitButtonText="Update"
+                />
+            }>
+                <EditDaydreamWrapper/>
+            </Suspense>
         </div>
     </Container>
 )

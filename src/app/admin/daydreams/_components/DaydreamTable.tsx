@@ -1,57 +1,58 @@
 "use client";
 
 import Image from "next/image";
-import {
-    AlertDialog,
-    BaseSkeletonLoader,
-    Button,
-    CardFooter,
-    CardRoot,
-    ImageSkeletonLoader,
-    SimplePagination,
-    SingleSimpleSelect
-} from "@/components";
+import {AlertDialog, Button, CardFooter, CardRoot, Pagination} from "@/components";
 import {FaPencilAlt} from "react-icons/fa";
 import {FaTrash} from "react-icons/fa6";
-import {Fragment, useEffect, useState} from "react";
+import {Fragment, Suspense, useCallback, useEffect, useState} from "react";
 import {DaydreamAPIDataStructure, getAllDaydreams} from "@/api/DaydreamAPI";
 import {getStoragePublicUrl} from "@/api/ImageAPI";
 import {DEFAULT_PAGINATION_VALUES, PaginationProps} from "@/utils/pagination";
-import {SelectDataFormatter} from "@/utils";
 import {useOpenable} from "@/hooks";
 import DaydreamService from "@/services/DaydreamService";
 import toast from "react-hot-toast";
+import DaydreamRowLoading from "@/app/admin/daydreams/_components/Loading/DaydreamRowLoading";
+import {useRouter, useSearchParams} from "next/navigation";
+import useSetParamsRouter from "@/hooks/useSetParamsRouter";
 
 const DaydreamTable = () => {
-    const storagePublicUrl = getStoragePublicUrl("")
+    const router = useRouter();
+    const searchParams = useSearchParams()
+
+    const {isOpen, onClose, onOpen} = useOpenable();
+    const {setParam, getUrl} = useSetParamsRouter();
 
     const [dreams, setDreams] = useState<DaydreamAPIDataStructure[]>([]);
-    const [pagination, setPagination] = useState<PaginationProps>(DEFAULT_PAGINATION_VALUES);
     const [isGetAPILoading, setIsGetAPILoading] = useState<boolean>(true);
     const [isDeleteAPILoading, setIsDeleteAPILoading] = useState<boolean>(false);
     const [selected, setSelected] = useState<DaydreamAPIDataStructure | null>(null);
-    const {isOpen, onClose, onOpen} = useOpenable();
+    const [pagination, setPagination] = useState<PaginationProps>({
+        ...DEFAULT_PAGINATION_VALUES,
+        per_page: Number(searchParams.get("per_page")) || DEFAULT_PAGINATION_VALUES.per_page,
+        current_page: Number(searchParams.get("page")) || DEFAULT_PAGINATION_VALUES.current_page,
+    });
+
+    const fetchData = useCallback(async () => {
+        setIsGetAPILoading(true);
+
+        const {data, pagination} = await getAllDaydreams({
+            page: Number(searchParams.get("page")) || DEFAULT_PAGINATION_VALUES.current_page,
+            per_page: Number(searchParams.get("per_page")) || DEFAULT_PAGINATION_VALUES.per_page,
+        })
+
+        if (pagination) setPagination(pagination);
+
+        setDreams(data);
+        setIsGetAPILoading(false);
+    }, [searchParams])
 
     useEffect(() => {
         const controller = new AbortController();
 
-        fetchData();
+        fetchData().catch(error => console.log(error));
 
         return () => controller.abort()
-    }, [pagination.current_page, pagination.per_page]);
-
-    const fetchData = () => {
-        getAllDaydreams({
-            page: pagination.current_page,
-            per_page: pagination.per_page,
-        }).then(({data, pagination}) => {
-            setDreams(data)
-
-            if (pagination) setPagination(pagination)
-
-            setIsGetAPILoading(false);
-        })
-    }
+    }, [fetchData]);
 
     const onSelectHandler = (item: DaydreamAPIDataStructure) => {
         setSelected(item)
@@ -83,7 +84,7 @@ const DaydreamTable = () => {
                     current_page: prevState.current_page - 1
                 }))
             }
-        } else fetchData();
+        } else fetchData().catch(error => console.log(error));
 
         onClose();
     }
@@ -104,70 +105,59 @@ const DaydreamTable = () => {
                     </thead>
                     <tbody>
                     {isGetAPILoading ? [...Array(2)].map((_, index) => (
-                        <tr key={`loading-row-${index}`}>
-                            <td><ImageSkeletonLoader/></td>
-                            <td><BaseSkeletonLoader/></td>
-                            <td><BaseSkeletonLoader/></td>
-                            <td>
-                                <BaseSkeletonLoader className="mb-1.5"/>
-                                <BaseSkeletonLoader className="mb-1.5"/>
-                                <BaseSkeletonLoader className="mb-1.5"/>
-                            </td>
-                            <td><BaseSkeletonLoader/></td>
-                            <td></td>
-                        </tr>
+                        <DaydreamRowLoading key={`loading-row-${index}`}/>
                     )) : dreams.length ? dreams.map(item => (
-                        <tr key={`dream-${item.id}`}>
-                            <td className="text-center">
-                                <div className="relative block aspect-square w-32 h-32 overflow-hidden">
-                                    <Image
-                                        src={`${storagePublicUrl}${item.file.storage_file_path}`}
-                                        alt="Something"
-                                        className="object-cover object-center point-events-none"
-                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                        quality={75}
-                                        fill
-                                        placeholder="blur"
-                                        blurDataURL={`${storagePublicUrl}${item.file.storage_file_path}`}
-                                    />
-                                </div>
-                            </td>
-                            <td>{item.year}</td>
-                            <td>{item.description}</td>
-                            <td>
-                                <span className="block mb-1 whitespace-nowrap">{item.iso} ISO</span>
-                                <span className="block mb-1 whitespace-nowrap">
-                                    {item.shutter_speed} <abbr title="Shutter Speed">SS</abbr>
-                                </span>
-                                <span className="block mb-1 whitespace-nowrap">{item.aperture} Aperture</span>
-                            </td>
-                            <td>{new Date(item.created_at).toLocaleDateString()}</td>
-                            <td>
-                                <div className="flex flex-row gap-1.5 justify-center">
-                                    <Button
-                                        icon
-                                        rounded
-                                        size="small"
-                                        data-tooltip-id="admin-tooltip"
-                                        data-tooltip-content="Edit"
-                                        href={`/admin/daydreams/${item.id}`}
-                                    >
-                                        <FaPencilAlt/>
-                                    </Button>
+                        <Suspense key={`dream-${item.id}`} fallback={<DaydreamRowLoading/>}>
+                            <tr>
+                                <td className="text-center">
+                                    <div className="relative block aspect-square w-32 h-32 overflow-hidden">
+                                        <Image
+                                            src={getStoragePublicUrl(item.file.storage_file_path)}
+                                            alt="Something"
+                                            className="object-cover object-center point-events-none"
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                            quality={75}
+                                            fill
+                                        />
+                                    </div>
+                                </td>
+                                <td>{item.year}</td>
+                                <td>{item.description}</td>
+                                <td>
+                                    <span className="block mb-1 whitespace-nowrap">{item.iso} ISO</span>
+                                    <span className="block mb-1 whitespace-nowrap">
+                                        {item.shutter_speed} <abbr title="Shutter Speed">SS</abbr>
+                                    </span>
+                                    <span className="block mb-1 whitespace-nowrap">{item.aperture} Aperture</span>
+                                </td>
+                                <td>{new Date(item.created_at).toLocaleDateString()}</td>
+                                <td>
+                                    <div className="flex flex-row gap-1.5 justify-center">
+                                        <Button
+                                            icon
+                                            rounded
+                                            size="small"
+                                            data-tooltip-id="admin-tooltip"
+                                            data-tooltip-content="Edit"
+                                            href={`/admin/daydreams/${item.id}`}
+                                        >
+                                            <FaPencilAlt/>
+                                        </Button>
 
-                                    <Button
-                                        icon
-                                        rounded
-                                        size="small"
-                                        data-tooltip-id="admin-tooltip"
-                                        data-tooltip-content="Delete"
-                                        onClick={() => onSelectHandler(item)}
-                                    >
-                                        <FaTrash/>
-                                    </Button>
-                                </div>
-                            </td>
-                        </tr>
+                                        <Button
+                                            icon
+                                            rounded
+                                            size="small"
+                                            data-tooltip-id="admin-tooltip"
+                                            data-tooltip-content="Delete"
+                                            onClick={() => onSelectHandler(item)}
+                                        >
+                                            <FaTrash/>
+                                        </Button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </Suspense>
                     )) : (
                         <tr>
                             <td colSpan={6} className="text-center">No result</td>
@@ -175,35 +165,18 @@ const DaydreamTable = () => {
                     )}
                     </tbody>
                 </table>
-                <CardFooter className="justify-between">
-                    <div className="flex flex-row items-center gap-2 text-sm">
-                        <span>Items: </span>
-                        <SingleSimpleSelect<number>
-                            options={SelectDataFormatter([15, 20, 25, 50, 100])}
-                            onChange={(value) => setPagination((prevState) => ({
-                                ...prevState,
-                                per_page: value
-                            }))}
-                            value={pagination.per_page}
-                        />
-                    </div>
-
-                    <div className="flex flex-row gap-6 items-center">
-                        <span className="text-neutral-600">
-                            {pagination.from}-{pagination.to} of {pagination.total}
-                        </span>
-
-                        <SimplePagination
-                            current_page={pagination.current_page}
-                            last_page={pagination.last_page}
-                            onChange={(value) => setPagination(prevState => ({
-                                ...prevState,
-                                current_page: value
-                            }))}
-                            isLoading={isGetAPILoading}
-                            size="small"
-                        />
-                    </div>
+                <CardFooter>
+                    <Pagination
+                        pagination={pagination}
+                        onPageChange={(value) => {
+                            setParam("page", value);
+                            router.push(getUrl());
+                        }}
+                        onPerPageChange={(value) => {
+                            setParam("per_page", value);
+                            router.push(getUrl());
+                        }}
+                    />
                 </CardFooter>
             </CardRoot>
 
