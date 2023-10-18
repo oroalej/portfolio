@@ -1,13 +1,7 @@
 import Link from "next/link";
-import {Metadata} from "next";
-import DaydreamTable from "@/app/admin/daydreams/_components/DaydreamTable";
+import DaydreamTableLoading from "@/app/admin/daydreams/_components/Loading/DaydreamTableLoading";
 
-export const metadata: Metadata = {
-    title: "Admin - Daydreams List"
-}
-
-const DaydreamPage = () => {
-
+const AdminDaydreamListLoading = () => {
     return (
         <div className="max-w-screen-xl mx-auto">
             <div className="py-14">
@@ -20,10 +14,10 @@ const DaydreamPage = () => {
                     </Link>
                 </div>
 
-                <DaydreamTable />
+                <DaydreamTableLoading/>
             </div>
         </div>
     )
 }
 
-export default DaydreamPage;
+export default AdminDaydreamListLoading
