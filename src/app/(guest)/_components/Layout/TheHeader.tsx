@@ -9,7 +9,7 @@ import {PiListLight, PiXThin} from "react-icons/pi";
 import DarkModeButton from "@/app/(guest)/_components/DarkModeButton";
 
 const TheHeader: FC = () => {
-    const {isOpen, onToggle} = useOpenable();
+    const {isOpen, onToggle, onClose} = useOpenable();
     const pathname = usePathname();
 
     // Add overflow hidden to HTML when navbar is open.
@@ -40,10 +40,10 @@ const TheHeader: FC = () => {
                         <span className="invisible"/>
 
                         <div className="flex flex-col items-center justify-center md:flex-row gap-4 mt-24 md:mt-0 px-1">
-                            <NavLink active={pathname === "/"} href="/">Home</NavLink>
-                            <NavLink active={pathname === '/resume'} href="/resume">Résumé</NavLink>
-                            <NavLink active={pathname.startsWith("/quotes")} href="/quotes">Quotes</NavLink>
-                            <NavLink active={pathname === '/daydreams'} href="/daydreams">Daydreams</NavLink>
+                            <NavLink onClick={onClose} active={pathname === "/"} href="/">Home</NavLink>
+                            <NavLink onClick={onClose} active={pathname === '/resume'} href="/resume">Résumé</NavLink>
+                            <NavLink onClick={onClose} active={pathname.startsWith("/quotes")} href="/quotes">Quotes</NavLink>
+                            <NavLink onClick={onClose} active={pathname === '/daydreams'} href="/daydreams">Daydreams</NavLink>
                         </div>
 
                         <div className="absolute bottom-7 right-7 md:bottom-0 md:right-0 z-50 md:relative pl-8">
