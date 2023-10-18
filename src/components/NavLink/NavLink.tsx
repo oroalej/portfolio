@@ -17,7 +17,7 @@ interface DisabledNavLinkInterface extends BaseNavLinkInterface {
 interface ActiveNavLinkInterface extends BaseNavLinkInterface {
     href: string;
     disabled?: never | false;
-    onClick: () => void;
+    onClick?: () => void;
 }
 
 type NavLink = DisabledNavLinkInterface | ActiveNavLinkInterface
