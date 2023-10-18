@@ -66,7 +66,7 @@ const QuotesList = () => {
                     <CardRoot key={item.id}
                               className="flex flex-col group hover:shadow-lg hover:-mt-1 hover:mb-1 transition-all"
                               rounded>
-                        <div className="px-6 pb-6 pt-16 grow text-2xl text-neutral-700 font-bold">
+                        <div className="px-6 pb-6 pt-16 grow text-2xl text-neutral-700 dark:text-neutral-200 font-bold">
                             {/*<div className="absolute top-2.5 right-2.5 flex justify-end group-hover:opacity-100 opacity-0 transition-opacity">*/}
                             {/*    <Button*/}
                             {/*        icon*/}
@@ -96,13 +96,13 @@ const QuotesList = () => {
 
                         </CardFooter>
                         <div className="px-6 pt-4 pb-6 flex justify-between">
-                            <p className="inline-block border-b-4 border-transparent transition-colors text-neutral-600 text-lg group-hover:border-neutral-700 group-hover:text-neutral-800">
+                            <p className="inline-block border-b-4 border-transparent transition-colors text-neutral-600 dark:text-white dark:group-hover:text-neutral-200 dark:group-hover:border-neutral-200 text-lg group-hover:border-neutral-700 group-hover:text-neutral-800">
                                 {`${item.media_detail.name}, ${item.source.name}`}
                             </p>
                         </div>
                     </CardRoot>
                 )) : (
-                    <div className="text-center col-span-2 text-xl py-12">
+                    <div className="text-center col-span-2 text-xl py-12 dark:text-white ">
                         No result
                     </div>
                 )}

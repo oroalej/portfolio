@@ -11,7 +11,7 @@ export const CardRoot = forwardRef<HTMLDivElement, CardRootProps>((props, ref) =
     const {children, className, rounded = false, ...remaining} = props;
 
     return (
-        <div ref={ref} className={classNames("relative block bg-white", className, {
+        <div ref={ref} className={classNames("relative block bg-white dark:bg-neutral-800", className, {
             'rounded-md': +rounded
         })} {...remaining}>
             {children}

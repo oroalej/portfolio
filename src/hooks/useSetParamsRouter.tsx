@@ -18,7 +18,7 @@ const useSetParamsRouter = () => {
 
     const getParams = () => params;
 
-    const getParam = (key: string, defaultValue: string = "") => params[key] || defaultValue
+    const getParam = (key: string, defaultValue: string | null = null) => params[key] || defaultValue
 
     const setParam = (key: string, value: string | number) => {
         params[key] = value.toString();

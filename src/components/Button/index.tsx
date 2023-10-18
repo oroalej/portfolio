@@ -50,7 +50,7 @@ const styles = {
     secondary: {
         default: "text-neutral-800 bg-neutral-200",
         text: "text-neutral-800 enabled:hover:bg-neutral-200 enabled:hover:text-neutral-800 enabled:active:bg-neutral-200 enabled:active:text-neutral-800",
-        plain: "text-neutral-800 enabled:active:bg-neutral-200 enabled:active:text-neutral-800"
+        plain: "text-neutral-800 enabled:active:bg-neutral-200 enabled:active:text-neutral-800 dark:text-white"
     }
 }
 
