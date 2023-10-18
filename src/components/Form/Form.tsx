@@ -33,25 +33,34 @@ export const FormErrorMessage = ({children}: BaseComponent) => (
 export const Label = (props: LabelProps) => {
     const {required, className, children, htmlFor, ...remaining} = props;
 
+    const innerChild = (
+        <Fragment>
+            <span className="text-neutral-600 dark:text-white">{children}</span>
+
+            {required && (
+                <span className="text-red-700 ml-1 leading-6">*</span>
+            )}
+        </Fragment>
+    )
+
     if (htmlFor) {
         return (
-            <label htmlFor={htmlFor} className={classNames("text-sm inline-block mb-2", className)} {...remaining}>
-                <span className="text-neutral-600">{children}</span>
-
-                {required && (
-                    <span className="text-red-700 ml-1 leading-4">*</span>
-                )}
+            <label
+                {...remaining}
+                htmlFor={htmlFor}
+                className={classNames("text-sm inline-block mb-2", className)}
+            >
+                {innerChild}
             </label>
         )
     }
 
     return (
-        <span className={classNames("text-sm inline-block mb-2", className)} {...remaining}>
-            <span className="text-neutral-600">{children}</span>
-
-            {required && (
-                <span className="text-red-700 ml-1 leading-6">*</span>
-            )}
+        <span
+            {...remaining}
+            className={classNames("text-sm inline-block mb-2", className)}
+        >
+            {innerChild}
         </span>
     )
 }

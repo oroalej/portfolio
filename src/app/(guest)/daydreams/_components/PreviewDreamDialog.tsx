@@ -116,25 +116,25 @@ export const PreviewDreamDialog = (props: Required<Omit<DialogProps, 'children'>
 
                     <div className="flex flex-row-reverse lg:flex-col w-full lg:w-80">
                         <div className="grow text-right lg:grow-0 lg:text-left">
-                            <h3 className="hidden lg:block text-lg font-bold capitalize text-neutral-600 mb-2">Details:</h3>
+                            <h3 className="hidden lg:block text-lg font-bold capitalize text-neutral-600 dark:text-white mb-2">Details:</h3>
 
                             <FormGroup>
                                 <Label className="!mb-0">Year</Label>
                                 {isLoading ? <BaseSkeletonLoader style={{height: "28px"}}/> : (
-                                    <p className="text-neutral-700 text-sm lg:text-lg">{selectedItem.year}</p>
+                                    <p className="text-neutral-700 dark:text-white text-sm lg:text-lg">{selectedItem.year}</p>
                                 )}
                             </FormGroup>
 
                             <FormGroup>
                                 <Label className="!mb-0">Description</Label>
                                 {isLoading ? <BaseSkeletonLoader style={{height: "28px"}}/> : (
-                                    <p className="text-neutral-700 text-sm lg:text-lg">{selectedItem.description}</p>
+                                    <p className="text-neutral-700 dark:text-white text-sm lg:text-lg">{selectedItem.description}</p>
                                 )}
                             </FormGroup>
                         </div>
 
                         <div className="grow">
-                            <h3 className="hidden lg:block ext-lg font-bold capitalize text-neutral-600 mb-2">Camera
+                            <h3 className="hidden lg:block ext-lg font-bold capitalize text-neutral-600 dark:text-white mb-2">Camera
                                 Setting:</h3>
 
                             <FormGroup>
@@ -142,7 +142,7 @@ export const PreviewDreamDialog = (props: Required<Omit<DialogProps, 'children'>
                                     <abbr title="International Organization for Standardization">ISO</abbr>
                                 </Label>
                                 {isLoading ? <BaseSkeletonLoader style={{height: "28px"}}/> : (
-                                    <p className="text-neutral-700 text-sm lg:text-lg">{selectedItem.iso}</p>
+                                    <p className="text-neutral-700 dark:text-white text-sm lg:text-lg">{selectedItem.iso}</p>
                                 )}
                             </FormGroup>
 
@@ -152,14 +152,14 @@ export const PreviewDreamDialog = (props: Required<Omit<DialogProps, 'children'>
                                     <span className="xs:hidden"><abbr title="Shutter Speed">SS</abbr></span>
                                 </Label>
                                 {isLoading ? <BaseSkeletonLoader style={{height: "28px"}}/> : (
-                                    <p className="text-neutral-700 text-sm lg:text-lg">{selectedItem.shutter_speed}</p>
+                                    <p className="text-neutral-700 dark:text-white text-sm lg:text-lg">{selectedItem.shutter_speed}</p>
                                 )}
                             </FormGroup>
 
                             <FormGroup>
                                 <Label className="!mb-0">Aperture</Label>
                                 {isLoading ? <BaseSkeletonLoader style={{height: "28px"}}/> : (
-                                    <p className="text-neutral-700 text-sm lg:text-lg">{selectedItem.aperture}</p>
+                                    <p className="text-neutral-700 dark:text-white text-sm lg:text-lg">{selectedItem.aperture}</p>
                                 )}
                             </FormGroup>
                         </div>
