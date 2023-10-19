@@ -6,5 +6,5 @@
 ```bash
 git clone https://github.com/oroalej/portfolio.git portfolio
 cd portfolio
-yarn && yarn dev
+yarn && yarn run dev
 ```
