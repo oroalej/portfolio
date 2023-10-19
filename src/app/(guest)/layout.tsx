@@ -32,7 +32,7 @@ const GuestLayout = ({children}: Pick<BaseComponent, 'children'>) => {
                 <Tooltip
                     id="guest-tooltip"
                     place="top"
-                    className="!bg-neutral-300 !opacity-100 !text-neutral-800"
+                    className="!bg-neutral-300 !opacity-100 !text-neutral-800 z-[100]"
                 />
 
                 <Toaster position="top-right" gutter={8} containerClassName="text-sm"/>

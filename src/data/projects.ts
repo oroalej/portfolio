@@ -78,7 +78,7 @@ export const PROJECT_LIST: Array<ProjectInterface> = [
     source: 'https://github.com/oroalej/portfolio',
     site: 'https://alexanderjeamoro.vercel.app/',
     uses: [
-      'HTML5', 'CSS3', 'TailwindCSS', 'Javascript', 'ReactJS', 'NextJS', 'Typescript', 'Supabase', 'Vercel', 'Git - Version Control'
+      'HTML5', 'CSS3', 'TailwindCSS', 'Javascript', 'ReactJS', 'NextJS', 'Typescript', 'Supabase', 'Vercel', 'Git - Version Control', 'Postgres'
     ]
   },
   {
