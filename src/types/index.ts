@@ -9,6 +9,7 @@ export type Tables<T extends keyof Database["public"]["Tables"]> = Database["pub
 export type Variants = "default" | "text" | "plain" | "outlined";
 export type Colors = "primary" | "secondary" | "danger" | "warning" | "success" | "light" | "dark";
 export type Sizes = "extra-small" | "small" | "default" | "large" | "extra-large";
+export type SortTypes = "asc" | "desc";
 
 export interface BaseComponent {
     children?: ReactNode;
@@ -30,4 +31,20 @@ export interface AudioOrVideoFileData<FileType = FileList | null> extends Requir
 
 export interface FileData<FileType = FileList | null> extends Required<Omit<UploadData<FileType>, "width" | "height" | "duration">> {
 
+}
+
+export interface Paginatable {
+    page?: number;
+    per_page?: number;
+}
+
+export interface Sortable<SortableColumns> {
+    sort?: {
+        column: keyof SortableColumns,
+        order: SortTypes
+    }[];
+}
+
+export interface Filterable<FilterableColumns> {
+    filter?: Partial<Record<keyof FilterableColumns, unknown>>
 }

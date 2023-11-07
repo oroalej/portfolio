@@ -1,6 +1,6 @@
 "use client";
 
-import {usePathname, useSearchParams} from "next/navigation";
+import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {removeEmptyValues} from "@/utils";
 import {useEffect} from "react";
 
@@ -9,6 +9,7 @@ const params: Record<string, string> = {};
 const useSetParamsRouter = () => {
     const pathname = usePathname();
     const searchParams = useSearchParams();
+    const router = useRouter()
 
     useEffect(() => {
         for (const [key, value] of searchParams.entries()) {
@@ -26,11 +27,14 @@ const useSetParamsRouter = () => {
 
     const getUrl = () => `${pathname}?${(new URLSearchParams(removeEmptyValues(params))).toString()}`;
 
+    const push = () => router.push(getUrl());
+
     return {
         setParam,
         getUrl,
         getParams,
-        getParam
+        getParam,
+        push
     }
 }
 
