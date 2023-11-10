@@ -12,6 +12,11 @@ export interface Range {
     to: number
 }
 
+export interface dataWithPagination<Structure> {
+    data: Structure[],
+    pagination: PaginationProps
+}
+
 export interface PaginationProps extends Range {
     total: number;
     per_page: number;

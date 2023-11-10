@@ -35,7 +35,7 @@ export const useStoreQuoteMutation = () => {
 
       return data as unknown as QuoteAPIDataStructure;
     },
-    onSuccess: (data, variables, context) => {
+    onSuccess: (data) => {
       toast.success("Your data has been successfully created!", { id });
 
       queryClient.setQueryData(["quote", data.id], data);

@@ -11,5 +11,8 @@
       ],
       "extends": ["plugin:testing-library/react"]
     }
-  ]
+  ],
+  "rules": {
+    "react-hooks/exhaustive-deps": "off"
+  }
 }
