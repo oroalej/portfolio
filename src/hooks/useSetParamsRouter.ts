@@ -2,7 +2,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { removeEmptyValues } from "@/utils";
 import { useEffect } from "react";
 
-const params: Record<string, string> = {};
+let params: Record<string, string> = {};
 
 const useSetParamsRouter = () => {
   const pathname = usePathname();
@@ -15,6 +15,10 @@ const useSetParamsRouter = () => {
     }
   }, [searchParams]);
 
+  useEffect(() => {
+    params = {};
+  }, [pathname]);
+
   const getParams = () => params;
 
   const getParam = (key: string, defaultValue: string | null = null) =>
@@ -23,6 +27,8 @@ const useSetParamsRouter = () => {
   const setParam = (key: string, value: string | number) => {
     params[key] = value.toString();
   };
+
+  const removeParam = (key: string) => delete params[key];
 
   const getUrl = () =>
     `${pathname}?${new URLSearchParams(removeEmptyValues(params)).toString()}`;
@@ -34,6 +40,7 @@ const useSetParamsRouter = () => {
     getUrl,
     getParams,
     getParam,
+    removeParam,
     push,
   };
 };
