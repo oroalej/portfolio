@@ -54,7 +54,7 @@ const EditQuoteWrapper = () => {
   );
 
   const onDeleteHandler = useCallback(async () => {
-    await deleteQuoteMutation.mutate(quoteId as string);
+    await deleteQuoteMutation.mutateAsync(quoteId as string);
 
     router.push("/admin/quotes");
   }, [quoteId]);
