@@ -1,40 +1,33 @@
-import {Button, Container} from "@/components";
-import {getDaydream} from "@/api/DaydreamAPI";
+import { Button, Container } from "@/components";
 import EditDaydreamWrapper from "@/app/admin/daydreams/[daydreamId]/_components/EditDaydreamWrapper";
-import {Metadata} from "next";
-import {Suspense} from "react";
-import DaydreamFormLoading from "@/app/admin/daydreams/_components/Loading/DaydreamFormLoading";
+import { Metadata } from "next";
+import { Suspense } from "react";
+import DaydreamFormLoading from "@/app/admin/daydreams/_components/DaydreamFormLoading";
 
-interface DreamEditPageProps {
-    params: { daydreamId: string }
-}
-
-export async function generateMetadata({params: {daydreamId}}: DreamEditPageProps): Promise<Metadata> {
-    const item = await getDaydream(daydreamId);
-
-    return {
-        title: `Admin - Editing ${item?.description} dream..`
-    }
-}
+export const metadata: Metadata = {
+  title: "Admin - Editing dream..",
+};
 
 const DreamEditPage = () => (
-    <Container>
-        <div className="py-14">
-            <div className="mb-8">
-                <Button href="/admin/daydreams">Back to list</Button>
-            </div>
+  <Container>
+    <div className="py-14">
+      <div className="mb-8">
+        <Button href="/admin/daydreams">Back to list</Button>
+      </div>
 
-            <Suspense fallback={
-                <DaydreamFormLoading
-                    title="Update Daydream"
-                    cancelButtonText="Reset"
-                    submitButtonText="Update"
-                />
-            }>
-                <EditDaydreamWrapper/>
-            </Suspense>
-        </div>
-    </Container>
-)
+      <Suspense
+        fallback={
+          <DaydreamFormLoading
+            title="Update Daydream"
+            cancelButtonText="Reset"
+            submitButtonText="Update"
+          />
+        }
+      >
+        <EditDaydreamWrapper />
+      </Suspense>
+    </div>
+  </Container>
+);
 
-export default DreamEditPage
+export default DreamEditPage;
