@@ -6,7 +6,6 @@ import {
   dataWithPagination,
   generatePaginationData,
   getRange,
-  PaginationProps,
 } from "@/utils/pagination";
 
 type DaydreamListSortable = Pick<

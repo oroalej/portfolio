@@ -1,7 +1,7 @@
 import toast from "react-hot-toast";
 import supabase from "@/utils/supabase";
 import { Buckets, UploadData } from "@/features/files/types";
-import { omit, snakeCase } from "lodash";
+import { omit } from "lodash";
 import { Tables } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 

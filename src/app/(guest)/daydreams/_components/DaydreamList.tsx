@@ -19,7 +19,7 @@ const DaydreamList = () => {
 
   const { setList, setSelectedIndex, selectedIndex } = useGalleryContext();
   const { isOpen, onOpen, onClose } = useOpenable();
-  const { setParam, getUrl, push } = useSetParamsRouter();
+  const { setParam, push } = useSetParamsRouter();
 
   const { isLoading, isFetching, data } = useGetDaydreamList({
     per_page:

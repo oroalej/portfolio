@@ -22,7 +22,7 @@ const DaydreamTable = () => {
   const queryClient = useQueryClient();
 
   const { isOpen, onClose, onOpen } = useOpenable();
-  const { setParam, getParams, push } = useSetParamsRouter();
+  const { setParam, push } = useSetParamsRouter();
 
   const [selected, setSelected] = useState<DaydreamAPIDataStructure | null>(
     null
