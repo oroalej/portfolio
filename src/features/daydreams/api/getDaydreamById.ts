@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import supabase from "@/utils/supabase";
 import { DaydreamAPIDataStructure } from "@/features/daydreams/types";
+import { durationInMinutes } from "@/utils";
 
 export const getDaydreamById = (id: string) => {
   return supabase
@@ -16,6 +17,8 @@ export const getDaydreamById = (id: string) => {
 export const useGetDaydreamById = (id: string) =>
   useQuery({
     enabled: !!id,
+    staleTime: durationInMinutes(2),
+
     queryKey: ["daydream", id],
     queryFn: async (): Promise<DaydreamAPIDataStructure> => {
       const { data } = await getDaydreamById(id);

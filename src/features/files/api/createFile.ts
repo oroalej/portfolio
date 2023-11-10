@@ -3,7 +3,7 @@ import supabase from "@/utils/supabase";
 import { Buckets, UploadData } from "@/features/files/types";
 import { omit } from "lodash";
 import { Tables } from "@/types";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export interface StoreFileBucketParams {
   pathname: string;
@@ -49,8 +49,10 @@ export const storeFile = ({
 
 const toasterId = crypto.randomUUID();
 
-export const useStoreFileMutation = () =>
-  useMutation({
+export const useStoreFileMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
     mutationFn: async (
       formData: StoreFileBucketParams
     ): Promise<Tables<"files">> => {
@@ -73,12 +75,15 @@ export const useStoreFileMutation = () =>
 
       return data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast.success("Your file has been successfully uploaded!", {
         id: toasterId,
       });
+
+      queryClient.setQueryData(["file", data.storage_file_path], data);
     },
     onError: (error) => {
       toast.error(error.message, { id: toasterId });
     },
   });
+};
