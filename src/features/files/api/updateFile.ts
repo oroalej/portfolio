@@ -46,7 +46,7 @@ export const useUpdateFileMutation = () => {
 
       return data as unknown as FileAPIDataStructure;
     },
-    onSuccess: (data, { item }) => {
+    onSuccess: (data) => {
       queryClient.setQueryData<FileAPIDataStructure>(["file", data.id], data);
 
       updatePaginatedDataCache({

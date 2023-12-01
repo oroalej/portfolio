@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { CategoryAPIDataStructure } from "@/features/categories/types";
-import supabase from "@/utils/supabase";
+import { supabase } from "@/utils/supabase";
 
 export const getCategoryById = (id: string) => {
   return supabase
