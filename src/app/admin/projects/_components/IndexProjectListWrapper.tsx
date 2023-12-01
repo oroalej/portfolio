@@ -115,8 +115,6 @@ const IndexProjectListWrapper = () => {
     queryClient.setQueryData(["projects", params], newOrder);
   };
 
-  const onDeleteHandler = useCallback((id: string) => {}, []);
-
   return (
     <Fragment>
       <CardRoot rounded className="border-b border-neutral-200 mb-2">
