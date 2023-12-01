@@ -21,13 +21,7 @@ export const SectionWrapper = ({
   id,
   className = "",
 }: SectionWrapperInterface) => (
-  <div
-    className={classNames(
-      "py-14 md:py-20 lg:py-32 dark:text-neutral-300",
-      className
-    )}
-    id={id}
-  >
+  <div className={classNames("py-16 dark:text-neutral-300", className)} id={id}>
     <Container>{children}</Container>
   </div>
 );

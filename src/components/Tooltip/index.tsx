@@ -1,21 +1,15 @@
 "use client";
 
-import {PlacesType, Tooltip as TooltipUI} from "react-tooltip";
+import { PlacesType, Tooltip as TooltipUI } from "react-tooltip";
 
 export interface TooltipProps {
-    id: string;
-    place?: PlacesType;
-    className?: string
+  id: string;
+  place?: PlacesType;
+  className?: string;
 }
 
 export const Tooltip = (props: TooltipProps) => {
-    const {id, className, place = 'top'} = props;
+  const { id, className, place = "top" } = props;
 
-    return (
-        <TooltipUI
-            id={id}
-            place={place}
-            className={className}
-        />
-    )
-}
+  return <TooltipUI id={id} place={place} className={className} />;
+};

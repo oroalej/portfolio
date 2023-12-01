@@ -14,3 +14,6 @@ export * from "./Tooltip";
 export * from "./Pagination";
 export * from "./SkeletonLoader";
 export * from "./ExternalLink";
+export * from "./Popover";
+export * from "./Scrollbar";
+export * from "./Dropdown";
