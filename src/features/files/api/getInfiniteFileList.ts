@@ -37,7 +37,7 @@ export const useInfiniteFileList = ({
           pagination: generatePaginationData(per_page, pageParam, count || 0),
         };
       },
-      getNextPageParam: (lastPage, allPages, lastPageParam) => {
+      getNextPageParam: (lastPage) => {
         const pagination = (
           lastPage as DataWithPagination<FileAPIDataStructure>
         ).pagination;

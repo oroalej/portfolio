@@ -36,7 +36,7 @@ export const useDeleteFileMutation = () => {
 
       if (bucketResult.error) throw bucketResult.error;
     },
-    onSuccess: async (data, variables) => {
+    onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ["files"],
         exact: false,

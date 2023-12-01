@@ -20,11 +20,11 @@ const GalleryDialog = ({
   onSelect,
   selected,
 }: GalleryDialogProps) => {
-  const [page, setPage] = useState(DEFAULT_PAGINATION_VALUES.current_page);
+  const [page] = useState(DEFAULT_PAGINATION_VALUES.current_page);
   const [localSelected, setLocalSelected] =
     useState<FileAPIDataStructure | null>(null);
 
-  const { isLoading, data } = useFileList({
+  const { data } = useFileList({
     bucket_name: "images",
     per_page: DEFAULT_PAGINATION_VALUES.per_page,
     page,

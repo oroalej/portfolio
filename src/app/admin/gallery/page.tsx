@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import { Metadata } from "next";
 import { BreadcrumbDataSetter } from "@/app/admin/_components/Breadcrumbs";
 

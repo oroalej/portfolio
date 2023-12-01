@@ -27,7 +27,7 @@ export const useMoveFileMutation = () =>
         id: toasterId,
       });
     },
-    onError: (error, variables) => {
+    onError: (error) => {
       toast.error(error.message, { id: toasterId });
     },
   });
