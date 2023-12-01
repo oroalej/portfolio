@@ -1,6 +1,5 @@
 "use client";
 
-import { VscSettings } from "react-icons/vsc";
 import * as PopoverUI from "@radix-ui/react-popover";
 import { PopoverContentProps } from "@radix-ui/react-popover";
 import * as React from "react";
@@ -12,7 +11,6 @@ export const PopoverRoot = ({ children }: BaseComponent) => {
   return <PopoverUI.Root>{children}</PopoverUI.Root>;
 };
 
-interface PopoverTrigger {}
 export const PopoverTrigger = ({ children, className }: BaseComponent) => (
   <PopoverUI.Trigger
     className={className}

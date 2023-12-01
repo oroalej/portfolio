@@ -2,33 +2,32 @@
 
 import { Listbox } from "@headlessui/react";
 import { BaseComponent } from "@/types";
-import classNames from "classnames";
 import { FormErrorMessage } from "@/components";
 import { PiXBold } from "react-icons/pi";
 import { Fragment } from "react";
+import classNames from "classnames";
 
 export interface SelectItem<Type> {
   value: Type;
   text: string;
 }
 
-export interface SingleSelectProps<Type, OptionItem> {
+export interface SingleSelectProps<Type, OptionType> {
   value?: Type;
   defaultValue?: Type;
 
-  options: OptionItem[];
-  optionValue?: keyof OptionItem;
-  optionText?: keyof OptionItem;
+  options: OptionType[];
+  optionValue?: keyof OptionType & string;
+  optionText?: keyof OptionType & string;
 
   onChange(value: Type): void;
 
+  placeholder?: string;
   error?: string;
   clearable?: boolean;
 }
 
-export interface SelectItemProps {
-  value: any;
-  text: any;
+export interface SelectItemProps extends SelectItem<string> {
   selected?: boolean;
 }
 
@@ -53,7 +52,7 @@ export const SelectButton = (props: SelectButtonProps) => {
   return (
     <div
       className={classNames(
-        "flex flex-row justify-between items-stretch relative border min-w-[5rem] w-full min-h-[40px] gap-2",
+        "flex flex-row justify-between items-stretch relative border min-w-[5rem] w-full min-h-[40px] gap-2 rounded-md text-sm",
         [
           isError
             ? "border-red-600 text-red-600"
@@ -93,10 +92,9 @@ export const SelectItem = (props: SelectItemProps) => {
 
   return (
     <Listbox.Option
-      key={``}
       value={value}
       className={classNames(
-        "relative cursor-default select-none rounded py-2 pl-3 pr-9 cursor-pointer hover:bg-neutral-100 transition-colors",
+        "relative select-none rounded py-2 pl-3 pr-9 cursor-pointer hover:bg-neutral-100 transition-colors text-sm",
         {
           "bg-neutral-100": selected,
         }
@@ -110,23 +108,20 @@ export const SelectItem = (props: SelectItemProps) => {
 export const SingleSimpleSelect = <
   ValueType extends string | number = number,
   OptionItem extends {} = SelectItem<ValueType>
->(
-  props: SingleSelectProps<ValueType, OptionItem>
-) => {
-  const {
-    onChange,
-    options,
-    error,
-    clearable,
-    value,
-    defaultValue = undefined,
-    optionValue = "value",
-    optionText = "text",
-  } = props;
-
+>({
+  onChange,
+  options,
+  error,
+  clearable,
+  value,
+  placeholder,
+  optionValue = "text" as any,
+  optionText = "value" as any,
+  defaultValue = undefined,
+}: SingleSelectProps<ValueType, OptionItem>) => {
   const selectedItem = options
-    .filter((item) => item?.[optionValue as keyof OptionItem] === value)
-    .pop();
+    .filter((item) => item?.[optionValue as keyof OptionItem] == value)
+    .pop() as OptionItem;
 
   return (
     <div className="relative">
@@ -140,19 +135,23 @@ export const SingleSimpleSelect = <
               isOpen={open}
               onReset={() => onChange(defaultValue as any)}
             >
-              {selectedItem?.[optionText as keyof OptionItem] || ""}
+              {selectedItem?.[optionText as keyof OptionItem] ||
+                placeholder ||
+                ""}
             </SelectButton>
 
             <SelectContent>
               {options.map((item, index) => {
                 const itemValue =
-                  item?.[optionValue as keyof OptionItem] || undefined;
+                  item?.[optionValue as keyof OptionItem] ?? undefined;
 
                 return (
                   <SelectItem
                     key={`single-select-${itemValue}-${index}`}
-                    text={item[optionText as keyof OptionItem]}
-                    value={itemValue}
+                    text={
+                      item[optionText as keyof OptionItem] as unknown as string
+                    }
+                    value={itemValue as any}
                     selected={itemValue === value}
                   />
                 );
