@@ -16,7 +16,7 @@ export const useGetTermByIdentifier = (identifier: number) =>
     staleTime: Infinity,
     queryKey: ["term", [identifier]],
     queryFn: async (): Promise<TermAPIDataStructure> => {
-      const { data, count } = await getTermByIdentifier(identifier);
+      const { data } = await getTermByIdentifier(identifier);
 
       if (data === null) throw new Error("Data not found.");
 

@@ -12,7 +12,7 @@ export const useGetTermList = () =>
     staleTime: durationInMinutes(5),
     queryKey: ["terms"],
     queryFn: async (): Promise<TermAPIDataStructure[]> => {
-      const { data, count } = await getTermList();
+      const { data } = await getTermList();
 
       return data || [];
     },

@@ -52,7 +52,7 @@ export const useGetTaxonomyByTermId = ({
     staleTime: Infinity,
     queryKey: ["taxonomy", filter],
     queryFn: async (): Promise<TaxonomyAPIDataStructure[]> => {
-      const { data, count } = await getTaxonomyByTermId({ filter, sort, q });
+      const { data } = await getTaxonomyByTermId({ filter, sort, q });
 
       if (data === null) throw new Error("Data not found.");
 
