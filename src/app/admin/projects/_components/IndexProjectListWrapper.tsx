@@ -20,7 +20,7 @@ import {
 } from "@dnd-kit/core";
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { find, pick } from "lodash";
-import { Fragment, Suspense, useCallback, useEffect, useState } from "react";
+import { Fragment, Suspense, useEffect, useState } from "react";
 import { useId } from "@radix-ui/react-id";
 import {
   restrictToVerticalAxis,
