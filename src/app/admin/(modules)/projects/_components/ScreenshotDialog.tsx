@@ -19,7 +19,7 @@ import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { SetRequired } from "@/types";
 import { isEqual, pick } from "lodash";
 import * as UIScrollArea from "@radix-ui/react-scroll-area";
-import GalleryWrapper from "@/app/admin/gallery/_components/GalleryWrapper";
+import GalleryWrapper from "@/app/admin/(modules)/gallery/_components/GalleryWrapper";
 
 export interface ScreenshotForm {
   id?: string;

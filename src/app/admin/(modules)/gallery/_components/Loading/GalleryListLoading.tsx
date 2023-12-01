@@ -1,5 +1,5 @@
 import { CardBody, CardRoot } from "@/components";
-import GalleryItemLoading from "@/app/admin/gallery/_components/Loading/GalleryItemLoading";
+import GalleryItemLoading from "@/app/admin/(modules)/gallery/_components/Loading/GalleryItemLoading";
 
 const GalleryListLoading = () => (
   <CardRoot rounded className="flex-1">

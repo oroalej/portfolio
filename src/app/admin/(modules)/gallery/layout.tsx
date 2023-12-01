@@ -2,7 +2,7 @@ import { Fragment, Suspense } from "react";
 import { BaseComponent } from "@/types";
 import { Button, CardHeader, CardRoot, CardTitle } from "@/components";
 import { FaRegImages } from "react-icons/fa6";
-import GalleryList from "@/app/admin/gallery/_components/GalleryList";
+import GalleryList from "@/app/admin/(modules)/gallery/_components/GalleryList";
 import GalleryListLoading from "./_components/Loading/GalleryListLoading";
 
 const AdminGalleryIndexLayout = ({

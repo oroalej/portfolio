@@ -5,9 +5,9 @@ import { useParams, useSearchParams } from "next/navigation";
 import { useFileList } from "@/features/files/api/getFileList";
 import { Suspense } from "react";
 import { DEFAULT_PAGINATION_VALUES } from "@/utils/pagination";
-import GalleryItemLoading from "@/app/admin/gallery/_components/Loading/GalleryItemLoading";
-import GalleryListLoading from "@/app/admin/gallery/_components/Loading/GalleryListLoading";
-import GalleryItem from "@/app/admin/gallery/_components/GalleryItem";
+import GalleryItemLoading from "@/app/admin/(modules)/gallery/_components/Loading/GalleryItemLoading";
+import GalleryListLoading from "@/app/admin/(modules)/gallery/_components/Loading/GalleryListLoading";
+import GalleryItem from "@/app/admin/(modules)/gallery/_components/GalleryItem";
 import useSetParamsRouter from "@/hooks/useSetParamsRouter";
 
 const GalleryList = () => {

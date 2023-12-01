@@ -9,7 +9,7 @@ import {
 } from "@/components";
 import { FaRegImages } from "react-icons/fa6";
 import { useFileById } from "@/features/files/api/getFileById";
-import ShowWrapperLoading from "@/app/admin/gallery/[imageId]/_components/Loading/ShowWrapperLoading";
+import ShowWrapperLoading from "@/app/admin/(modules)/gallery/[imageId]/_components/Loading/ShowWrapperLoading";
 import { computeStorageSizeFromByte } from "@/utils";
 import { useStoragePublicUrl } from "@/features/files/api";
 import Image from "next/image";

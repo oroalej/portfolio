@@ -33,7 +33,7 @@ import { getFileBlob } from "@/features/files/api/downloadFile";
 import { downloadFile } from "@/utils";
 import { useUpdateFileMutation } from "@/features/files/api/updateFile";
 import { GoBookmark, GoBookmarkFill } from "react-icons/go";
-import { RenameDialog } from "@/app/admin/gallery/_components/RenameDialog";
+import { RenameDialog } from "@/app/admin/(modules)/gallery/_components/RenameDialog";
 
 interface GalleryItem {
   item: FileAPIDataStructure;

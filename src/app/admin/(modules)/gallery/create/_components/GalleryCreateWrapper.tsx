@@ -18,7 +18,7 @@ import {
   DEFAULT_REJECT_FILES_VALUES,
   RejectedFileListDialog,
   RejectedFiles,
-} from "@/app/admin/gallery/create/_components/RejectedFileListDialog";
+} from "@/app/admin/(modules)/gallery/create/_components/RejectedFileListDialog";
 import { cloneDeep, omit } from "lodash";
 import { useStoreFileMutation } from "@/features/files/api";
 import classNames from "classnames";
