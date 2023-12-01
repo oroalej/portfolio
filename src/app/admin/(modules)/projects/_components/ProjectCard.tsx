@@ -12,7 +12,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { Fragment, useState } from "react";
 import classNames from "classnames";
 import SupabaseImage from "@/app/admin/daydreams/_components/SupabaseImage";
-import ImagePreviewDialog from "@/app/admin/projects/_components/ImagePreviewDialog";
+import ImagePreviewDialog from "@/app/admin/(modules)/projects/_components/ImagePreviewDialog";
 import toast from "react-hot-toast";
 
 export interface ProjectCardProps {

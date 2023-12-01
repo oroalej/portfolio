@@ -4,7 +4,7 @@ import {
   DEFAULT_PROJECT_FORM_VALUES,
   ProjectForm,
   ProjectFormParams,
-} from "@/app/admin/projects/_components/ProjectForm";
+} from "@/app/admin/(modules)/projects/_components/ProjectForm";
 import { useUpdateProjectMutation } from "@/features/projects/api/updateProject";
 import { useDeleteProjectSkillsMutation } from "@/features/projects/api/junctions/skills/deleteProjectSkills";
 import { useStoreProjectSkillsMutation } from "@/features/projects/api/junctions/skills/storeProjectSkills";
@@ -14,7 +14,7 @@ import { projectFormItemTransformer } from "@/features/projects/transformers";
 import { ProjectAPIDataStructure } from "@/features/projects/types";
 import { difference } from "lodash";
 import { useDeleteProjectScreenshotsMutation } from "@/features/projects/api/junctions/screenshots/deleteProjectScreenshots";
-import { ProjectFormLoading } from "@/app/admin/projects/_components/Loading/ProjectFormLoading";
+import { ProjectFormLoading } from "@/app/admin/(modules)/projects/_components/Loading/ProjectFormLoading";
 import {
   UpsertScreenshotItem,
   useUpsertProjectScreenshotsMutation,

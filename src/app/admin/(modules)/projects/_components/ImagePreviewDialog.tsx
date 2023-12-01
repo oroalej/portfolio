@@ -2,7 +2,7 @@ import { Dialog, DialogProps } from "@/components";
 import { MdClose } from "react-icons/md";
 import { useHotkeys } from "react-hotkeys-hook";
 import classNames from "classnames";
-import ImagePreviewContainer from "@/app/admin/projects/_components/ImagePreviewContainer";
+import ImagePreviewContainer from "@/app/admin/(modules)/projects/_components/ImagePreviewContainer";
 
 const ImagePreviewDialog = ({
   isOpen,

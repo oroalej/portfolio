@@ -35,9 +35,9 @@ import { GalleryProvider } from "@/context/GalleryContext";
 import {
   ProjectCard,
   ProjectCardItem,
-} from "@/app/admin/projects/_components/ProjectCard";
+} from "@/app/admin/(modules)/projects/_components/ProjectCard";
 import { ProjectListSelector } from "@/features/projects/transformers";
-import ProjectCardLoading from "@/app/admin/projects/_components/Loading/ProjectCardLoading";
+import ProjectCardLoading from "@/app/admin/(modules)/projects/_components/Loading/ProjectCardLoading";
 
 const IndexProjectListWrapper = () => {
   const id = useId();

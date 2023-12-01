@@ -3,7 +3,7 @@ import { Fragment } from "react";
 import { Metadata } from "next";
 import { BreadcrumbDataSetter } from "@/app/admin/_components/Breadcrumbs";
 import { GoFileDirectoryFill } from "react-icons/go";
-import ProjectCreateWrapper from "@/app/admin/projects/create/_components/ProjectCreateWrapper";
+import ProjectCreateWrapper from "@/app/admin/(modules)/projects/create/_components/ProjectCreateWrapper";
 
 export const metadata: Metadata = {
   title: "Admin - Create Project",

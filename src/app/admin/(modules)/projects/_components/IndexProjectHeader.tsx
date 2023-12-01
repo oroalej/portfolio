@@ -4,7 +4,7 @@ import { Button, CardHeader, CardRoot, CardTitle } from "@/components";
 import { GoFileDirectoryFill } from "react-icons/go";
 import { InputField } from "@/components/Form/InputField";
 import { RiSearch2Line } from "react-icons/ri";
-import { ProjectTypeSelect } from "@/app/admin/projects/_components/Select/ProjectTypeSelect";
+import { ProjectTypeSelect } from "@/app/admin/(modules)/projects/_components/Select/ProjectTypeSelect";
 import { useQueryState } from "next-usequerystate";
 import { useState } from "react";
 

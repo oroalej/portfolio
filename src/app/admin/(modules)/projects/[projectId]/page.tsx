@@ -3,7 +3,7 @@ import { CardHeader, CardRoot, CardTitle } from "@/components";
 import { GoFileDirectoryFill } from "react-icons/go";
 import { Fragment } from "react";
 import { Metadata } from "next";
-import ProjectEditWrapper from "@/app/admin/projects/[projectId]/_components/ProjectEditWrapper";
+import ProjectEditWrapper from "@/app/admin/(modules)/projects/[projectId]/_components/ProjectEditWrapper";
 
 export const metadata: Metadata = {
   title: "Admin - Edit Project",

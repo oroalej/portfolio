@@ -1,8 +1,8 @@
 import { Fragment } from "react";
 import { BreadcrumbDataSetter } from "@/app/admin/_components/Breadcrumbs";
 import { Metadata } from "next";
-import IndexProjectListWrapper from "@/app/admin/projects/_components/IndexProjectListWrapper";
-import IndexProjectHeader from "@/app/admin/projects/_components/IndexProjectHeader";
+import IndexProjectListWrapper from "@/app/admin/(modules)/projects/_components/IndexProjectListWrapper";
+import IndexProjectHeader from "@/app/admin/(modules)/projects/_components/IndexProjectHeader";
 
 export const metadata: Metadata = {
   title: "Admin - Projects",

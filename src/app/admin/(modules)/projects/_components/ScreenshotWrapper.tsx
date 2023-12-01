@@ -1,4 +1,4 @@
-import { ScreenshotItem as ScreenshotItemUI } from "@/app/admin/projects/_components/ScreenshotItem";
+import { ScreenshotItem as ScreenshotItemUI } from "@/app/admin/(modules)/projects/_components/ScreenshotItem";
 import { Button, Scrollbar } from "@/components";
 import {
   closestCorners,
@@ -16,7 +16,7 @@ import {
   DEFAULT_SCREENSHOT_FORM_VALUES,
   ScreenshotDialog,
   ScreenshotForm,
-} from "@/app/admin/projects/_components/ScreenshotDialog";
+} from "@/app/admin/(modules)/projects/_components/ScreenshotDialog";
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { useMemo, useState } from "react";
 import { useId } from "@radix-ui/react-id";

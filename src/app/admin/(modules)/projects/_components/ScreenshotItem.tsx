@@ -4,7 +4,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { MdOutlineDragIndicator } from "react-icons/md";
 import { FaPencilAlt } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa6";
-import { ScreenshotForm } from "@/app/admin/projects/_components/ScreenshotDialog";
+import { ScreenshotForm } from "@/app/admin/(modules)/projects/_components/ScreenshotDialog";
 import { SetRequired } from "@/types";
 import { useFileById } from "@/features/files/api/getFileById";
 import classNames from "classnames";

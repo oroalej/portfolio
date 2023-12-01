@@ -7,7 +7,7 @@ import {
   Label,
 } from "@/components";
 import { InputFieldLoading } from "@/components/Form/InputField";
-import { ScreenshotItemLoading } from "@/app/admin/projects/_components/Loading/ScreenshotItemLoading";
+import { ScreenshotItemLoading } from "@/app/admin/(modules)/projects/_components/Loading/ScreenshotItemLoading";
 
 export const ProjectFormLoading = () => (
   <CardRoot rounded className="w-4/5 mx-auto opacity-95">

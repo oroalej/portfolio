@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import {
   ProjectForm,
   ProjectFormParams,
-} from "@/app/admin/projects/_components/ProjectForm";
+} from "@/app/admin/(modules)/projects/_components/ProjectForm";
 
 const ProjectCreateWrapper = () => {
   const storeProjectMutation = useStoreProjectMutation();

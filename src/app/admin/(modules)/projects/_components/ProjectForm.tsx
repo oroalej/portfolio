@@ -17,15 +17,15 @@ import { FormEvent, Fragment, Suspense, useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Tables } from "@/types";
-import { ScreenshotWrapper } from "@/app/admin/projects/_components/ScreenshotWrapper";
+import { ScreenshotWrapper } from "@/app/admin/(modules)/projects/_components/ScreenshotWrapper";
 import { array, object, string } from "zod";
 import {
   ScreenshotForm,
   ScreenshotSchema,
-} from "@/app/admin/projects/_components/ScreenshotDialog";
-import { ProjectTypeSelect } from "@/app/admin/projects/_components/Select/ProjectTypeSelect";
+} from "@/app/admin/(modules)/projects/_components/ScreenshotDialog";
+import { ProjectTypeSelect } from "@/app/admin/(modules)/projects/_components/Select/ProjectTypeSelect";
 import { useRouter } from "next/navigation";
-import SkillSearchableSelect from "@/app/admin/projects/_components/Select/SkillSearchableSelect";
+import SkillSearchableSelect from "@/app/admin/(modules)/projects/_components/Select/SkillSearchableSelect";
 
 export interface ProjectFormParams
   extends Omit<Tables<"projects">, "created_at" | "id" | "project_order"> {
