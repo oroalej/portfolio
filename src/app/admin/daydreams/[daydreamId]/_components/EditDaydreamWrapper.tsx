@@ -1,12 +1,9 @@
 "use client";
 
-import { omit, parseInt } from "lodash";
-import DaydreamForm from "@/app/admin/daydreams/_components/DaydreamForm";
-import { CreateDreamFormInterface } from "@/features/daydreams/types";
-import { Fragment, useCallback } from "react";
+import { omit } from "lodash";
+import { DreamFormParams } from "@/features/daydreams/types";
+import { Fragment, Suspense, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
-import DaydreamFormLoading from "@/app/admin/daydreams/_components/DaydreamFormLoading";
-import { any, number, object, string, ZodType } from "zod";
 
 import { AlertDialog } from "@/components";
 import { useOpenable } from "@/hooks";
@@ -15,42 +12,10 @@ import {
   useGetDaydreamById,
   useUpdateDaydreamMutation,
 } from "@/features/daydreams/api";
-import { useStoragePublicUrl } from "@/features/files/api";
-import { ACCEPTED_IMAGE_TYPES, MAX_FILE_SIZE } from "@/features/daydreams/data";
 
-export const EditDreamSchema = object({
-  shutter_speed: any().refine(
-    (item) => !isNaN(parseInt(item)),
-    "The shutter speed field is required."
-  ),
-  aperture: any().refine(
-    (item) => !isNaN(parseInt(item)),
-    "The aperture field is required."
-  ),
-  iso: any().refine(
-    (item) => !isNaN(parseInt(item)),
-    "The iso field is required."
-  ),
-  year: number(),
-  description: string().trim().min(1, "The description field is required."),
-  image: object({
-    file: (any() as ZodType<FileList>)
-      .optional()
-      .refine(
-        (files) => !files || ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-        "Invalid file type. File type .jpg, .jpeg, .png and .webp files only are accepted."
-      )
-      .refine(
-        (files) => !files || files?.[0]?.size <= MAX_FILE_SIZE,
-        `You're file is too large, max file size is 15MB.`
-      ),
-    width: number(),
-    height: number(),
-    name: string().trim(),
-    type: string().trim(),
-    size: number(),
-  }),
-});
+import toast from "react-hot-toast";
+import DaydreamFormLoading from "@/app/admin/daydreams/_components/Loading/DaydreamFormLoading";
+import DaydreamForm from "@/app/admin/daydreams/_components/DaydreamForm";
 
 const EditDaydreamWrapper = () => {
   const router = useRouter();
@@ -58,68 +23,86 @@ const EditDaydreamWrapper = () => {
 
   const updateDaydreamMutation = useUpdateDaydreamMutation();
   const deleteDaydreamMutation = useDeleteDaydreamMutation();
+
   const { data: daydreamData, isLoading: isDataFetching } = useGetDaydreamById(
     daydreamId as string
   );
 
-  const fileQuery = useStoragePublicUrl(daydreamData?.file.storage_file_path);
-
   const { isOpen, onClose, onOpen } = useOpenable();
 
   const onSubmitHandler = useCallback(
-    async (value: CreateDreamFormInterface) => {
+    async ({ file, ...formData }: DreamFormParams) => {
       if (!daydreamData) return;
 
-      await updateDaydreamMutation.mutateAsync({
-        formData: value,
-        item: daydreamData,
-      });
+      await toast.promise(
+        updateDaydreamMutation.mutateAsync({
+          formData,
+          id: daydreamData.id,
+        }),
+        {
+          success: "Dream successfully updated!",
+          loading: "Updating dream...",
+          error: (error) => error,
+        }
+      );
     },
     [daydreamData]
   );
 
-  const onDeleteHandler = async () => {
-    if (!daydreamData) return;
+  const onDeleteHandler = useCallback(async () => {
+    if (!daydreamId) return;
 
-    await deleteDaydreamMutation.mutateAsync(daydreamData);
+    await toast.promise(
+      deleteDaydreamMutation.mutateAsync(daydreamId as string),
+      {
+        success: "Your data has been successfully deleted!",
+        loading: "Deleting dream...",
+        error: (error) => error,
+      }
+    );
 
-    router.push("/admin/daydreams");
-  };
+    router.push("/admin/daydreams/create");
+  }, []);
 
-  if (isDataFetching || !daydreamData || !fileQuery.data) {
+  if (isDataFetching || !daydreamData) {
     return (
-      <DaydreamFormLoading
-        title="Update Daydream"
-        cancelButtonText="Reset"
-        submitButtonText="Update"
-      />
+      <DaydreamFormLoading title="Edit Dream" submitButtonText="Update Dream" />
     );
   }
 
   return (
     <Fragment>
-      <DaydreamForm
-        item={{
-          ...omit(daydreamData, ["id", "file", "created_at"]),
-          image: {
-            ...omit(daydreamData.file, ["storage_file_path", "id"]),
-            file: null,
-          },
-        }}
-        onSubmit={onSubmitHandler}
-        onDelete={onOpen}
-        defaultImage={fileQuery.data}
-        schema={EditDreamSchema}
-        title={`Edit Daydream`}
-        submitButtonText="Update"
-        cancelButtonText="Reset"
-      />
+      <Suspense
+        fallback={
+          <DaydreamFormLoading
+            title="Edit Dream"
+            submitButtonText="Update Dream"
+          />
+        }
+      >
+        <DaydreamForm
+          title="Edit Dream"
+          item={{
+            ...omit(daydreamData, "file"),
+            file_id: daydreamData.file.id,
+            file: {
+              id: daydreamData.file.id,
+              name: daydreamData.file.name,
+              bucket_name: daydreamData.file.bucket_name,
+              storage_file_path: daydreamData.file.storage_file_path,
+            },
+          }}
+          onSubmit={onSubmitHandler}
+          onDelete={onOpen}
+          submitButtonText="Update Dream"
+        />
+      </Suspense>
 
       <AlertDialog
         onConfirm={onDeleteHandler}
         isOpen={isOpen}
         onClose={onClose}
-        confirmButtonText="Yes, delete"
+        confirmButtonText="Yes, delete dream"
         confirmButtonColor="danger"
         title="Delete Dream"
         isLoading={deleteDaydreamMutation.isPending}

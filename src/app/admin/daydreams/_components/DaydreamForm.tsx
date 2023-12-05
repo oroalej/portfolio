@@ -1,13 +1,9 @@
 "use client";
 
 import {
+  BaseSkeletonLoader,
   Button,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  CardRoot,
-  CardTitle,
-  FormErrorMessage,
+  Card,
   FormGroup,
   Label,
   SearchableSelect,
@@ -17,238 +13,185 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  ACCEPTED_IMAGE_TYPES,
   APERTURE,
   DEFAULT_FORM_VALUES,
   ISO,
   SHUTTER_SPEED,
   YEARS,
 } from "@/features/daydreams/data";
-import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
-import { PiImageLight, PiX } from "react-icons/pi";
-import Image from "next/image";
-import classNames from "classnames";
-import { isEmpty } from "lodash";
+import {
+  FormEvent,
+  Fragment,
+  Suspense,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { isEmpty, parseInt } from "lodash";
 import { SelectDataFormatter } from "@/utils";
-import { CreateDreamFormInterface } from "@/features/daydreams/types";
-import { ZodObject } from "zod";
-import { ImageFileData } from "@/features/files/types";
+import { DreamFormParams } from "@/features/daydreams/types";
+import { any, number, object, string } from "zod";
+import { FileAPIDataStructure } from "@/features/files/types";
+import { FaRegImages } from "react-icons/fa6";
+import { PiXBold } from "react-icons/pi";
+import GalleryDialog from "@/app/admin/daydreams/_components/GalleryDialog";
+import SupabaseImage from "@/app/admin/daydreams/_components/SupabaseImage";
+import classNames from "classnames";
+
+export const DreamSchema = object({
+  shutter_speed: any().refine(
+    (item) => !isNaN(parseInt(item)),
+    "The shutter speed field is required."
+  ),
+  aperture: any().refine(
+    (item) => !isNaN(parseInt(item)),
+    "The aperture field is required."
+  ),
+  iso: any().refine(
+    (item) => !isNaN(parseInt(item)),
+    "The iso field is required."
+  ),
+  year: number(),
+  description: string().trim().min(1, "The description field is required."),
+  file_id: string().trim().min(1, "Image is required."),
+});
 
 interface DaydreamFormComponentProps {
-  item?: CreateDreamFormInterface;
-  onSubmit: (value: CreateDreamFormInterface) => Promise<void>;
-  onDelete?: () => void;
-  defaultImage: string;
-  schema: ZodObject<any>;
   title: string;
+  item?: DreamFormParams;
+  onSubmit: (value: DreamFormParams) => Promise<void>;
+  onDelete?: () => void;
   submitButtonText?: string;
-  cancelButtonText?: string;
 }
 
 const DaydreamForm = ({
+  title,
   item = DEFAULT_FORM_VALUES,
   onSubmit,
   onDelete,
-  schema,
-  title,
-  defaultImage = "",
   submitButtonText = "Submit",
-  cancelButtonText = "Cancel",
 }: DaydreamFormComponentProps) => {
-  const imageInputRef = useRef<HTMLInputElement | null>(null);
-  const [fileDetails, setFileDetails] = useState<ImageFileData>(item!.image);
-  const [localImage, setLocalImage] = useState<string>(defaultImage);
+  const [isGalleryDialogOpen, setIsGalleryDialogOpen] = useState(false);
+  const [image, setImage] = useState<FileAPIDataStructure | null>(
+    (item?.file as FileAPIDataStructure) ?? null
+  );
 
   const {
     handleSubmit,
     formState,
     control,
     getValues,
-    register,
     reset,
-    resetField,
     setValue,
     trigger,
-  } = useForm<CreateDreamFormInterface>({
+  } = useForm<DreamFormParams>({
     mode: "onChange",
     defaultValues: useMemo(() => item, [item]),
-    resolver: zodResolver(schema),
+    resolver: zodResolver(DreamSchema),
   });
 
   useEffect(() => {
     reset(item);
-  }, [item]);
 
-  const {
-    ref: imageRegisterRef,
-    onChange: _,
-    ...imageRegister
-  } = register("image.file");
+    if (!formState.isSubmitting) {
+      setImage((item?.file as FileAPIDataStructure) ?? null);
+    }
+  }, [item]);
 
   const onSubmitHandler = async () => {
     await onSubmit(getValues());
     onResetFormHandler();
   };
 
-  const onImageInputHandler = async (event: FormEvent<HTMLInputElement>) => {
-    const files = event.currentTarget?.files || [];
-
-    if (files.length) {
-      const imageFile = files[0];
-
-      const details = {
-        ...fileDetails,
-        file: files as FileList,
-        name: imageFile.name,
-        type: imageFile.type,
-        size: imageFile.size,
-      };
-
-      if (ACCEPTED_IMAGE_TYPES.includes(imageFile.type)) {
-        setLocalImage(URL.createObjectURL(imageFile));
-      }
-
-      setFileDetails(details);
-      setValue("image", details, { shouldDirty: true });
-
-      await trigger("image.file");
-    } else onResetImageInputHandler();
-  };
-
-  const onResetImageInputHandler = () => {
-    resetField("image", { keepDirty: false });
-
-    setFileDetails(DEFAULT_FORM_VALUES.image);
-    setLocalImage(defaultImage);
-
-    if (imageInputRef?.current) {
-      imageInputRef.current.value = "";
-    }
-  };
-
   const onResetFormHandler = () => {
-    onResetImageInputHandler();
+    setImage((item?.file as FileAPIDataStructure) ?? null);
     reset(item);
   };
 
-  const getImageDimensions = async (image: HTMLImageElement) => {
-    const details = {
-      ...fileDetails,
-      width: image.naturalWidth,
-      height: image.naturalHeight,
-    };
-
-    setFileDetails(details);
-    setValue("image", details);
-
-    await trigger("image");
-  };
-
   return (
-    <form
-      method="post"
-      onSubmit={(event: FormEvent) => handleSubmit(onSubmitHandler)(event)}
-    >
-      <fieldset
-        className="disabled:opacity-95"
-        disabled={formState.isSubmitting}
+    <Fragment>
+      <form
+        method="post"
+        onSubmit={(event: FormEvent) => handleSubmit(onSubmitHandler)(event)}
+        className="max-w-md w-full sticky top-2"
       >
-        <CardRoot>
-          <CardHeader>
-            <CardTitle>{title}</CardTitle>
-          </CardHeader>
-          <CardBody>
-            <div className="grid gap-6 grid-cols-2">
-              <FormGroup className="flex flex-col">
-                <Label>Image: </Label>
+        <fieldset
+          className="disabled:opacity-95"
+          disabled={formState.isSubmitting}
+        >
+          <Card rounded>
+            <Card.Header className="pb-0">
+              <Card.Title>{title}</Card.Title>
+            </Card.Header>
+            <Card.Body>
+              <h3 className="text-base font-bold text-neutral-600 mb-3">
+                {"Photo: "}
+              </h3>
 
-                <small className="leading-snug block text-neutral-500 text-xs mb-2">
-                  File types supported: JPG, JPEG, PNG, and WEBP. Max size: 15
-                  MB
-                </small>
-
+              <div className="w-full mb-3">
                 <div
                   className={classNames(
-                    "relative grow group border cursor-pointer",
                     [
-                      !!formState.errors?.image
-                        ? "border-red-700"
-                        : "border-neutral-200",
-                    ]
+                      !!formState.errors.file_id
+                        ? "border-red-700 bg-red-100"
+                        : "border-neutral-200 hover:border-neutral-400 bg-neutral-100",
+                    ],
+                    "group relative w-52 mx-auto aspect-square overflow-hidden border-2 border-dashed rounded-md"
                   )}
                 >
-                  <div
-                    className="h-full w-full"
-                    onClick={() =>
-                      imageInputRef && imageInputRef.current?.click()
-                    }
-                  >
-                    {!!localImage ? (
-                      <div className="relative w-full h-full bg-neutral-200">
-                        <Image
-                          src={localImage}
-                          alt={fileDetails.name}
-                          className="w-full h-full object-contain pointer-events-none group-hover:opacity-90"
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                          quality={75}
-                          priority={fileDetails.size > 1280}
-                          fill
-                          onLoadingComplete={getImageDimensions}
-                        />
-                      </div>
-                    ) : (
-                      <div
-                        className={classNames(
-                          "absolute inset-0 flex items-center justify-center z-10",
-                          [
-                            !!formState.errors?.image?.file
-                              ? "bg-red-100 text-red-700"
-                              : "hover:bg-neutral-200 hover:bg-opacity-25 text-neutral-600",
-                          ]
-                        )}
-                      >
-                        <span className="opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                          <PiImageLight size={28} />
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
-                  {localImage !== defaultImage && (
+                  {image && (
                     <button
-                      className="absolute top-1 right-2 p-2 text-neutral-700 transition-all opacity-0 group-hover:opacity-100 z-10"
-                      onClick={onResetImageInputHandler}
+                      className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 text-neutral-600 hover:text-neutral-700 transition-colors cursor-pointer p-1 z-[1]"
+                      onClick={async () => {
+                        setImage(null);
+                        setValue("file_id", null);
+                        await trigger("file_id");
+                      }}
                     >
-                      <PiX size={24} />
+                      <PiXBold size={20} />
                     </button>
                   )}
 
-                  <input
-                    accept={ACCEPTED_IMAGE_TYPES.join(", ")}
-                    type="file"
-                    className="hidden"
-                    tabIndex={-1}
-                    ref={(ref) => {
-                      imageRegisterRef(ref);
-                      imageInputRef.current = ref;
-                    }}
-                    onChange={onImageInputHandler}
-                    {...imageRegister}
-                  />
-                </div>
-
-                {formState.errors?.image?.file && (
-                  <div className="mt-1.5">
-                    <FormErrorMessage>
-                      {formState.errors!.image!.file.message}
-                    </FormErrorMessage>
+                  <div
+                    className="relative h-full w-full inline-flex items-center justify-center cursor-pointer"
+                    onClick={() => setIsGalleryDialogOpen(true)}
+                  >
+                    {image ? (
+                      <Suspense
+                        fallback={
+                          <div className="p-1 w-full h-full">
+                            <BaseSkeletonLoader className="aspect-square" />
+                          </div>
+                        }
+                      >
+                        <SupabaseImage
+                          src={image.storage_file_path}
+                          alt={image.name}
+                          className="w-full h-full object-contain group-hover:opacity-90"
+                          quality={75}
+                          width={480}
+                          height={480}
+                        />
+                      </Suspense>
+                    ) : (
+                      <FaRegImages
+                        className={classNames(
+                          [
+                            !!formState.errors.file_id
+                              ? "text-red-600 group-hover:text-red-700"
+                              : "text-neutral-400 group-hover:text-neutral-500",
+                          ],
+                          "text-2xl transition-colors pointer-events-none "
+                        )}
+                      />
+                    )}
                   </div>
-                )}
-              </FormGroup>
+                </div>
+              </div>
 
               <div>
-                <h3 className="text-lg font-bold text-neutral-600 mb-3">
-                  Details:{" "}
+                <h3 className="text-base font-bold text-neutral-600 mb-3">
+                  {"Details: "}
                 </h3>
 
                 <FormGroup>
@@ -263,7 +206,7 @@ const DaydreamForm = ({
                       <SingleSimpleSelect<number>
                         options={YEARS}
                         value={value}
-                        onChange={onChange}
+                        onChange={(value) => onChange(Number(value))}
                         defaultValue={DEFAULT_FORM_VALUES.year}
                         error={fieldState.error?.message}
                       />
@@ -284,7 +227,7 @@ const DaydreamForm = ({
                     render={({ field: { onChange, value }, fieldState }) => (
                       <Textarea
                         id="input-description"
-                        rows={3}
+                        rows={2}
                         className="resize-none"
                         onChange={onChange}
                         value={value}
@@ -295,111 +238,132 @@ const DaydreamForm = ({
                   />
                 </FormGroup>
 
-                <h3 className="text-lg font-bold text-neutral-600 mb-3">
-                  Camera Setting:{" "}
+                <h3 className="text-base font-bold text-neutral-600 mb-3">
+                  {"Camera Setting: "}
                 </h3>
 
-                <FormGroup>
-                  <Label required>ISO</Label>
+                <div className="grid grid-cols-2 gap-x-4">
+                  <FormGroup>
+                    <Label required>ISO</Label>
 
-                  <Controller
-                    name="iso"
-                    control={control}
-                    rules={{ required: true }}
-                    defaultValue={DEFAULT_FORM_VALUES.iso as any}
-                    render={({ field: { onChange, value }, fieldState }) => (
-                      <SearchableSelect
-                        value={value}
-                        options={SelectDataFormatter<number>(ISO)}
-                        onChange={onChange}
-                        defaultValue={DEFAULT_FORM_VALUES.iso}
-                        error={fieldState.error?.message}
-                        clearable
-                      />
-                    )}
-                  />
-                </FormGroup>
+                    <Controller
+                      name="iso"
+                      control={control}
+                      rules={{ required: true }}
+                      defaultValue={DEFAULT_FORM_VALUES.iso as any}
+                      render={({ field: { onChange, value }, fieldState }) => (
+                        <SearchableSelect
+                          value={value}
+                          options={SelectDataFormatter<number>(ISO)}
+                          onChange={onChange}
+                          defaultValue={DEFAULT_FORM_VALUES.iso}
+                          error={fieldState.error?.message}
+                        />
+                      )}
+                    />
+                  </FormGroup>
 
-                <FormGroup>
-                  <Label required>Shutter Speed</Label>
+                  <FormGroup>
+                    <Label required>Shutter Speed</Label>
 
-                  <Controller
-                    name="shutter_speed"
-                    control={control}
-                    rules={{ required: true }}
-                    defaultValue={DEFAULT_FORM_VALUES.shutter_speed}
-                    render={({ field: { onChange, value }, fieldState }) => (
-                      <SearchableSelect
-                        options={SelectDataFormatter<number>(SHUTTER_SPEED)}
-                        value={value}
-                        onChange={onChange}
-                        defaultValue={DEFAULT_FORM_VALUES.shutter_speed}
-                        error={fieldState.error?.message}
-                        clearable
-                      />
-                    )}
-                  />
-                </FormGroup>
+                    <Controller
+                      name="shutter_speed"
+                      control={control}
+                      rules={{ required: true }}
+                      defaultValue={DEFAULT_FORM_VALUES.shutter_speed}
+                      render={({ field: { onChange, value }, fieldState }) => (
+                        <SearchableSelect
+                          options={SelectDataFormatter<number>(SHUTTER_SPEED)}
+                          value={value}
+                          onChange={onChange}
+                          defaultValue={DEFAULT_FORM_VALUES.shutter_speed}
+                          error={fieldState.error?.message}
+                        />
+                      )}
+                    />
+                  </FormGroup>
 
-                <FormGroup>
-                  <Label required>Aperture</Label>
+                  <FormGroup>
+                    <Label required>Aperture</Label>
 
-                  <Controller
-                    name="aperture"
-                    control={control}
-                    rules={{ required: true }}
-                    defaultValue={DEFAULT_FORM_VALUES.aperture}
-                    render={({ field: { onChange, value }, fieldState }) => (
-                      <SearchableSelect
-                        options={SelectDataFormatter<number>(APERTURE)}
-                        value={value}
-                        onChange={onChange}
-                        defaultValue={DEFAULT_FORM_VALUES.aperture}
-                        error={fieldState.error?.message}
-                        clearable
-                      />
-                    )}
-                  />
-                </FormGroup>
+                    <Controller
+                      name="aperture"
+                      control={control}
+                      rules={{ required: true }}
+                      defaultValue={DEFAULT_FORM_VALUES.aperture}
+                      render={({ field: { onChange, value }, fieldState }) => (
+                        <SearchableSelect
+                          options={SelectDataFormatter<number>(APERTURE)}
+                          value={value}
+                          onChange={onChange}
+                          defaultValue={DEFAULT_FORM_VALUES.aperture}
+                          error={fieldState.error?.message}
+                        />
+                      )}
+                    />
+                  </FormGroup>
+                </div>
               </div>
-            </div>
-          </CardBody>
-          <CardFooter className="justify-between gap-3">
-            <div>
-              {!!onDelete && (
-                <Button color="danger" type="button" onClick={onDelete}>
-                  Delete
+            </Card.Body>
+            <Card.Footer className="justify-between pt-0">
+              <div>
+                {!!onDelete && (
+                  <Button
+                    color="danger"
+                    type="button"
+                    size="small"
+                    onClick={onDelete}
+                    rounded
+                  >
+                    Delete
+                  </Button>
+                )}
+              </div>
+
+              <div className="flex flex-row gap-3">
+                <Button
+                  type="button"
+                  variant="text"
+                  color="secondary"
+                  size="small"
+                  disabled={!formState.isDirty || formState.isSubmitting}
+                  onClick={onResetFormHandler}
+                  rounded
+                >
+                  Reset
                 </Button>
-              )}
-            </div>
 
-            <div className="flex flex-row gap-3">
-              <Button
-                type="button"
-                variant="plain"
-                color="secondary"
-                disabled={!formState.isDirty || formState.isSubmitting}
-                onClick={onResetFormHandler}
-              >
-                {cancelButtonText}
-              </Button>
+                <Button
+                  type="submit"
+                  size="small"
+                  disabled={
+                    !isEmpty(formState.errors) ||
+                    !formState.isValid ||
+                    !formState.isDirty
+                  }
+                  isLoading={formState.isSubmitting}
+                  rounded
+                >
+                  {submitButtonText}
+                </Button>
+              </div>
+            </Card.Footer>
+          </Card>
+        </fieldset>
+      </form>
 
-              <Button
-                type="submit"
-                disabled={
-                  !isEmpty(formState.errors) ||
-                  !formState.isValid ||
-                  !formState.isDirty
-                }
-                isLoading={formState.isSubmitting}
-              >
-                {submitButtonText}
-              </Button>
-            </div>
-          </CardFooter>
-        </CardRoot>
-      </fieldset>
-    </form>
+      <GalleryDialog
+        isOpen={isGalleryDialogOpen}
+        onClose={() => setIsGalleryDialogOpen(false)}
+        onSelect={async (value) => {
+          setImage(value);
+          setIsGalleryDialogOpen(false);
+          setValue("file_id", value.id, { shouldDirty: true });
+          await trigger("file_id");
+        }}
+        selected={image}
+      />
+    </Fragment>
   );
 };
 

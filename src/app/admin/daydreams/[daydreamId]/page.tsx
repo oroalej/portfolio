@@ -1,33 +1,41 @@
-import { Button, Container } from "@/components";
 import EditDaydreamWrapper from "@/app/admin/daydreams/[daydreamId]/_components/EditDaydreamWrapper";
 import { Metadata } from "next";
-import { Suspense } from "react";
-import DaydreamFormLoading from "@/app/admin/daydreams/_components/DaydreamFormLoading";
+import { Fragment, Suspense } from "react";
+import DaydreamFormLoading from "@/app/admin/daydreams/_components/Loading/DaydreamFormLoading";
+import { BreadcrumbDataSetter } from "@/app/admin/_components/Breadcrumbs";
+
+export interface AdminDaydreamEditPage {
+  params: { dreamId: string };
+}
 
 export const metadata: Metadata = {
   title: "Admin - Editing dream..",
 };
 
-const DreamEditPage = () => (
-  <Container>
-    <div className="py-14">
-      <div className="mb-8">
-        <Button href="/admin/daydreams">Back to list</Button>
-      </div>
+const AdminDaydreamEditPage = ({
+  params: { dreamId },
+}: AdminDaydreamEditPage) => {
+  return (
+    <Fragment>
+      <BreadcrumbDataSetter
+        breadcrumbs={[
+          { href: "/dreams", content: "All Dreams" },
+          { content: "Create" },
+        ]}
+      />
 
       <Suspense
         fallback={
           <DaydreamFormLoading
-            title="Update Daydream"
-            cancelButtonText="Reset"
-            submitButtonText="Update"
+            title="Edit Daydream"
+            submitButtonText="Update Dream"
           />
         }
       >
         <EditDaydreamWrapper />
       </Suspense>
-    </div>
-  </Container>
-);
+    </Fragment>
+  );
+};
 
-export default DreamEditPage;
+export default AdminDaydreamEditPage;

@@ -1,8 +1,8 @@
-import { Button, Container } from "@/components";
 import { Metadata } from "next";
+import { Fragment, Suspense } from "react";
+import { BreadcrumbDataSetter } from "@/app/admin/_components/Breadcrumbs";
 import CreateDaydreamWrapper from "@/app/admin/daydreams/create/_components/CreateDaydreamWrapper";
-import { Suspense } from "react";
-import DaydreamFormLoading from "@/app/admin/daydreams/_components/DaydreamFormLoading";
+import DaydreamFormLoading from "@/app/admin/daydreams/_components/Loading/DaydreamFormLoading";
 
 export const metadata: Metadata = {
   title: "Admin - Create Dream",
@@ -10,25 +10,25 @@ export const metadata: Metadata = {
 
 const CreateDaydreamPage = () => {
   return (
-    <Container>
-      <div className="py-14">
-        <div className="mb-8">
-          <Button href="/admin/daydreams">Back to list</Button>
-        </div>
+    <Fragment>
+      <BreadcrumbDataSetter
+        breadcrumbs={[
+          { href: "/daydreams", content: "All Dreams" },
+          { content: "Create" },
+        ]}
+      />
 
-        <Suspense
-          fallback={
-            <DaydreamFormLoading
-              title="Create Daydream"
-              cancelButtonText="Cancel"
-              submitButtonText="Submit"
-            />
-          }
-        >
-          <CreateDaydreamWrapper />
-        </Suspense>
-      </div>
-    </Container>
+      <Suspense
+        fallback={
+          <DaydreamFormLoading
+            title="Create Daydream"
+            submitButtonText="Submit"
+          />
+        }
+      >
+        <CreateDaydreamWrapper />
+      </Suspense>
+    </Fragment>
   );
 };
 

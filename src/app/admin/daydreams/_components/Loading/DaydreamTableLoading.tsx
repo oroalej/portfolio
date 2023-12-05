@@ -1,8 +1,8 @@
 import { CardRoot } from "@/components";
-import { DaydreamTableRowLoading } from "@/app/admin/daydreams/(Index)/_components/DaydreamTableRow";
+import { DaydreamTableRowLoading } from "@/app/admin/daydreams/_components/DaydreamTableRow";
 
 const DaydreamTableLoading = () => (
-  <CardRoot>
+  <CardRoot rounded className="flex-1">
     <table className="border-b border-neutral-200">
       <thead>
         <tr>

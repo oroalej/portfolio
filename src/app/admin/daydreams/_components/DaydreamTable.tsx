@@ -1,41 +1,55 @@
 "use client";
 
 import { AlertDialog, CardFooter, CardRoot, Pagination } from "@/components";
-import { Fragment, Suspense, useCallback, useState } from "react";
-import { DaydreamAPIDataStructure } from "@/features/daydreams/types";
-import { DEFAULT_PAGINATION_VALUES } from "@/utils/pagination";
 import { useOpenable } from "@/hooks";
-import { useSearchParams } from "next/navigation";
-import useSetParamsRouter from "@/hooks/useSetParamsRouter";
+import { useParams, useSearchParams } from "next/navigation";
 import {
   useDeleteDaydreamMutation,
   useGetDaydreamList,
 } from "@/features/daydreams/api";
-import { useQueryClient } from "@tanstack/react-query";
 import {
   DaydreamTableRow,
   DaydreamTableRowLoading,
-} from "@/app/admin/daydreams/(Index)/_components/DaydreamTableRow";
+} from "@/app/admin/daydreams/_components/DaydreamTableRow";
+import { useQueryClient } from "@tanstack/react-query";
+import { removeEmptyValues } from "@/utils";
+import { useQueryState } from "next-usequerystate";
+import { Fragment, Suspense, useCallback, useState } from "react";
+import { DEFAULT_PAGINATION_VALUES } from "@/utils/pagination";
+import { DaydreamAPIDataStructure } from "@/features/daydreams/types";
+import DaydreamTableLoading from "@/app/admin/daydreams/_components/Loading/DaydreamTableLoading";
+import toast from "react-hot-toast";
 
 const DaydreamTable = () => {
+  const { daydreamId } = useParams();
   const searchParams = useSearchParams();
+
+  const deleteDaydreamMutation = useDeleteDaydreamMutation();
   const queryClient = useQueryClient();
 
   const { isOpen, onClose, onOpen } = useOpenable();
-  const { setParam, push } = useSetParamsRouter();
+
+  const [perPage, setPerPage] = useQueryState("per_page", {
+    parse: parseInt,
+    shallow: false,
+  });
+
+  const [page, setPage] = useQueryState("page", {
+    parse: parseInt,
+    shallow: false,
+  });
 
   const [selected, setSelected] = useState<DaydreamAPIDataStructure | null>(
     null
   );
 
-  const deleteDaydreamMutation = useDeleteDaydreamMutation();
   const { isLoading: isGetAPILoading, data } = useGetDaydreamList({
-    page:
-      Number(searchParams.get("page")) ||
-      DEFAULT_PAGINATION_VALUES.current_page,
-    per_page:
-      Number(searchParams.get("per_page")) ||
-      DEFAULT_PAGINATION_VALUES.per_page,
+    q: searchParams.get("q") ?? undefined,
+    page: page || DEFAULT_PAGINATION_VALUES.current_page,
+    per_page: perPage || DEFAULT_PAGINATION_VALUES.per_page,
+    filter: removeEmptyValues({
+      year: searchParams.get("year"),
+    }),
     sort: [{ column: "created_at", order: "desc" }],
   });
 
@@ -47,16 +61,16 @@ const DaydreamTable = () => {
   const onDeleteHandler = useCallback(async () => {
     if (!selected) return;
 
-    await deleteDaydreamMutation.mutateAsync(selected);
+    await toast.promise(deleteDaydreamMutation.mutateAsync(selected.id), {
+      success: "Your data has been successfully deleted!",
+      loading: "Deleting dream...",
+      error: (error) => error,
+    });
 
     if (data?.data.length === 1) {
-      setParam(
-        "page",
-        (Number(data?.pagination?.per_page) - 1 ?? 1).toString()
-      );
-      push();
+      await setPage(data?.pagination?.per_page - 1 ?? 1);
     } else {
-      await queryClient.refetchQueries({
+      await queryClient.invalidateQueries({
         queryKey: ["daydreams"],
         type: "active",
       });
@@ -66,9 +80,13 @@ const DaydreamTable = () => {
     onClose();
   }, [selected?.id]);
 
+  if (isGetAPILoading) {
+    return <DaydreamTableLoading />;
+  }
+
   return (
     <Fragment>
-      <CardRoot>
+      <CardRoot rounded className="grow flex-1 transition-all">
         <table className="border-b border-neutral-200">
           <thead>
             <tr>
@@ -77,7 +95,7 @@ const DaydreamTable = () => {
               <th>Description</th>
               <th className="w-40">Setting</th>
               <th className="w-48">Created At</th>
-              <th className="w-28"></th>
+              <th className="w-32"></th>
             </tr>
           </thead>
           <tbody>
@@ -91,7 +109,11 @@ const DaydreamTable = () => {
                   key={`dream-${item.id}`}
                   fallback={<DaydreamTableRowLoading />}
                 >
-                  <DaydreamTableRow item={item} onClick={onSelectHandler} />
+                  <DaydreamTableRow
+                    item={item}
+                    onClick={onSelectHandler}
+                    isSelected={item.id === daydreamId}
+                  />
                 </Suspense>
               ))
             ) : (
@@ -106,13 +128,11 @@ const DaydreamTable = () => {
         <CardFooter>
           <Pagination
             pagination={data?.pagination || DEFAULT_PAGINATION_VALUES}
-            onPageChange={(value) => {
-              setParam("page", value);
-              push();
+            onPageChange={async (value) => {
+              await setPage(value);
             }}
-            onPerPageChange={(value) => {
-              setParam("per_page", value);
-              push();
+            onPerPageChange={async (value) => {
+              await setPerPage(value);
             }}
           />
         </CardFooter>

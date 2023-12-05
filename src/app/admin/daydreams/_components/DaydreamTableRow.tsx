@@ -1,18 +1,22 @@
-"use client";
-
 import Image from "next/image";
 import { BaseSkeletonLoader, Button, ImageSkeletonLoader } from "@/components";
 import { FaPencilAlt } from "react-icons/fa";
-import { FaTrash } from "react-icons/fa6";
+import { FaChevronRight, FaTrash } from "react-icons/fa6";
 import { useStoragePublicUrl } from "@/features/files/api";
 import { DaydreamAPIDataStructure } from "@/features/daydreams/types";
+import { Fragment } from "react";
 
 interface DaydreamTableRowProps {
   item: DaydreamAPIDataStructure;
   onClick: (value: DaydreamAPIDataStructure) => void;
+  isSelected: boolean;
 }
 
-export const DaydreamTableRow = ({ item, onClick }: DaydreamTableRowProps) => {
+export const DaydreamTableRow = ({
+  item,
+  onClick,
+  isSelected,
+}: DaydreamTableRowProps) => {
   const { data, isLoading } = useStoragePublicUrl(item.file.storage_file_path);
 
   if (isLoading || !data) {
@@ -47,28 +51,37 @@ export const DaydreamTableRow = ({ item, onClick }: DaydreamTableRowProps) => {
       </td>
       <td>{new Date(item.created_at).toLocaleDateString()}</td>
       <td>
-        <div className="flex flex-row gap-1.5 justify-center">
-          <Button
-            icon
-            rounded
-            size="small"
-            data-tooltip-id="admin-tooltip"
-            data-tooltip-content="Edit"
-            href={`/admin/daydreams/${item.id}`}
-          >
-            <FaPencilAlt />
-          </Button>
+        <div className="flex flex-row gap-1.5 justify-end">
+          {isSelected ? (
+            <div className="inline-flex items-center gap-1 font-medium bg-neutral-200 text-neutral-800 px-3 py-2 rounded-md h-[38px] transition-colors">
+              <span className="text-sm">Selected</span>
+              <FaChevronRight />
+            </div>
+          ) : (
+            <Fragment>
+              <Button
+                icon
+                rounded
+                size="small"
+                data-tooltip-id="admin-tooltip"
+                data-tooltip-content="Edit"
+                href={`/admin/daydreams/${item.id}`}
+              >
+                <FaPencilAlt />
+              </Button>
 
-          <Button
-            icon
-            rounded
-            size="small"
-            data-tooltip-id="admin-tooltip"
-            data-tooltip-content="Delete"
-            onClick={() => onClick(item)}
-          >
-            <FaTrash />
-          </Button>
+              <Button
+                icon
+                rounded
+                size="small"
+                data-tooltip-id="admin-tooltip"
+                data-tooltip-content="Delete"
+                onClick={() => onClick(item)}
+              >
+                <FaTrash />
+              </Button>
+            </Fragment>
+          )}
         </div>
       </td>
     </tr>
@@ -94,6 +107,17 @@ export const DaydreamTableRowLoading = () => (
     <td>
       <BaseSkeletonLoader />
     </td>
-    <td></td>
+    <td>
+      <div className="flex flex-row gap-1.5 justify-center">
+        <BaseSkeletonLoader
+          className="rounded-md"
+          style={{ width: "38px", height: "38px" }}
+        />
+        <BaseSkeletonLoader
+          className="rounded-md"
+          style={{ width: "38px", height: "38px" }}
+        />
+      </div>
+    </td>
   </tr>
 );

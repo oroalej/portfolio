@@ -1,27 +1,21 @@
 "use client";
 
-import * as PopoverUI from "@radix-ui/react-popover";
-import { PopoverContentProps } from "@radix-ui/react-popover";
-import * as React from "react";
+import { CardRoot } from "@/components";
+import { PopoverContentProps, PopoverProps } from "@radix-ui/react-popover";
 import { RefAttributes } from "react";
 import { BaseComponent } from "@/types";
-import { CardRoot } from "@/components";
+import * as React from "react";
+import * as PopoverUI from "@radix-ui/react-popover";
 
-export const PopoverRoot = ({ children }: BaseComponent) => {
-  return <PopoverUI.Root>{children}</PopoverUI.Root>;
+export const PopoverRoot = ({
+  children,
+  ...remaining
+}: BaseComponent & PopoverProps) => {
+  return <PopoverUI.Root {...remaining}>{children}</PopoverUI.Root>;
 };
 
 export const PopoverTrigger = ({ children, className }: BaseComponent) => (
-  <PopoverUI.Trigger
-    className={className}
-    // className="border border-neutral-200 hover:bg-neutral-100 transition-colors pl-2.5 pr-3.5 h-full inline-flex items-center justify-center cursor-pointer rounded-e-md active:bg-neutral-200/50 open:bg-neutral-100 open:ring-2 open:ring-neutral-800 open:z-[1]"
-    // data-tooltip-id="admin-tooltip"
-    // data-tooltip-content="Filters"
-    // data-tooltip-place="bottom"
-  >
-    {children}
-    {/*<VscSettings className="text-lg text-neutral-600 hover:text-neutral-800" />*/}
-  </PopoverUI.Trigger>
+  <PopoverUI.Trigger className={className}>{children}</PopoverUI.Trigger>
 );
 
 interface PopoverContent

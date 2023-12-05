@@ -1,26 +1,32 @@
-import { DaydreamAPIDataStructure } from "@/features/daydreams/types";
-import { useQuery } from "@tanstack/react-query";
-import { Paginatable, Sortable, Tables } from "@/types";
-import supabase from "@/utils/supabase";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import {
-  dataWithPagination,
-  generatePaginationData,
-  getRange,
-} from "@/utils/pagination";
+  queryFilterBuilder,
+  queryPaginationBuilder,
+  supabase,
+} from "@/utils/supabase";
+import { DaydreamAPIDataStructure } from "@/features/daydreams/types";
+import { Filterable, Paginatable, Searchable, Sortable, Tables } from "@/types";
+import { DataWithPagination, generatePaginationData } from "@/utils/pagination";
 
 type DaydreamListSortable = Pick<
   Tables<"daydreams">,
   "created_at" | "iso" | "year" | "aperture" | "shutter_speed"
 >;
 
+type DaydreamListFilterable = Pick<Tables<"daydreams">, "year">;
+
 export interface getDaydreamListParams
   extends Required<Paginatable>,
-    Sortable<DaydreamListSortable> {}
+    Sortable<DaydreamListSortable>,
+    Filterable<DaydreamListFilterable>,
+    Searchable {}
 
 export const getDaydreamList = ({
+  q,
   per_page,
   page,
   sort = [{ column: "created_at", order: "desc" }],
+  filter = {},
 }: getDaydreamListParams) => {
   let query = supabase
     .from("daydreams")
@@ -29,15 +35,18 @@ export const getDaydreamList = ({
       { count: "exact" }
     );
 
-  sort.forEach((item) => {
-    query = query.order(item.column, { ascending: item.order === "asc" });
+  query = queryFilterBuilder({
+    query,
+    textSearch: { column: "description", value: q },
+    sort,
+    filter,
   });
 
-  if (Number.isInteger(page) && Number.isInteger(per_page)) {
-    const { from, to } = getRange(Number(per_page), Number(page));
-
-    query = query.range(from, to);
-  }
+  query = queryPaginationBuilder({
+    query,
+    page,
+    per_page,
+  });
 
   query = query.throwOnError();
 
@@ -47,8 +56,10 @@ export const getDaydreamList = ({
 export const useGetDaydreamList = (params: getDaydreamListParams) =>
   useQuery({
     queryKey: ["daydreams", params],
+    placeholderData: keepPreviousData,
+
     queryFn: async (): Promise<
-      dataWithPagination<DaydreamAPIDataStructure>
+      DataWithPagination<DaydreamAPIDataStructure>
     > => {
       const { data, count } = await getDaydreamList(params);
 
