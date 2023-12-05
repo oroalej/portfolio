@@ -1,8 +1,8 @@
 import { Fragment, Suspense } from "react";
-import QuoteTableFilter from "@/app/admin/quotes/_components/QuoteTableFilter";
-import QuotesTable from "@/app/admin/quotes/_components/QuotesTable";
-import QuoteTableLoading from "@/app/admin/quotes/_components/Loading/QuoteTableLoading";
-import QuoteTableFilterLoading from "@/app/admin/quotes/_components/Loading/QuoteTableFilterLoading";
+import QuoteTableFilter from "@/app/admin/(modules)/quotes/_components/QuoteTableFilter";
+import QuotesTable from "@/app/admin/(modules)/quotes/_components/QuotesTable";
+import QuoteTableLoading from "@/app/admin/(modules)/quotes/_components/Loading/QuoteTableLoading";
+import QuoteTableFilterLoading from "@/app/admin/(modules)/quotes/_components/Loading/QuoteTableFilterLoading";
 import { BaseComponent } from "@/types";
 
 const AdminQuoteIndexLayout = ({

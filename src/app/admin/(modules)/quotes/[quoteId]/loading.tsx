@@ -1,4 +1,4 @@
-import QuoteFormLoading from "@/app/admin/quotes/_components/Loading/QuoteFormLoading";
+import QuoteFormLoading from "@/app/admin/(modules)/quotes/_components/Loading/QuoteFormLoading";
 
 const AdminQuoteEditLoading = () => (
   <QuoteFormLoading title="Edit Quote" submitButtonText="Update" />

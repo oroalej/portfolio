@@ -27,9 +27,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { object, string } from "zod";
 import { removeEmptyValues } from "@/utils";
 import * as Popover from "@radix-ui/react-popover";
-import CategorySearchableSelect from "@/app/admin/quotes/_components/Select/CategorySearchableSelect";
-import SourceSearchableSelect from "@/app/admin/quotes/_components/Select/SourceSearchableSelect";
-import MediaDetailSearchableSelect from "@/app/admin/quotes/_components/Select/MediaDetailSearchableSelect";
+import CategorySearchableSelect from "@/app/admin/(modules)/quotes/_components/Select/CategorySearchableSelect";
+import SourceSearchableSelect from "@/app/admin/(modules)/quotes/_components/Select/SourceSearchableSelect";
+import MediaDetailSearchableSelect from "@/app/admin/(modules)/quotes/_components/Select/MediaDetailSearchableSelect";
 
 const QUOTE_TABLE_FILTER_DEFAULT_VALUES = {
   category_id: "",

@@ -1,4 +1,4 @@
-import QuoteTableRowLoading from "@/app/admin/quotes/_components/Loading/QuoteTableRowLoading";
+import QuoteTableRowLoading from "@/app/admin/(modules)/quotes/_components/Loading/QuoteTableRowLoading";
 import { CardRoot } from "@/components";
 
 const QuoteTableLoading = () => (

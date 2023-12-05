@@ -10,7 +10,7 @@ import {
   Label,
 } from "@/components";
 import { Fragment } from "react";
-import QuoteInputFieldLoading from "@/app/admin/quotes/_components/Loading/QuoteInputFieldLoading";
+import QuoteInputFieldLoading from "@/app/admin/(modules)/quotes/_components/Loading/QuoteInputFieldLoading";
 
 interface QuoteFormLoadingProps {
   title: string;

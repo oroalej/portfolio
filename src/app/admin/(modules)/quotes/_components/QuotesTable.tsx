@@ -9,10 +9,10 @@ import { removeEmptyValues } from "@/utils";
 import { useDeleteQuoteMutation, useGetQuoteList } from "@/features/quotes/api";
 import { useQueryState } from "next-usequerystate";
 import { GetAllQuotesAPIDataStructure } from "@/features/quotes/types";
-import QuoteTableLoading from "@/app/admin/quotes/_components/Loading/QuoteTableLoading";
-import QuoteTableRow from "@/app/admin/quotes/_components/QuoteTableRow";
+import QuoteTableLoading from "@/app/admin/(modules)/quotes/_components/Loading/QuoteTableLoading";
+import QuoteTableRow from "@/app/admin/(modules)/quotes/_components/QuoteTableRow";
 import toast from "react-hot-toast";
-import QuoteTableRowLoading from "@/app/admin/quotes/_components/Loading/QuoteTableRowLoading";
+import QuoteTableRowLoading from "@/app/admin/(modules)/quotes/_components/Loading/QuoteTableRowLoading";
 
 const QuotesTable = () => {
   const searchParams = useSearchParams();

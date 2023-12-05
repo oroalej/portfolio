@@ -2,11 +2,11 @@
 
 import QuoteForm, {
   QuoteFormStructure,
-} from "@/app/admin/quotes/_components/QuoteForm";
+} from "@/app/admin/(modules)/quotes/_components/QuoteForm";
 import { Suspense, useCallback } from "react";
 import { useStoreQuoteMutation } from "@/features/quotes/api";
 import toast from "react-hot-toast";
-import QuoteFormLoading from "@/app/admin/quotes/_components/Loading/QuoteFormLoading";
+import QuoteFormLoading from "@/app/admin/(modules)/quotes/_components/Loading/QuoteFormLoading";
 
 const CreateQuoteWrapper = () => {
   const storeQuoteMutation = useStoreQuoteMutation();

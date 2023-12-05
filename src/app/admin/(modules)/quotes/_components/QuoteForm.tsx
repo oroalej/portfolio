@@ -16,10 +16,10 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { any, object } from "zod";
 import { isEmpty } from "lodash";
-import SourceSearchableSelect from "@/app/admin/quotes/_components/Select/SourceSearchableSelect";
-import CategorySearchableSelect from "@/app/admin/quotes/_components/Select/CategorySearchableSelect";
-import MediaDetailSearchableSelect from "@/app/admin/quotes/_components/Select/MediaDetailSearchableSelect";
-import QuoteInputFieldLoading from "@/app/admin/quotes/_components/Loading/QuoteInputFieldLoading";
+import SourceSearchableSelect from "@/app/admin/(modules)/quotes/_components/Select/SourceSearchableSelect";
+import CategorySearchableSelect from "@/app/admin/(modules)/quotes/_components/Select/CategorySearchableSelect";
+import MediaDetailSearchableSelect from "@/app/admin/(modules)/quotes/_components/Select/MediaDetailSearchableSelect";
+import QuoteInputFieldLoading from "@/app/admin/(modules)/quotes/_components/Loading/QuoteInputFieldLoading";
 
 export const DEFAULT_FORM_VALUES: QuoteFormStructure = {
   category_id: "",

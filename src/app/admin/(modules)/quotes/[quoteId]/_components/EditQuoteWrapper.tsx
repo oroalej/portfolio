@@ -2,7 +2,7 @@
 
 import QuoteForm, {
   QuoteFormStructure,
-} from "@/app/admin/quotes/_components/QuoteForm";
+} from "@/app/admin/(modules)/quotes/_components/QuoteForm";
 import { omit } from "lodash";
 import { Fragment, Suspense, useCallback } from "react";
 import { AlertDialog } from "@/components";
@@ -13,7 +13,7 @@ import {
   useGetQuote,
   useUpdateQuoteMutation,
 } from "@/features/quotes/api";
-import AdminQuoteEditLoading from "@/app/admin/quotes/[quoteId]/loading";
+import AdminQuoteEditLoading from "@/app/admin/(modules)/quotes/[quoteId]/loading";
 import toast from "react-hot-toast";
 
 const EditQuoteWrapper = () => {

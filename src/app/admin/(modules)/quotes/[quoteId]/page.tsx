@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { Fragment, Suspense } from "react";
-import QuoteFormLoading from "@/app/admin/quotes/_components/Loading/QuoteFormLoading";
-import EditQuoteWrapper from "@/app/admin/quotes/[quoteId]/_components/EditQuoteWrapper";
+import QuoteFormLoading from "@/app/admin/(modules)/quotes/_components/Loading/QuoteFormLoading";
+import EditQuoteWrapper from "@/app/admin/(modules)/quotes/[quoteId]/_components/EditQuoteWrapper";
 import { BreadcrumbDataSetter } from "@/app/admin/_components/Breadcrumbs";
 
 interface AdminQuoteEditPage {
