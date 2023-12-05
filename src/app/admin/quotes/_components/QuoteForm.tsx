@@ -11,14 +11,15 @@ import {
   Label,
   Textarea,
 } from "@/components";
-import { FormEvent, useEffect, useMemo } from "react";
+import { FormEvent, Suspense, useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ZodObject } from "zod";
-import SourceSearchableSelect from "@/app/admin/quotes/_components/SourceSearchableSelect";
-import CategorySearchableSelect from "@/app/admin/quotes/_components/CategorySearchableSelect";
-import MediaDetailSearchableSelect from "@/app/admin/quotes/_components/MediaDetailSearchableSelect";
+import { any, object } from "zod";
 import { isEmpty } from "lodash";
+import SourceSearchableSelect from "@/app/admin/quotes/_components/Select/SourceSearchableSelect";
+import CategorySearchableSelect from "@/app/admin/quotes/_components/Select/CategorySearchableSelect";
+import MediaDetailSearchableSelect from "@/app/admin/quotes/_components/Select/MediaDetailSearchableSelect";
+import QuoteInputFieldLoading from "@/app/admin/quotes/_components/Loading/QuoteInputFieldLoading";
 
 export const DEFAULT_FORM_VALUES: QuoteFormStructure = {
   category_id: "",
@@ -34,42 +35,40 @@ export interface QuoteFormStructure {
   content: string;
 }
 
-const formLabelByCategory: Record<
-  string,
-  { source: string; media_detail: string }
-> = {
-  "f0d18182-b25c-4ff6-8fa7-836e1b4226c8": {
-    source: "Artist",
-    media_detail: "Song Title or Interview",
-  },
-  "385bddb0-36ab-49d9-8477-fbbd815f270e": {
-    source: "Book Title",
-    media_detail: "Character",
-  },
-  "2e996782-2d6b-4757-bf97-332358dab0ca": {
-    source: "Movie Title",
-    media_detail: "Character",
-  },
-};
-
 export interface QuoteFormProps {
   item?: QuoteFormStructure;
-  onSubmit: (value: QuoteFormStructure) => void;
+  onSubmit: (value: QuoteFormStructure) => Promise<void>;
   onDelete?: () => void;
-  schema: ZodObject<any>;
   title: string;
   submitButtonText?: string;
   cancelButtonText?: string;
 }
 
+export const QuoteSchema = object({
+  content: any().refine(
+    (data) => data.length !== 0,
+    "The content field is required"
+  ),
+  category_id: any().refine(
+    (data) => data !== null,
+    "The category field is required"
+  ),
+  source_id: any().refine(
+    (data) => data !== null,
+    "The source field is required"
+  ),
+  media_detail_id: any().refine(
+    (data) => data !== null,
+    "The media detail field is required"
+  ),
+});
+
 const QuoteForm = ({
   item = DEFAULT_FORM_VALUES,
   onSubmit,
   onDelete,
-  schema,
   title,
   submitButtonText = "Submit",
-  cancelButtonText = "Cancel",
 }: QuoteFormProps) => {
   const {
     handleSubmit,
@@ -82,26 +81,30 @@ const QuoteForm = ({
   } = useForm<QuoteFormStructure>({
     mode: "onChange",
     defaultValues: useMemo(() => item, [item]),
-    resolver: zodResolver(schema),
+    resolver: zodResolver(QuoteSchema),
   });
-
-  useEffect(() => {
-    reset(item);
-  }, [item]);
 
   const onSubmitHandler = async () => {
     await onSubmit(getValues());
     reset(item);
   };
 
+  useEffect(() => {
+    reset(item);
+  }, [item]);
+
   return (
     <form
       method="post"
       onSubmit={(event: FormEvent) => handleSubmit(onSubmitHandler)(event)}
+      className="sticky top-2 max-w-sm w-full"
     >
       <fieldset disabled={formState.isSubmitting}>
-        <CardRoot>
-          <CardHeader>
+        <CardRoot
+          rounded
+          className="focus-within:drop-shadow-lg hover:drop-shadow-xl focus:drop-shadow-lg transition-all w-full"
+        >
+          <CardHeader className="pb-0">
             <CardTitle>{title}</CardTitle>
           </CardHeader>
           <CardBody>
@@ -114,25 +117,24 @@ const QuoteForm = ({
                 rules={{ required: true }}
                 control={control}
                 render={({ field: { value, onChange }, fieldState }) => (
-                  <CategorySearchableSelect
-                    clearable
-                    value={value}
-                    defaultValue={item.category_id}
-                    error={fieldState.error?.message}
-                    onChange={(value) => {
-                      onChange(value);
-                      setValue("media_detail_id", "");
-                      setValue("source_id", "");
-                    }}
-                  />
+                  <Suspense fallback={<QuoteInputFieldLoading />}>
+                    <CategorySearchableSelect
+                      value={value}
+                      defaultValue={item.category_id}
+                      error={fieldState.error?.message}
+                      onChange={(value) => {
+                        onChange(value);
+                        setValue("media_detail_id", "");
+                        setValue("source_id", "");
+                      }}
+                    />
+                  </Suspense>
                 )}
               />
             </FormGroup>
 
             <FormGroup>
-              <Label required>
-                {formLabelByCategory[watch("category_id")]?.source || "Source"}
-              </Label>
+              <Label required>Artist, Movie or Book title</Label>
 
               <Controller
                 defaultValue={item.source_id}
@@ -140,26 +142,25 @@ const QuoteForm = ({
                 rules={{ required: true }}
                 control={control}
                 render={({ field: { value, onChange }, fieldState }) => (
-                  <SourceSearchableSelect
-                    categoryId={watch("category_id")}
-                    disabled={!watch("category_id")}
-                    value={value}
-                    defaultValue={item.source_id}
-                    error={fieldState.error?.message}
-                    onChange={(value) => {
-                      onChange(value);
-                      setValue("media_detail_id", "");
-                    }}
-                  />
+                  <Suspense fallback={<QuoteInputFieldLoading />}>
+                    <SourceSearchableSelect
+                      categoryId={watch("category_id")}
+                      disabled={!watch("category_id")}
+                      value={value}
+                      defaultValue={item.source_id}
+                      error={fieldState.error?.message}
+                      onChange={(value) => {
+                        onChange(value);
+                        setValue("media_detail_id", "");
+                      }}
+                    />
+                  </Suspense>
                 )}
               />
             </FormGroup>
 
             <FormGroup>
-              <Label>
-                {formLabelByCategory[watch("category_id")]?.media_detail ||
-                  "Name"}
-              </Label>
+              <Label required>Song Title, Interview, or Character Name</Label>
 
               <Controller
                 defaultValue={item.media_detail_id}
@@ -167,14 +168,16 @@ const QuoteForm = ({
                 rules={{ required: true }}
                 control={control}
                 render={({ field: { value, onChange }, fieldState }) => (
-                  <MediaDetailSearchableSelect
-                    value={value}
-                    sourceId={watch("source_id")}
-                    disabled={!watch("source_id")}
-                    defaultValue={item.media_detail_id}
-                    error={fieldState.error?.message}
-                    onChange={onChange}
-                  />
+                  <Suspense fallback={<QuoteInputFieldLoading />}>
+                    <MediaDetailSearchableSelect
+                      value={value}
+                      sourceId={watch("source_id")}
+                      disabled={!watch("source_id")}
+                      defaultValue={item.media_detail_id}
+                      error={fieldState.error?.message}
+                      onChange={onChange}
+                    />
+                  </Suspense>
                 )}
               />
             </FormGroup>
@@ -203,10 +206,16 @@ const QuoteForm = ({
               />
             </FormGroup>
           </CardBody>
-          <CardFooter className="justify-between gap-3">
+          <CardFooter className="justify-between gap-3 pt-0">
             <div>
               {!!onDelete && (
-                <Button color="danger" type="button" onClick={onDelete}>
+                <Button
+                  rounded
+                  color="danger"
+                  type="button"
+                  size="small"
+                  onClick={onDelete}
+                >
                   Delete
                 </Button>
               )}
@@ -214,17 +223,21 @@ const QuoteForm = ({
 
             <div className="flex flex-row gap-3">
               <Button
+                rounded
                 type="button"
-                variant="plain"
+                variant="text"
                 color="secondary"
-                disabled={!formState.isDirty || formState.isSubmitting}
+                size="small"
+                disabled={!formState.isDirty}
                 onClick={() => reset()}
               >
-                {cancelButtonText}
+                Reset
               </Button>
 
               <Button
+                rounded
                 type="submit"
+                size="small"
                 disabled={
                   !isEmpty(formState.errors) ||
                   !formState.isValid ||

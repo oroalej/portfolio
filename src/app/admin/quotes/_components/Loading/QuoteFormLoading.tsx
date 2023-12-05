@@ -10,41 +10,40 @@ import {
   Label,
 } from "@/components";
 import { Fragment } from "react";
+import QuoteInputFieldLoading from "@/app/admin/quotes/_components/Loading/QuoteInputFieldLoading";
 
 interface QuoteFormLoadingProps {
   title: string;
-  cancelButtonText: string;
   submitButtonText: string;
 }
 
 const QuoteFormLoading = ({
   title,
-  cancelButtonText,
   submitButtonText,
 }: QuoteFormLoadingProps) => (
-  <fieldset disabled>
-    <CardRoot>
-      <CardHeader>
+  <fieldset disabled className="max-w-sm w-full">
+    <CardRoot rounded>
+      <CardHeader className="pb-0">
         <CardTitle>{title}</CardTitle>
       </CardHeader>
       <CardBody>
         <FormGroup>
           <Label required>Category</Label>
 
-          <BaseSkeletonLoader style={{ height: "40px" }} />
+          <QuoteInputFieldLoading />
         </FormGroup>
 
         <Fragment>
           <FormGroup>
-            <Label required>Source</Label>
+            <Label required>Artist, Movie or Book title</Label>
 
-            <BaseSkeletonLoader style={{ height: "40px" }} />
+            <QuoteInputFieldLoading />
           </FormGroup>
 
           <FormGroup>
-            <Label>Media Detail</Label>
+            <Label required>Song Title, Interview, or Character Name</Label>
 
-            <BaseSkeletonLoader style={{ height: "40px" }} />
+            <QuoteInputFieldLoading />
           </FormGroup>
         </Fragment>
 
@@ -53,15 +52,25 @@ const QuoteFormLoading = ({
             Content
           </Label>
 
-          <BaseSkeletonLoader style={{ height: "142px" }} />
+          <BaseSkeletonLoader
+            className="rounded-md"
+            style={{ height: "142px" }}
+          />
         </FormGroup>
       </CardBody>
-      <CardFooter className="justify-end gap-3">
-        <Button disabled type="button" variant="plain" color="secondary">
-          {cancelButtonText}
+      <CardFooter className="justify-end pt-0">
+        <Button
+          disabled
+          type="button"
+          variant="text"
+          color="secondary"
+          size="small"
+          rounded
+        >
+          Reset
         </Button>
 
-        <Button type="submit" disabled>
+        <Button type="submit" disabled size="small" rounded>
           {submitButtonText}
         </Button>
       </CardFooter>

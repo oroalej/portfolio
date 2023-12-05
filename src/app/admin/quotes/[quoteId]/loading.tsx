@@ -1,18 +1,7 @@
-import { Button } from "@/components";
-import QuoteFormLoading from "@/app/admin/quotes/_components/QuoteFormLoading";
+import QuoteFormLoading from "@/app/admin/quotes/_components/Loading/QuoteFormLoading";
 
-const AdminQuoteFormLoading = () => (
-  <div className="py-14 max-w-xl mx-auto">
-    <div className="mb-8">
-      <Button disabled>Back to list</Button>
-    </div>
-
-    <QuoteFormLoading
-      title="Edit Quote"
-      submitButtonText="Update"
-      cancelButtonText="Cancel"
-    />
-  </div>
+const AdminQuoteEditLoading = () => (
+  <QuoteFormLoading title="Edit Quote" submitButtonText="Update" />
 );
 
-export default AdminQuoteFormLoading;
+export default AdminQuoteEditLoading;

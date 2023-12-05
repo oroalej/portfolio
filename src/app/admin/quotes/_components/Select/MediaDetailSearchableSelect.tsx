@@ -1,10 +1,9 @@
 import { SearchableSelect, SearchableSelectProps } from "@/components";
 import { useCallback } from "react";
-import {
-  useGetMediaDetailListBySourceId,
-  useStoreMediaDetailMutation,
-} from "@/features/media_details/api";
-import { useQueryClient } from "@tanstack/react-query";
+import { useStoreTaxonomyMutation } from "@/features/term_taxonomy/api/createTaxonomy";
+import { useGetTermByIdentifier } from "@/features/terms/api/getTermByIdentifier";
+import { TERM_IDENTIFIER } from "@/data";
+import { useGetTaxonomyByTermId } from "@/features/term_taxonomy/api/getTaxonomyByTermId";
 
 interface SelectProps
   extends Omit<SearchableSelectProps<string>, "options" | "onCreate" | "name"> {
@@ -16,14 +15,22 @@ const MediaDetailSearchableSelect = ({
   onChange,
   ...props
 }: SelectProps) => {
-  const mediaDetailListQuery = useGetMediaDetailListBySourceId(sourceId);
-  const storeMediaDetailMutation = useStoreMediaDetailMutation();
+  const storeTaxonomyMutation = useStoreTaxonomyMutation();
+  const { data: termData } = useGetTermByIdentifier(
+    TERM_IDENTIFIER.MEDIA_DETAIL
+  );
+  const { data } = useGetTaxonomyByTermId({
+    filter: { term_id: termData?.id, parent_id: sourceId },
+  });
 
   const onCreateHandler = useCallback(
     async (value: string) => {
-      await storeMediaDetailMutation.mutateAsync({
+      if (!termData?.id || !sourceId) return;
+
+      await storeTaxonomyMutation.mutateAsync({
+        term_id: termData.id,
+        parent_id: sourceId,
         name: value,
-        source_id: sourceId,
       });
     },
     [sourceId]
@@ -34,7 +41,7 @@ const MediaDetailSearchableSelect = ({
       name="media_detail"
       {...props}
       options={
-        mediaDetailListQuery.data?.map((media) => ({
+        data?.map((media) => ({
           text: media.name,
           value: media.id,
         })) || []

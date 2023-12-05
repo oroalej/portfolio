@@ -3,85 +3,84 @@
 import QuoteForm, {
   QuoteFormStructure,
 } from "@/app/admin/quotes/_components/QuoteForm";
-import { any, object } from "zod";
 import { omit } from "lodash";
-import { Fragment, useCallback } from "react";
+import { Fragment, Suspense, useCallback } from "react";
 import { AlertDialog } from "@/components";
 import { useOpenable } from "@/hooks";
-import { useParams, useRouter } from "next/navigation";
-import QuoteFormLoading from "@/app/admin/quotes/_components/QuoteFormLoading";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import {
   useDeleteQuoteMutation,
   useGetQuote,
   useUpdateQuoteMutation,
 } from "@/features/quotes/api";
-
-const EditQuoteSchema = object({
-  content: any().refine(
-    (data) => data.length !== 0,
-    "The content field is required"
-  ),
-  category_id: any().refine(
-    (data) => data !== null,
-    "The category field is required"
-  ),
-  source_id: any().refine(
-    (data) => data !== null,
-    "The source field is required"
-  ),
-  media_detail_id: any().refine(
-    (data) => data !== null,
-    "The media detail field is required"
-  ),
-});
+import AdminQuoteEditLoading from "@/app/admin/quotes/[quoteId]/loading";
+import toast from "react-hot-toast";
 
 const EditQuoteWrapper = () => {
   const router = useRouter();
-  const { quoteId } = useParams();
-  const { isOpen, onClose, onOpen } = useOpenable();
+  const searchParams = useSearchParams();
 
-  const { isLoading: isFetchingLoading, data } = useGetQuote(quoteId as string);
   const updateQuoteMutation = useUpdateQuoteMutation();
   const deleteQuoteMutation = useDeleteQuoteMutation();
 
+  const { quoteId } = useParams();
+  const { isOpen, onClose, onOpen } = useOpenable();
+  const { isLoading: isFetchingLoading, data } = useGetQuote(quoteId as string);
+
   const onSubmitHandler = useCallback(
-    async (value: QuoteFormStructure) =>
-      updateQuoteMutation.mutate({
-        id: quoteId as string,
-        formData: value,
-      }),
+    async (value: QuoteFormStructure) => {
+      await toast.promise(
+        updateQuoteMutation.mutateAsync({
+          id: quoteId as string,
+          formData: value,
+        }),
+        {
+          success: "Your data has been successfully updated!",
+          loading: "Updating quote...",
+          error: (error) => error,
+        },
+        {
+          id: quoteId as string,
+        }
+      );
+    },
     [quoteId]
   );
 
   const onDeleteHandler = useCallback(async () => {
-    await deleteQuoteMutation.mutateAsync(quoteId as string);
+    await toast.promise(
+      deleteQuoteMutation.mutateAsync(quoteId as string),
+      {
+        success: "Your data has been successfully deleted!",
+        loading: "Deleting quote...",
+        error: (error) => error,
+      },
+      {
+        id: quoteId as string,
+      }
+    );
 
-    router.push("/admin/quotes");
+    router.push(`/admin/quotes?${searchParams.toString()}`);
   }, [quoteId]);
 
   if (isFetchingLoading) {
-    return (
-      <QuoteFormLoading
-        cancelButtonText="Reset"
-        submitButtonText="Update"
-        title="Edit Quote"
-      />
-    );
+    return <AdminQuoteEditLoading />;
   }
 
   return (
     <Fragment>
-      <QuoteForm
-        onSubmit={onSubmitHandler}
-        onDelete={onOpen}
-        schema={EditQuoteSchema}
-        title="Edit Quote"
-        item={{
-          ...omit(data, "id"),
-        }}
-        cancelButtonText="Reset"
-        submitButtonText="Update"
-      />
+      <Suspense fallback={<AdminQuoteEditLoading />}>
+        <QuoteForm
+          onSubmit={onSubmitHandler}
+          onDelete={onOpen}
+          item={{
+            ...omit(data, ["id"]),
+          }}
+          title="Edit Quote"
+          cancelButtonText="Reset"
+          submitButtonText="Update"
+        />
+      </Suspense>
 
       {isOpen && (
         <AlertDialog

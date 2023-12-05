@@ -1,6 +1,6 @@
 import { BaseSkeletonLoader, TextSkeletonLoader } from "@/components";
 
-const RowLoading = () => (
+const QuoteTableRowLoading = () => (
   <tr>
     <td>
       <TextSkeletonLoader />
@@ -26,4 +26,4 @@ const RowLoading = () => (
   </tr>
 );
 
-export default RowLoading;
+export default QuoteTableRowLoading;

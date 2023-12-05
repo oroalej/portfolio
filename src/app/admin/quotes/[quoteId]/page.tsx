@@ -1,31 +1,34 @@
-import { Button } from "@/components";
 import { Metadata } from "next";
-import { Suspense } from "react";
-import QuoteFormLoading from "@/app/admin/quotes/_components/QuoteFormLoading";
+import { Fragment, Suspense } from "react";
+import QuoteFormLoading from "@/app/admin/quotes/_components/Loading/QuoteFormLoading";
 import EditQuoteWrapper from "@/app/admin/quotes/[quoteId]/_components/EditQuoteWrapper";
+import { BreadcrumbDataSetter } from "@/app/admin/_components/Breadcrumbs";
+
+interface AdminQuoteEditPage {
+  params: { quoteId: string };
+}
 
 export const metadata: Metadata = {
   title: "Admin - Edit Quote",
 };
 
-const AdminQuoteEditPage = () => (
-  <div className="py-14 max-w-xl mx-auto">
-    <div className="mb-8">
-      <Button href="/admin/quotes">Back to list</Button>
-    </div>
+const AdminQuoteEditPage = ({ params: { quoteId } }: AdminQuoteEditPage) => (
+  <Fragment>
+    <BreadcrumbDataSetter
+      breadcrumbs={[
+        { href: "/quotes", content: "All Quotes" },
+        { content: quoteId },
+      ]}
+    />
 
     <Suspense
       fallback={
-        <QuoteFormLoading
-          title="Edit Quote"
-          cancelButtonText="Reset"
-          submitButtonText="Update"
-        />
+        <QuoteFormLoading title="Edit Quote" submitButtonText="Update" />
       }
     >
       <EditQuoteWrapper />
     </Suspense>
-  </div>
+  </Fragment>
 );
 
 export default AdminQuoteEditPage;

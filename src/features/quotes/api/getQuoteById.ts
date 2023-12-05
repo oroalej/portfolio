@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { Tables } from "@/types";
-import supabase from "@/utils/supabase";
 import { durationInMinutes } from "@/utils";
+import { Tables } from "@/types";
+import { supabase } from "@/utils/supabase";
 
 export const getQuoteById = (id: string) => {
   return supabase
