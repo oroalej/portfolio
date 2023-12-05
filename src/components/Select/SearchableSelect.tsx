@@ -128,6 +128,8 @@ export const SearchableSelect = <Type extends string | number = string>({
           disabled={disabled}
           isError={!!error}
           placeholder={placeholder}
+          autoComplete="off"
+          autoCorrect="off"
           appendActions={
             <div className="flex flex-row items-center gap-1 pl-2 -mr-1.5">
               {!!(

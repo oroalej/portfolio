@@ -102,10 +102,3 @@ export const CardTitle = ({
     </h2>
   );
 };
-
-// display: inline-block;
-// line-height: 24px;
-// overflow: hidden;
-// padding-left: 0;
-// width: auto;
-// word-wrap: break-word;
