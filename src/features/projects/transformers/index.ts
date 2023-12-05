@@ -1,6 +1,6 @@
 import { ProjectAPIDataStructure } from "@/features/projects/types";
-import { ProjectFormParams } from "@/app/admin/projects/_components/ProjectForm";
-import { ProjectCardItem } from "@/app/admin/projects/_components/ProjectCard";
+import { ProjectFormParams } from "@/app/admin/(modules)/projects/_components/ProjectForm";
+import { ProjectCardItem } from "@/app/admin/(modules)/projects/_components/ProjectCard";
 
 export const ProjectListSelector = (data: ProjectAPIDataStructure[]) => {
   return data.map(projectListItemTransformer);

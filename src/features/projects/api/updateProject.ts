@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { ProjectFormParams } from "@/app/admin/projects/_components/ProjectForm";
+import { ProjectFormParams } from "@/app/admin/(modules)/projects/_components/ProjectForm";
 import { supabase } from "@/utils/supabase";
 import toast from "react-hot-toast";
 
