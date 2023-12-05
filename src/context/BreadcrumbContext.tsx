@@ -1,6 +1,6 @@
 "use client";
 
-import { Breadcrumb } from "@/app/admin/_components/Breadcrumbs";
+import { Breadcrumb } from "src/app/admin/(modules)/_components/Breadcrumbs";
 import { createContext, useContext, useState } from "react";
 import { BaseComponent } from "@/types";
 
