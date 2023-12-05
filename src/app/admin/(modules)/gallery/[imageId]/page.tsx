@@ -1,6 +1,6 @@
 import ShowWrapper from "@/app/admin/(modules)/gallery/[imageId]/_components/ShowWrapper";
 import { Fragment } from "react";
-import { BreadcrumbDataSetter } from "@/app/admin/_components/Breadcrumbs";
+import { BreadcrumbDataSetter } from "src/app/admin/(modules)/_components/Breadcrumbs";
 import { Metadata } from "next";
 
 interface AdminGalleryItemShowPage {

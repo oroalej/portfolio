@@ -1,6 +1,6 @@
 "use client";
 
-import { BreadcrumbList } from "@/app/admin/_components/Breadcrumbs";
+import { BreadcrumbList } from "@/app/admin/(modules)/_components/Breadcrumbs";
 import { MdLogout, MdNotifications } from "react-icons/md";
 import { useAuth } from "@/context/SupabaseContext";
 

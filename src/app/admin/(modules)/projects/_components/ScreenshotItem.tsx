@@ -8,7 +8,7 @@ import { ScreenshotForm } from "@/app/admin/(modules)/projects/_components/Scree
 import { SetRequired } from "@/types";
 import { useFileById } from "@/features/files/api/getFileById";
 import classNames from "classnames";
-import SupabaseImage from "@/app/admin/daydreams/_components/SupabaseImage";
+import SupabaseImage from "@/app/admin/(modules)/daydreams/_components/SupabaseImage";
 
 export interface ScreenshotItemProps {
   item: SetRequired<ScreenshotForm, "id">;

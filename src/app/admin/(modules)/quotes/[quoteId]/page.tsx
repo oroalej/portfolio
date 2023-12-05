@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { Fragment, Suspense } from "react";
 import QuoteFormLoading from "@/app/admin/(modules)/quotes/_components/Loading/QuoteFormLoading";
 import EditQuoteWrapper from "@/app/admin/(modules)/quotes/[quoteId]/_components/EditQuoteWrapper";
-import { BreadcrumbDataSetter } from "@/app/admin/_components/Breadcrumbs";
+import { BreadcrumbDataSetter } from "src/app/admin/(modules)/_components/Breadcrumbs";
 
 interface AdminQuoteEditPage {
   params: { quoteId: string };

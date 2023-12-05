@@ -1,6 +1,6 @@
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import { useGalleryContext } from "@/context/GalleryContext";
-import SupabaseImage from "@/app/admin/daydreams/_components/SupabaseImage";
+import SupabaseImage from "@/app/admin/(modules)/daydreams/_components/SupabaseImage";
 import classNames from "classnames";
 
 const ImagePreviewContainer = () => {

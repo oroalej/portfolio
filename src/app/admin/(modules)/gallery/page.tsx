@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { BreadcrumbDataSetter } from "@/app/admin/_components/Breadcrumbs";
+import { BreadcrumbDataSetter } from "src/app/admin/(modules)/_components/Breadcrumbs";
 
 export const metadata: Metadata = {
   title: "Admin - Gallery",

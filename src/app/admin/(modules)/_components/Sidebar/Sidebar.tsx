@@ -7,7 +7,7 @@ import { ImHome } from "react-icons/im";
 import {
   SidebarItem,
   SidebarItemGroup,
-} from "@/app/admin/_components/Sidebar/SidebarItem";
+} from "@/app/admin/(modules)/_components/Sidebar/SidebarItem";
 import { usePathname } from "next/navigation";
 import { Fragment } from "react";
 import {

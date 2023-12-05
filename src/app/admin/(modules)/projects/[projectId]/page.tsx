@@ -1,4 +1,4 @@
-import { BreadcrumbDataSetter } from "@/app/admin/_components/Breadcrumbs";
+import { BreadcrumbDataSetter } from "src/app/admin/(modules)/_components/Breadcrumbs";
 import { CardHeader, CardRoot, CardTitle } from "@/components";
 import { GoFileDirectoryFill } from "react-icons/go";
 import { Fragment } from "react";

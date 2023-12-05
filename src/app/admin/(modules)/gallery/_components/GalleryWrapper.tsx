@@ -7,7 +7,7 @@ import { BaseSkeletonLoader, Button } from "@/components";
 import { FileAPIDataStructure } from "@/features/files/types";
 import { useInfiniteFileList } from "@/features/files/api/getInfiniteFileList";
 import classNames from "classnames";
-import SupabaseImage from "@/app/admin/daydreams/_components/SupabaseImage";
+import SupabaseImage from "@/app/admin/(modules)/daydreams/_components/SupabaseImage";
 
 interface BaseGallery {
   gap: string;

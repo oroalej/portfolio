@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 import { Fragment, Suspense } from "react";
-import { BreadcrumbDataSetter } from "@/app/admin/_components/Breadcrumbs";
-import CreateDaydreamWrapper from "@/app/admin/daydreams/create/_components/CreateDaydreamWrapper";
-import DaydreamFormLoading from "@/app/admin/daydreams/_components/Loading/DaydreamFormLoading";
+import { BreadcrumbDataSetter } from "src/app/admin/(modules)/_components/Breadcrumbs";
+import CreateDaydreamWrapper from "@/app/admin/(modules)/daydreams/create/_components/CreateDaydreamWrapper";
+import DaydreamFormLoading from "@/app/admin/(modules)/daydreams/_components/Loading/DaydreamFormLoading";
 
 export const metadata: Metadata = {
   title: "Admin - Create Dream",

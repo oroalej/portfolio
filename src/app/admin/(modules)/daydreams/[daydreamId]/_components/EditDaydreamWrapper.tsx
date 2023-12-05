@@ -14,8 +14,8 @@ import {
 } from "@/features/daydreams/api";
 
 import toast from "react-hot-toast";
-import DaydreamFormLoading from "@/app/admin/daydreams/_components/Loading/DaydreamFormLoading";
-import DaydreamForm from "@/app/admin/daydreams/_components/DaydreamForm";
+import DaydreamFormLoading from "@/app/admin/(modules)/daydreams/_components/Loading/DaydreamFormLoading";
+import DaydreamForm from "@/app/admin/(modules)/daydreams/_components/DaydreamForm";
 
 const EditDaydreamWrapper = () => {
   const router = useRouter();

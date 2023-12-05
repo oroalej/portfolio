@@ -10,14 +10,14 @@ import {
 import {
   DaydreamTableRow,
   DaydreamTableRowLoading,
-} from "@/app/admin/daydreams/_components/DaydreamTableRow";
+} from "@/app/admin/(modules)/daydreams/_components/DaydreamTableRow";
 import { useQueryClient } from "@tanstack/react-query";
 import { removeEmptyValues } from "@/utils";
 import { useQueryState } from "next-usequerystate";
 import { Fragment, Suspense, useCallback, useState } from "react";
 import { DEFAULT_PAGINATION_VALUES } from "@/utils/pagination";
 import { DaydreamAPIDataStructure } from "@/features/daydreams/types";
-import DaydreamTableLoading from "@/app/admin/daydreams/_components/Loading/DaydreamTableLoading";
+import DaydreamTableLoading from "@/app/admin/(modules)/daydreams/_components/Loading/DaydreamTableLoading";
 import toast from "react-hot-toast";
 
 const DaydreamTable = () => {

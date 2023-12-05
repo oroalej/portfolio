@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { BreadcrumbDataSetter } from "@/app/admin/_components/Breadcrumbs";
+import { BreadcrumbDataSetter } from "src/app/admin/(modules)/_components/Breadcrumbs";
 import QuoteFormLoading from "@/app/admin/(modules)/quotes/_components/Loading/QuoteFormLoading";
 import CreateQuoteWrapper from "@/app/admin/(modules)/quotes/_components/CreateQuoteWrapper";
 import { Fragment, Suspense } from "react";

@@ -1,7 +1,7 @@
 import { CardHeader, CardRoot, CardTitle } from "@/components";
 import { Fragment } from "react";
 import { Metadata } from "next";
-import { BreadcrumbDataSetter } from "@/app/admin/_components/Breadcrumbs";
+import { BreadcrumbDataSetter } from "src/app/admin/(modules)/_components/Breadcrumbs";
 import { GoFileDirectoryFill } from "react-icons/go";
 import ProjectCreateWrapper from "@/app/admin/(modules)/projects/create/_components/ProjectCreateWrapper";
 
