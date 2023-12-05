@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Tables } from "@/types";
 import { supabase } from "@/utils/supabase";
-import { ImageFileData } from "@/features/files/types";
 import {
   DreamFormParams,
   DaydreamAPIDataStructure,

@@ -33,7 +33,7 @@ export const useUpdateDaydreamMutation = () => {
 
       return data as unknown as DaydreamAPIDataStructure;
     },
-    onSuccess: (data, variables) => {
+    onSuccess: (data) => {
       queryClient.setQueryData(["daydream", data.id], data);
 
       updatePaginatedDataCache({

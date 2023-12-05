@@ -1,20 +1,14 @@
 import EditDaydreamWrapper from "@/app/admin/daydreams/[daydreamId]/_components/EditDaydreamWrapper";
+import { BreadcrumbDataSetter } from "@/app/admin/_components/Breadcrumbs";
 import { Metadata } from "next";
 import { Fragment, Suspense } from "react";
 import DaydreamFormLoading from "@/app/admin/daydreams/_components/Loading/DaydreamFormLoading";
-import { BreadcrumbDataSetter } from "@/app/admin/_components/Breadcrumbs";
-
-export interface AdminDaydreamEditPage {
-  params: { dreamId: string };
-}
 
 export const metadata: Metadata = {
   title: "Admin - Editing dream..",
 };
 
-const AdminDaydreamEditPage = ({
-  params: { dreamId },
-}: AdminDaydreamEditPage) => {
+const AdminDaydreamEditPage = () => {
   return (
     <Fragment>
       <BreadcrumbDataSetter

@@ -1,5 +1,4 @@
 import { Tables } from "@/types";
-import { ImageFileData } from "@/features/files/types";
 
 export interface DreamFormParams
   extends Omit<Tables<"daydreams">, "id" | "created_at"> {
