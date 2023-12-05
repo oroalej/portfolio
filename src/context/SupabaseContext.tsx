@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }: BaseComponent) => {
       }
     };
 
-    getAuthenticatedSession();
+    getAuthenticatedSession().catch();
   }, []);
 
   const onLogin = async (
