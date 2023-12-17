@@ -1,20 +1,22 @@
+"use client";
+
 import { ReactNode } from "react";
 import classNames from "classnames";
-import styles from "@/components/NavLink/nav-link.module.css";
+import styles from "@/app/(web)/_components/NavLink/nav-link.module.css";
 import Link from "next/link";
 
-interface BaseNavLinkInterface {
+export interface BaseNavLinkInterface {
   children: ReactNode;
   active?: boolean;
 }
 
-interface DisabledNavLinkInterface extends BaseNavLinkInterface {
+export interface DisabledNavLinkInterface extends BaseNavLinkInterface {
   href?: never;
   disabled: true;
-  onClick: never;
+  onClick?: never;
 }
 
-interface ActiveNavLinkInterface extends BaseNavLinkInterface {
+export interface ActiveNavLinkInterface extends BaseNavLinkInterface {
   href: string;
   disabled?: never | false;
   onClick?: () => void;

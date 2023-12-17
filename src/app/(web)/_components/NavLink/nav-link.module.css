@@ -1,0 +1,16 @@
+.default {
+  @apply py-2 px-2.5 uppercase cursor-pointer border-b-4 hover:text-neutral-800 border-transparent transition-colors;
+  @apply font-bold text-neutral-500;
+}
+
+.disabled {
+  @apply italic opacity-70 pointer-events-none;
+}
+
+.border {
+  @apply hover:border-neutral-700;
+}
+
+.active {
+  @apply border-neutral-800 text-neutral-800;
+}
