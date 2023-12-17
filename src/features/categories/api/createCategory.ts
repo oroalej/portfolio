@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import supabase from "@/utils/supabase";
+import { supabase } from "@/utils/supabase";
 import { titleCase } from "@/utils";
 import { kebabCase, sortBy } from "lodash";
 import { CategoryAPIDataStructure } from "@/features/categories/types";

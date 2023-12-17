@@ -18,5 +18,6 @@ export interface ScreenshotAPIDataStructure {
   file: Pick<
     Tables<"files">,
     "id" | "bucket_name" | "storage_file_path" | "name"
-  >;
+  > &
+    Required<Pick<Tables<"files">, "width" | "height">>;
 }

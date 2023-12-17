@@ -2,7 +2,9 @@ import { ProjectAPIDataStructure } from "@/features/projects/types";
 import { ProjectFormParams } from "@/app/admin/(modules)/projects/_components/ProjectForm";
 import { ProjectCardItem } from "@/app/admin/(modules)/projects/_components/ProjectCard";
 
-export const ProjectListSelector = (data: ProjectAPIDataStructure[]) => {
+export const ProjectListSelector = (
+  data: ProjectAPIDataStructure[]
+): ProjectCardItem[] => {
   return data.map(projectListItemTransformer);
 };
 
@@ -27,6 +29,8 @@ export const projectListItemTransformer = (
   screenshots: item.screenshots.map((screenshot) => ({
     storage_file_path: screenshot.file.storage_file_path,
     name: screenshot.title,
+    height: screenshot.file.height,
+    width: screenshot.file.width,
   })),
 });
 

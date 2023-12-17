@@ -16,7 +16,9 @@ export type ProjectSortableColumns = Pick<
 export interface GetProjectListParams
   extends Filterable<ProjectFilterableColumns>,
     Sortable<ProjectSortableColumns>,
-    Searchable {}
+    Searchable {
+  byType?: boolean;
+}
 
 export const getProjectList = async ({
   filter,
@@ -26,7 +28,7 @@ export const getProjectList = async ({
   let query = supabase
     .from("projects")
     .select(
-      "*, screenshots:project_screenshots(id, file_id, screenshot_order, file:file_id(id, name, bucket_name, storage_file_path), title), project_type:project_type_id(name), skills:project_skills(id, skill_id, skill:skill_id(name))"
+      "*, screenshots:project_screenshots(id, file_id, screenshot_order, file:file_id(id, name, bucket_name, storage_file_path, width, height), title), project_type:project_type_id(name), skills:project_skills(id, skill_id, skill:skill_id(name))"
     );
 
   query = queryFilterBuilder({
@@ -41,24 +43,25 @@ export const getProjectList = async ({
   return query;
 };
 
-export const useGetProjectList = <
-  TransformerType extends {} = ProjectAPIDataStructure
->(
+export const useGetProjectList = <Type extends any = ProjectAPIDataStructure>(
   params: GetProjectListParams,
-  transformer?: (value: ProjectAPIDataStructure[]) => TransformerType
-) =>
-  useQuery({
-    staleTime: Infinity,
+  transformer?: (value: ProjectAPIDataStructure[]) => Type[]
+) => {
+  const isEnabled = params.byType ? !!params.filter?.project_type_id : true;
 
+  return useQuery({
+    staleTime: Infinity,
     queryKey: ["projects", params],
+    enabled: isEnabled,
     queryFn: async (): Promise<ProjectAPIDataStructure[]> => {
       const { data } = await getProjectList(params);
 
       return (data as unknown as ProjectAPIDataStructure[]) ?? [];
     },
-    select: (data) => {
-      if (transformer) return transformer(data);
+    select: (data): Type[] => {
+      if (transformer) return transformer(data as ProjectAPIDataStructure[]);
 
-      return data;
+      return data as Type[];
     },
   });
+};

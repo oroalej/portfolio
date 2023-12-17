@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { Tables } from "@/types";
-import supabase from "@/utils/supabase";
+import { supabase } from "@/utils/supabase";
 import { SourceAPIDataStructure } from "@/features/sources/types";
 import { sortBy } from "lodash";
 

@@ -31,9 +31,7 @@ export const getTaxonomyByTermId = ({
     filter: removeEmptyValues(filter),
   });
 
-  query = query.throwOnError();
-
-  return query;
+  return query.throwOnError();
 };
 
 export const useGetTaxonomyByTermId = ({
