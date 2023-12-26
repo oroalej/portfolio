@@ -2,10 +2,9 @@
 
 import Link from "next/link";
 import Container from "@/app/(web)/_components/Container";
-import { Switch } from "@headlessui/react";
 import { ExternalLink } from "@/components";
 import { SiGithub } from "react-icons/si";
-import { PiListLight, PiMoonFill, PiXThin } from "react-icons/pi";
+import { PiListLight, PiXThin } from "react-icons/pi";
 import { NavLink } from "@/app/(web)/_components/NavLink/NavLink";
 import { useOpenable } from "@/hooks";
 import { usePathname } from "next/navigation";
