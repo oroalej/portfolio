@@ -38,10 +38,10 @@ export const ProjectCard = ({ item, onPreview }: ProjectCardInterface) => {
             <SupabaseImage
               src={screenshots[0].storage_file_path}
               alt={screenshots[0].name}
-              className="object-cover"
+              className="object-cover absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 h-full w-full"
               quality={75}
-              width={1280}
-              height={1280}
+              width={450}
+              height={450}
             />
           </div>
         )}
@@ -53,11 +53,11 @@ export const ProjectCard = ({ item, onPreview }: ProjectCardInterface) => {
             {description}
           </p>
 
-          <div className="flex flex-row gap-2.5 text-neutral-700 items-center">
+          <div className="flex flex-row gap-2.5 text-neutral-700 items-center flex-wrap">
             {skills.map((item) => (
               <div
                 key={item.id}
-                className="text-sm select-all bg-neutral-200 rounded px-2.5 py-1.5"
+                className="text-sm select-all bg-neutral-200 rounded px-2.5 py-1.5 whitespace-nowrap"
               >
                 {item.name}
               </div>

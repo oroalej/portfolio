@@ -38,11 +38,11 @@ export const Thumbnail: FC<ThumbnailInterface> = ({
             src={image.storage_file_path}
             alt={image.name}
             quality={65}
-            width={80}
-            height={80}
+            width={450}
+            height={450}
             onLoadingComplete={endLoading}
             loading="lazy"
-            className="object-cover object-center"
+            className="object-cover absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 h-full w-full"
           />
         </div>
       </div>
