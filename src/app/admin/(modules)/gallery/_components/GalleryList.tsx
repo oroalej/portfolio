@@ -1,28 +1,28 @@
 "use client";
 
 import { CardBody, CardFooter, CardRoot, SimplePagination } from "@/components";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useFileList } from "@/features/files/api/getFileList";
 import { Suspense } from "react";
 import { DEFAULT_PAGINATION_VALUES } from "@/utils/pagination";
 import GalleryItemLoading from "@/app/admin/(modules)/gallery/_components/Loading/GalleryItemLoading";
 import GalleryListLoading from "@/app/admin/(modules)/gallery/_components/Loading/GalleryListLoading";
 import GalleryItem from "@/app/admin/(modules)/gallery/_components/GalleryItem";
-import useSetParamsRouter from "@/hooks/useSetParamsRouter";
+import { useQueryState } from "next-usequerystate";
 
 const GalleryList = () => {
   const params = useParams();
-  const searchParams = useSearchParams();
 
-  const { setParam, push } = useSetParamsRouter();
+  const [page, setPage] = useQueryState("per_page", {
+    parse: parseInt,
+    shallow: false,
+    defaultValue: DEFAULT_PAGINATION_VALUES.current_page,
+  });
+
   const { isLoading, data } = useFileList({
     bucket_name: "images",
-    per_page:
-      Number(searchParams.get("per_page")) ||
-      DEFAULT_PAGINATION_VALUES.per_page,
-    page:
-      Number(searchParams.get("page")) ||
-      DEFAULT_PAGINATION_VALUES.current_page,
+    per_page: DEFAULT_PAGINATION_VALUES.per_page,
+    page,
   });
 
   if (isLoading) {
@@ -46,8 +46,7 @@ const GalleryList = () => {
         <CardFooter className="justify-end">
           <SimplePagination
             onChange={(value) => {
-              setParam("page", value.toString());
-              push();
+              setPage(value).catch();
             }}
             current_page={data?.pagination.current_page}
             last_page={data?.pagination.last_page}
