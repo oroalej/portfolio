@@ -39,11 +39,7 @@ export const useGetTaxonomyByTermId = ({
   sort = [],
   q,
 }: GetTaxonomyByTermId) => {
-  const termIdExists =
-    filter?.hasOwnProperty("term_id") &&
-    Object.keys(filter).every(
-      (key) => !!filter?.[key as keyof TaxonomyFilterableColumns]
-    );
+  const termIdExists = filter?.hasOwnProperty("term_id") && !!filter?.term_id;
 
   return useQuery({
     enabled: termIdExists,

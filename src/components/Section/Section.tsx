@@ -32,7 +32,10 @@ export const SectionTitle = ({
   className = "",
 }: SectionTitleInterface) => (
   <div
-    className={classNames("flex flex-row gap-2 items-center mb-4", className)}
+    className={classNames(
+      "flex flex-row gap-2 items-center mb-4 text-2xl",
+      className
+    )}
   >
     <FaHashtag size={24} className="text-rose-500" />
 

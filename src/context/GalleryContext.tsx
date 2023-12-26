@@ -1,23 +1,25 @@
 "use client";
 
 import { createContext, useCallback, useContext, useState } from "react";
-import { BaseComponent } from "@/types";
+import { BaseComponent, Tables } from "@/types";
 import { useHotkeys } from "react-hotkeys-hook";
 
 interface GalleryContextProps {
-  setList: (value: any[]) => void;
+  setList: (value: GalleryItem[]) => void;
   setSelectedIndex: (value: number) => void;
   selectedIndex?: number | null;
-  list?: unknown[];
+  list: GalleryItem[];
   selectedItem: Record<string, any>;
   onNext: () => void;
   onPrev: () => void;
   isFirst?: boolean;
   isLast?: boolean;
+  total: number;
 }
 
-export interface GalleryItem {
-  storage_file_path: string;
+export interface GalleryItem
+  extends Pick<Tables<"files">, "storage_file_path">,
+    Required<Pick<Tables<"files">, "width" | "height">> {
   name: string;
 }
 
@@ -27,17 +29,25 @@ const GalleryContext = createContext<GalleryContextProps>({
   onNext: () => {},
   onPrev: () => {},
   selectedItem: {},
+  total: 1,
+  list: [],
 });
 
 export const useGalleryContext = () => useContext(GalleryContext);
 
 export const GalleryProvider = ({ children }: BaseComponent) => {
-  const [list, setList] = useState<GalleryItem[]>([]);
+  const [list, setListable] = useState<GalleryItem[]>([]);
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
   const isFirst = selectedIndex <= 0;
   const isLast = selectedIndex >= list.length - 1;
+  const total = list.length;
   const selectedItem = list?.[selectedIndex] ?? null;
+
+  const setList = (value: GalleryItem[]) => {
+    setListable(value);
+    setSelectedIndex(0);
+  };
 
   const onPrev = useCallback(
     () =>
@@ -74,6 +84,7 @@ export const GalleryProvider = ({ children }: BaseComponent) => {
         selectedItem,
         isFirst,
         isLast,
+        total,
       }}
     >
       {children}

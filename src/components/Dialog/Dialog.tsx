@@ -19,7 +19,7 @@ export const Dialog = (props: DialogProps) => {
         className="fixed inset-0 z-[100]"
         onClose={() => (onClose ? onClose() : null)}
       >
-        <div className="flex flex-col h-full xs:p-1 md:p-2.5">
+        <div className="flex flex-col h-full xs:p-1 md:p-3.5">
           <UIDialog.Overlay className="fixed inset-0 bg-black bg-opacity-60" />
           <Transition.Child
             as={Fragment}

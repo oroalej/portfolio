@@ -53,23 +53,34 @@ export const getDaydreamList = ({
   return query;
 };
 
-export const useGetDaydreamList = (params: getDaydreamListParams) =>
+export const useGetDaydreamList = <Type extends any = DaydreamAPIDataStructure>(
+  params: getDaydreamListParams,
+  transformer?: (value: DaydreamAPIDataStructure[]) => Type[]
+) =>
   useQuery({
     queryKey: ["daydreams", params],
     placeholderData: keepPreviousData,
 
-    queryFn: async (): Promise<
-      DataWithPagination<DaydreamAPIDataStructure>
-    > => {
+    queryFn: async (): Promise<DataWithPagination<Type>> => {
       const { data, count } = await getDaydreamList(params);
 
       return {
-        data: (data as unknown as DaydreamAPIDataStructure[]) || [],
+        data: (data as unknown as Type[]) || [],
         pagination: generatePaginationData(
           Number(params.per_page),
           Number(params.page),
           count || 0
         ),
       };
+    },
+    select: (data): DataWithPagination<Type> => {
+      if (transformer) {
+        return {
+          data: transformer((data?.data as DaydreamAPIDataStructure[]) || []),
+          pagination: data.pagination,
+        };
+      }
+
+      return data as DataWithPagination<Type>;
     },
   });

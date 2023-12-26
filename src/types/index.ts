@@ -3,7 +3,7 @@ import { Database } from "@/types/supabase";
 
 export type ValueOf<T> = T[keyof T];
 export type PropType<TObj, TProp extends keyof TObj> = TObj[TProp];
-
+export type Nullable<T> = { [P in keyof T]: T[P] | null };
 export type SetRequired<T, K extends keyof T> = T & Required<Pick<T, K>>;
 
 export type Tables<T extends keyof Database["public"]["Tables"]> =

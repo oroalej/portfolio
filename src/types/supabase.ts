@@ -270,24 +270,24 @@ export interface Database {
           content: string;
           created_at: string;
           id: string;
-          media_detail_id: string | null;
-          source_id: string | null;
+          media_detail_id: string;
+          source_id: string;
         };
         Insert: {
           category_id: string;
           content: string;
           created_at?: string;
           id?: string;
-          media_detail_id?: string | null;
-          source_id?: string | null;
+          media_detail_id?: string;
+          source_id?: string;
         };
         Update: {
           category_id?: string;
           content?: string;
           created_at?: string;
           id?: string;
-          media_detail_id?: string | null;
-          source_id?: string | null;
+          media_detail_id?: string;
+          source_id?: string;
         };
         Relationships: [
           {
