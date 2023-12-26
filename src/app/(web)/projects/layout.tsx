@@ -1,7 +1,7 @@
 import { BaseComponent } from "@/types";
 import { GalleryProvider } from "@/context/GalleryContext";
 import Container from "@/app/(web)/_components/Container";
-import ProjectHeader from "@/app/(web)/(profession)/projects/_components/ProjectHeader";
+import ProjectHeader from "@/app/(web)/projects/[projectTypeId]/_components/ProjectHeader";
 
 const ProjectLayout = ({ children }: Omit<BaseComponent, "className">) => (
   <Container className="py-20">

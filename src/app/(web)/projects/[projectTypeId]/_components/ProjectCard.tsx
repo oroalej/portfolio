@@ -14,10 +14,10 @@ export const ProjectCard = ({ item, onPreview }: ProjectCardInterface) => {
 
   return (
     <Fragment>
-      <div className="flex flex-row gap-6">
+      <div className="flex flex-col md:flex-row gap-6">
         {!!screenshots.length && (
           <div
-            className="relative w-64 aspect-square shrink-0 rounded-md overflow-hidden cursor-pointer hover:bg-neutral-800 group"
+            className="relative h-64 md:h-auto md:w-64 md:aspect-square shrink-0 rounded-md overflow-hidden cursor-pointer hover:bg-neutral-800 group"
             onClick={() => onPreview(item)}
           >
             <button className="z-10 opacity-0 group-hover:opacity-100 transition-opacity delay-75 absolute w-full h-full bg-opacity-40 bg-neutral-800 flex items-center justify-center pointer-events-none group-active:bg-opacity-[0.45]">
@@ -46,8 +46,12 @@ export const ProjectCard = ({ item, onPreview }: ProjectCardInterface) => {
           </div>
         )}
         <div>
-          <h2 className="text-xl font-bold text-neutral-700 mb-2">{title}</h2>
-          <p className="text-neutral-600 mb-4">{description}</p>
+          <h2 className="text-xl font-bold text-neutral-700 dark:text-neutral-200 mb-2">
+            {title}
+          </h2>
+          <p className="text-neutral-600 dark:text-neutral-200 mb-4">
+            {description}
+          </p>
 
           <div className="flex flex-row gap-2.5 text-neutral-700 items-center">
             {skills.map((item) => (

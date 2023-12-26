@@ -51,7 +51,7 @@ export const NavLink = ({
       className={classNames(
         styles.default,
         styles.border,
-        "dark:text-neutral-100 dark:hover:border-neutral-200",
+        "hover:text-neutral-800 dark:text-neutral-100 dark:hover:border-neutral-200",
         {
           [styles.active]: active,
         }

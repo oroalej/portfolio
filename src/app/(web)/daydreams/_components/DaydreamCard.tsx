@@ -1,7 +1,7 @@
-import Image from "next/image";
-import { BaseSkeletonLoader, ImageSkeletonLoader } from "@/components";
 import { Tables } from "@/types";
 import { useStoragePublicUrl } from "@/features/files/api";
+import { BaseSkeletonLoader, ImageSkeletonLoader } from "@/components";
+import Image from "next/image";
 
 export interface DaydreamCardProps
   extends Omit<Tables<"daydreams">, "created_at" | "id" | "file_id"> {
@@ -22,7 +22,7 @@ export const DaydreamCard = ({
 
   return (
     <div
-      className="bg-white p-4 overflow-hidden cursor-pointer transition-all dark:bg-neutral-100"
+      className="bg-white p-5 overflow-hidden cursor-pointer transition-all dark:bg-neutral-100 hover:drop-shadow-lg"
       onClick={onSelect}
     >
       <div className="relative aspect-square mb-4 group overflow-hidden">
@@ -34,11 +34,11 @@ export const DaydreamCard = ({
           <Image
             src={data}
             alt={description}
-            width={430}
-            height={430}
+            width={450}
+            height={450}
+            quality={75}
             style={{ width: "100%", height: "100%" }}
             className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 point-events-none object-cover"
-            quality={75}
           />
         )}
       </div>

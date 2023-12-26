@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import ProjectList from "@/app/(web)/(profession)/projects/_components/ProjectList";
+import ProjectList from "@/app/(web)/projects/[projectTypeId]/_components/ProjectList";
 
 export const metadata: Metadata = {
   title: "Alexander Jeam Oro - Projects",

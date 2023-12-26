@@ -8,7 +8,10 @@ const Container = ({
   ...remaining
 }: BaseComponent & HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={classNames("max-w-screen-xl px-4 mx-auto", className)}
+    className={classNames(
+      "max-w-screen-md lg:max-w-screen-xl px-4 mx-auto",
+      className
+    )}
     {...remaining}
   >
     {children}

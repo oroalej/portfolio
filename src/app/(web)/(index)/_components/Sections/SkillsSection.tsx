@@ -1,8 +1,9 @@
 "use client";
 
-import { Section, Skill, SkillInterface } from "@/components";
-import { BACKEND_SKILL, DATABASE_SKILL, FRONTEND_SKILL } from "@/data/skills";
 import Container from "@/app/(web)/_components/Container";
+import { Section } from "@/components";
+import { Skill, SkillInterface } from "@/app/(web)/(index)/_components/Skill";
+import { BACKEND_SKILL, DATABASE_SKILL, FRONTEND_SKILL } from "@/data/skills";
 
 export interface SkillListInterface {
   title: string;
@@ -17,7 +18,7 @@ const list: Array<SkillListInterface> = [
 
 const SkillsSection = () => {
   return (
-    <Container id="what-i-use" className="py-32">
+    <Container id="what-i-use" className="py-32 dark:text-white">
       <Section.Title anchor="#what-i-use">Tech Stack</Section.Title>
 
       <Section.Content>

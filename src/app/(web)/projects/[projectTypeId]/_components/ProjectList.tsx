@@ -1,11 +1,11 @@
 "use client";
 
-import ProjectLoading from "@/app/(web)/(profession)/projects/loading";
-import PreviewProjectImageDialog from "@/app/(web)/(profession)/projects/_components/PreviewProjectImageDialog";
+import ProjectLoading from "@/app/(web)/projects/loading";
+import PreviewProjectImageDialog from "@/app/(web)/projects/[projectTypeId]/_components/PreviewProjectImageDialog";
 import { useParams } from "next/navigation";
 import { useGetProjectList } from "@/features/projects/api/getProjectList";
 import { Fragment, useState } from "react";
-import { ProjectCard } from "@/app/(web)/(profession)/projects/_components/ProjectCard";
+import { ProjectCard } from "@/app/(web)/projects/[projectTypeId]/_components/ProjectCard";
 import { useGalleryContext } from "@/context/GalleryContext";
 import { ProjectListSelector } from "@/features/projects/transformers";
 import { ProjectCardItem } from "@/app/admin/(modules)/projects/_components/ProjectCard";
@@ -44,13 +44,15 @@ const ProjectList = () => {
   return (
     <Fragment>
       {data?.length ? (
-        data?.map((item) => (
-          <ProjectCard
-            key={item.id}
-            item={item as unknown as ProjectCardItem}
-            onPreview={onPreviewImageHandler}
-          />
-        ))
+        <div className="flex flex-col gap-8">
+          {data?.map((item) => (
+            <ProjectCard
+              key={item.id}
+              item={item as unknown as ProjectCardItem}
+              onPreview={onPreviewImageHandler}
+            />
+          ))}
+        </div>
       ) : (
         <span className="text-center">No Result</span>
       )}
