@@ -1,6 +1,4 @@
-import { ProjectInterface } from "@/components/Project/ProjectCard";
-
-export const PROJECT_LIST: Array<ProjectInterface> = [
+export const PROJECT_LIST = [
   {
     title: "intothealgoverse 2.0",
     type: "personal",

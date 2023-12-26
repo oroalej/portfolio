@@ -1,8 +1,8 @@
-import toast from "react-hot-toast";
-import supabase from "@/utils/supabase";
-import { Tables } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { QuoteAPIDataStructure } from "@/features/quotes/types";
+import { Tables } from "@/types";
+import { supabase } from "@/utils/supabase";
+import toast from "react-hot-toast";
 
 interface StoreQuoteParams
   extends Required<Omit<Tables<"quotes">, "id" | "created_at">> {}
@@ -11,12 +11,12 @@ export const createQuote = (formData: StoreQuoteParams) => {
   return supabase
     .from("quotes")
     .insert(formData)
-    .select("id, category_id, source_id, media_detail_id, content")
+    .select(
+      "id, content, created_at, source_id, media_detail_id, category_id, category:category_id(name), source:source_id(name), media_detail:media_detail_id(name)"
+    )
     .single()
     .throwOnError();
 };
-
-const id = crypto.randomUUID();
 
 export const useStoreQuoteMutation = () => {
   const queryClient = useQueryClient();
@@ -25,8 +25,6 @@ export const useStoreQuoteMutation = () => {
     mutationFn: async (
       formData: StoreQuoteParams
     ): Promise<QuoteAPIDataStructure> => {
-      toast.loading("Creating your quote...", { id });
-
       const { data } = await createQuote(formData);
 
       if (data === null) {
@@ -35,18 +33,17 @@ export const useStoreQuoteMutation = () => {
 
       return data as unknown as QuoteAPIDataStructure;
     },
-    onSuccess: (data) => {
-      toast.success("Your data has been successfully created!", { id });
-
-      queryClient.setQueryData(["quote", data.id], data);
-      queryClient.removeQueries({
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries({
         queryKey: ["quotes"],
         exact: false,
         type: "active",
       });
+
+      queryClient.setQueryData(["quote", data.id], data);
     },
     onError: (error) => {
-      toast.error(error.message, { id });
+      toast.error(error.message);
     },
   });
 };

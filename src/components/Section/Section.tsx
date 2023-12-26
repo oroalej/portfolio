@@ -21,13 +21,7 @@ export const SectionWrapper = ({
   id,
   className = "",
 }: SectionWrapperInterface) => (
-  <div
-    className={classNames(
-      "py-14 md:py-20 lg:py-32 dark:text-neutral-300",
-      className
-    )}
-    id={id}
-  >
+  <div className={classNames("py-16 dark:text-neutral-300", className)} id={id}>
     <Container>{children}</Container>
   </div>
 );
@@ -38,7 +32,10 @@ export const SectionTitle = ({
   className = "",
 }: SectionTitleInterface) => (
   <div
-    className={classNames("flex flex-row gap-2 items-center mb-4", className)}
+    className={classNames(
+      "flex flex-row gap-2 items-center mb-4 text-2xl",
+      className
+    )}
   >
     <FaHashtag size={24} className="text-rose-500" />
 

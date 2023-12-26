@@ -1,8 +1,12 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import supabase from "@/utils/supabase";
-import { generatePaginationData, getRange } from "@/utils/pagination";
-import { Filterable, Paginatable, Sortable, Tables } from "@/types";
+import {
+  queryFilterBuilder,
+  queryPaginationBuilder,
+  supabase,
+} from "@/utils/supabase";
+import { generatePaginationData } from "@/utils/pagination";
 import { durationInMinutes } from "@/utils";
+import { Filterable, Paginatable, Searchable, Sortable, Tables } from "@/types";
 
 type QuoteListSortable = Pick<Tables<"quotes">, "created_at" | "source_id">;
 type QuoteListFilterable = Pick<
@@ -13,7 +17,8 @@ type QuoteListFilterable = Pick<
 interface getQuotesParams
   extends Required<Paginatable>,
     Sortable<QuoteListSortable>,
-    Filterable<QuoteListFilterable> {}
+    Filterable<QuoteListFilterable>,
+    Searchable {}
 
 interface GetAllQuotesAPIDataStructure
   extends Pick<Tables<"quotes">, "content" | "id" | "created_at"> {
@@ -25,31 +30,31 @@ interface GetAllQuotesAPIDataStructure
 const getQuoteList = ({
   per_page,
   page,
+  q,
   sort = [],
   filter = {},
 }: getQuotesParams) => {
   let query = supabase
     .from("quotes")
     .select(
-      "id, content, created_at, category:categories(id, name), source:sources(id, name), media_detail:media_details(id, name)",
-      { count: "exact" }
+      "id, content, created_at, category:category_id(name), source:source_id(name), media_detail:media_detail_id(name)",
+      {
+        count: "exact",
+      }
     );
 
-  if (Object.keys(filter).length) {
-    query = query.match(filter);
-  }
-
-  sort.forEach((item) => {
-    query = query.order(item.column as string, {
-      ascending: item.order === "asc",
-    });
+  query = queryFilterBuilder({
+    query,
+    textSearch: { column: "content", value: q },
+    sort,
+    filter,
   });
 
-  if (Number.isInteger(page) && Number.isInteger(per_page)) {
-    const { from, to } = getRange(Number(per_page), Number(page));
-
-    query = query.range(from, to);
-  }
+  query = queryPaginationBuilder({
+    query,
+    page,
+    per_page,
+  });
 
   query = query.throwOnError();
 

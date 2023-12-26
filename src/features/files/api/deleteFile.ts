@@ -1,6 +1,6 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/utils/supabase";
 import toast from "react-hot-toast";
-import { useMutation } from "@tanstack/react-query";
-import supabase from "@/utils/supabase";
 
 export const deleteFileById = (id: string) => {
   return supabase.from("files").delete().eq("id", id).throwOnError();
@@ -19,15 +19,15 @@ export interface DeleteFile {
   bucket_name: string;
 }
 
-export const useDeleteFileMutation = () =>
-  useMutation({
+export const useDeleteFileMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
     mutationFn: async ({
       id,
       pathname,
       bucket_name,
     }: DeleteFile): Promise<void> => {
-      toast.loading(`Deleting file...`, { id });
-
       await deleteFileById(id);
       const bucketResult = await deleteFileBucketByPathname(
         bucket_name,
@@ -36,12 +36,14 @@ export const useDeleteFileMutation = () =>
 
       if (bucketResult.error) throw bucketResult.error;
     },
-    onSuccess: (data, variables) => {
-      toast.success("Your file has been successfully deleted!", {
-        id: variables.id,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["files"],
+        exact: false,
       });
     },
     onError: (error, variables) => {
       toast.error(error.message, { id: variables.id });
     },
   });
+};

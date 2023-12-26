@@ -1,4 +1,4 @@
-import supabase from "@/utils/supabase";
+import { supabase } from "@/utils/supabase";
 import { useQuery } from "@tanstack/react-query";
 import { durationInMinutes } from "@/utils";
 

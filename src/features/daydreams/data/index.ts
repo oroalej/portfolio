@@ -1,4 +1,4 @@
-import { CreateDreamFormInterface } from "@/features/daydreams/types";
+import { DreamFormParams } from "@/features/daydreams/types";
 
 export const MAX_FILE_SIZE = 15728640; // 15MB
 export const ACCEPTED_IMAGE_TYPES = [
@@ -8,20 +8,13 @@ export const ACCEPTED_IMAGE_TYPES = [
   "image/webp",
 ];
 
-export const DEFAULT_FORM_VALUES: CreateDreamFormInterface = {
+export const DEFAULT_FORM_VALUES: DreamFormParams = {
   iso: 200,
   shutter_speed: 125,
   aperture: 2.8,
   year: new Date().getFullYear(),
   description: "",
-  image: {
-    file: null,
-    width: 0,
-    height: 0,
-    name: "",
-    type: ACCEPTED_IMAGE_TYPES[0],
-    size: 0,
-  },
+  file_id: null,
 };
 
 export const YEARS = [...Array(30)].map((_, index) => {

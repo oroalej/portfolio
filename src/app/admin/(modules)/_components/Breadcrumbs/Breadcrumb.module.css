@@ -1,0 +1,9 @@
+.breadcrumb-item {
+  @apply relative font-medium text-neutral-600 hover:text-neutral-700 transition-colors cursor-pointer text-sm capitalize;
+}
+
+.breadcrumb-item:after {
+  content: "/";
+  right: -18px;
+  @apply text-neutral-400 absolute pointer-events-none top-1/2 -translate-y-1/2;
+}

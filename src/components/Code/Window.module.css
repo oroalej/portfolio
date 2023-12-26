@@ -7,7 +7,7 @@
 }
 
 .title {
-  @apply absolute left-1/2 transform -translate-x-1/2 text-white text-sm font-mono tracking-wide hidden sm:block text-neutral-400
+  @apply absolute left-1/2 transform -translate-x-1/2 text-sm font-mono tracking-wide hidden sm:block text-neutral-400
 }
 
 .content {

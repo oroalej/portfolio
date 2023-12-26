@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { MediaDetailAPIDataStructure } from "@/features/media_details/types";
-import supabase from "@/utils/supabase";
+import { supabase } from "@/utils/supabase";
 import { durationInMinutes } from "@/utils";
 
 export const getMediaListBySourceId = (sourceId: string) => {

@@ -1,4 +1,5 @@
 const colors = require("tailwindcss/colors");
+const plugin = require("tailwindcss/plugin");
 
 module.exports = {
   content: [
@@ -33,7 +34,12 @@ module.exports = {
       "2xl": "1536px",
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(({ addVariant }) => {
+      addVariant("open", '&[data-state="open"]');
+    }),
+    require("tailwind-scrollbar")({ nocompatible: true }),
+  ],
   experimental: {
     applyComplexClasses: true,
   },

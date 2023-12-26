@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import supabase from "@/utils/supabase";
+import { supabase } from "@/utils/supabase";
 import { DaydreamAPIDataStructure } from "@/features/daydreams/types";
 import { durationInMinutes } from "@/utils";
 

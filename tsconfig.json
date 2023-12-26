@@ -22,13 +22,6 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-//      "@/components/*": ["src/components/*"],
-//      "@/pages/*": ["src/pages/*"],
-//      "@/styles/*": ["src/styles/*"],
-//      "@/hooks/*": ["src/hooks/*"],
-//      "@/constants/*": ["src/constants/*"],
-//      "@/data/*": ["src/data/*"],
-//      "@/providers/*": ["src/providers/*"]
     },
     "plugins": [
       {
