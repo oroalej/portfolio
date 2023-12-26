@@ -38,6 +38,7 @@ module.exports = {
     plugin(({ addVariant }) => {
       addVariant("open", '&[data-state="open"]');
     }),
+    require("tailwind-scrollbar")({ nocompatible: true }),
   ],
   experimental: {
     applyComplexClasses: true,
