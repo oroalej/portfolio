@@ -25,7 +25,7 @@ export const ProjectCard = ({ item, onPreview }: ProjectCardInterface) => {
             </button>
 
             {screenshots.length && (
-              <div className="flex flex-row gap-1 absolute right-2.5 top-2.5">
+              <div className="flex flex-row gap-1 absolute right-2.5 top-2.5 z-10">
                 {[...Array(screenshots.length)].map((_, index) => (
                   <span
                     key={`indicator-${index}-${id}`}
