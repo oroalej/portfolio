@@ -6,7 +6,7 @@ import { useFileList } from "@/features/files/api/getFileList";
 import { DEFAULT_PAGINATION_VALUES } from "@/utils/pagination";
 import { useState } from "react";
 import { FileAPIDataStructure } from "@/features/files/types";
-import SupabaseImage from "@/app/admin/(modules)/daydreams/_components/SupabaseImage";
+import SupabaseImage from "@/components/Image/SupabaseImage";
 import * as UIScrollArea from "@radix-ui/react-scroll-area";
 
 interface GalleryDialogProps extends DialogProps {

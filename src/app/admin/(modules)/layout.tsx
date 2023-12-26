@@ -1,6 +1,4 @@
 import { BaseComponent } from "@/types";
-import { Toaster } from "react-hot-toast";
-import { Tooltip } from "@/components";
 import { BreadcrumbProvider } from "@/context/BreadcrumbContext";
 import Sidebar from "@/app/admin/(modules)/_components/Sidebar/Sidebar";
 import Header from "@/app/admin/(modules)/_components/Header";
@@ -18,13 +16,6 @@ const AdminLayout = ({ children }: Pick<BaseComponent, "children">) => (
         </div>
       </main>
     </div>
-
-    <Toaster
-      position="top-right"
-      gutter={8}
-      containerClassName="text-sm text-left"
-    />
-    <Tooltip id="admin-tooltip" />
   </BreadcrumbProvider>
 );
 

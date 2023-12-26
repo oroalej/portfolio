@@ -1,9 +1,9 @@
 "use client";
 
-import { NavLink } from "@/components";
 import Link from "next/link";
-import DarkModeButton from "@/app/(web)/career/_components/DarkModeButton";
 import { usePathname } from "next/navigation";
+import { NavLink } from "@/app/(web)/_components/NavLink/NavLink";
+import DarkModeButton from "@/app/(web)/_components/DarkModeButton";
 
 const TheHeader = () => {
   const pathname = usePathname();

@@ -35,7 +35,7 @@ import { FileAPIDataStructure } from "@/features/files/types";
 import { FaRegImages } from "react-icons/fa6";
 import { PiXBold } from "react-icons/pi";
 import GalleryDialog from "@/app/admin/(modules)/daydreams/_components/GalleryDialog";
-import SupabaseImage from "@/app/admin/(modules)/daydreams/_components/SupabaseImage";
+import SupabaseImage from "@/components/Image/SupabaseImage";
 import classNames from "classnames";
 
 export const DreamSchema = object({
