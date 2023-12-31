@@ -23,7 +23,7 @@ export const Thumbnail: FC<ThumbnailInterface> = ({
     <div
       onClick={onSelect}
       className={classNames(
-        "m-1 w-16 md:w-20 aspect-square overflow-hidden rounded-md border border-solid border-neutral-300 transition-colors",
+        "m-1 w-16 md:w-20 aspect-square overflow-hidden rounded-md border border-solid border-neutral-300 transition-colors shrink-0",
         {
           "ring dark:ring-neutral-200 ring-neutral-800 dark:ring-offset-neutral-200 border-transparent":
             isActive,

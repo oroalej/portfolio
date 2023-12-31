@@ -163,6 +163,11 @@ const GalleryCreateWrapper = () => {
       exact: false,
     });
 
+    await queryClient.invalidateQueries({
+      queryKey: ["infinite_files"],
+      exact: false,
+    });
+
     toast.success(`Successfully uploaded ${fileKeys.length} image(s).`, {
       id: toasterId,
     });

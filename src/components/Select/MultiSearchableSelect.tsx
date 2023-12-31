@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Button,
   FormErrorMessage,
@@ -37,7 +35,6 @@ export const MultiSearchableSelect = ({
   options,
   error,
   value,
-  defaultValue,
   disabled,
   placeholder,
   name = "multi-searchable-input",
@@ -65,6 +62,11 @@ export const MultiSearchableSelect = ({
 
     return filtered;
   }, [query, options]);
+
+  const onSelectHandler = (item: SelectItem<string>) => {
+    onChange([item.value, ...value]);
+    setQuery("");
+  };
 
   return (
     <div className="relative">
@@ -124,7 +126,7 @@ export const MultiSearchableSelect = ({
             filteredOptions.map((item, index) => (
               <SearchableSelectItem
                 key={`searchable-select-${item.text}-${index}`}
-                onSelect={() => onChange([item.value, ...value])}
+                onSelect={() => onSelectHandler(item)}
                 selected={value?.includes(item.value)}
               >
                 {item.text}

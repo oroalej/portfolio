@@ -93,7 +93,7 @@ const DaydreamTable = () => {
               <th className="w-32">Image</th>
               <th className="w-36">Year</th>
               <th>Description</th>
-              <th className="w-40">Setting</th>
+              <th className="w-48">Setting</th>
               <th className="w-48">Created At</th>
               <th className="w-32"></th>
             </tr>

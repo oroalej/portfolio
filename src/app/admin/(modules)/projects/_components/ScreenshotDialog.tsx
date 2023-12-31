@@ -112,7 +112,7 @@ export const ScreenshotDialog = ({
           className="disabled:opacity-95"
           disabled={formState.isSubmitting}
         >
-          <CardRoot rounded className="max-w-lg mx-auto mt-12">
+          <CardRoot rounded className="max-w-3xl mx-auto mt-12">
             <CardHeader className="pb-0">
               <CardTitle>Screenshot</CardTitle>
             </CardHeader>
@@ -141,8 +141,8 @@ export const ScreenshotDialog = ({
                             if (titleInputRef.current)
                               titleInputRef.current.focus();
                           }}
-                          cols={5}
-                          per_page={20}
+                          cols={4}
+                          per_page={16}
                         />
                       )}
                     />

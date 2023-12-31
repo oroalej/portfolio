@@ -103,10 +103,11 @@ export const ProjectCard = ({
             {item.project_order}
           </div>
           <div className="px-4 py-3.5 w-56 overflow-hidden">
-            {!!item.screenshots?.length && (
+            {!!item.screenshots?.length ? (
               <div
-                className="relative aspect-video w-full h-full group"
+                className="relative aspect-video w-full h-full group bg-neutral-300 rounded-md"
                 onClick={onPreviewHandler}
+                style={{ minHeight: "120px" }}
               >
                 <SupabaseImage
                   src={item.screenshots[0].storage_file_path}
@@ -114,15 +115,20 @@ export const ProjectCard = ({
                   width={240}
                   height={240}
                   quality={75}
-                  className="rounded pointer-events-none object-center object-cover w-full h-full"
+                  className="pointer-events-none object-center object-cover w-full h-full rounded-md"
                 />
 
-                <div className="absolute inset-0 inline-flex items-center justify-center group-hover:opacity-100 transition-all duration-500 opacity-0 cursor-pointer bg-black bg-opacity-40 group-active:bg-opacity-50">
+                <div className="absolute inset-0 inline-flex items-center justify-center group-hover:opacity-100 transition-all duration-500 opacity-0 cursor-pointer bg-black bg-opacity-40 group-active:bg-opacity-50 rounded-md">
                   <button className="text-neutral-200 outline-none">
                     <AiOutlineExpand size={20} />
                   </button>
                 </div>
               </div>
+            ) : (
+              <span
+                className="block aspect-video h-full bg-neutral-300 w-full rounded-md"
+                style={{ minHeight: "120px" }}
+              />
             )}
           </div>
           <div className="px-4 py-3.5 flex-1">
@@ -177,8 +183,8 @@ export const ProjectCard = ({
                     </td>
                     <td className="pl-1.5 pr-0 py-1 w-full">
                       <ExternalLink
-                        label={`https://github.com/oroalej/${item.repository_link}`}
-                        href={`https://github.com/oroalej/${item.repository_link}`}
+                        label={`https://github.com/${item.repository_link}`}
+                        href={`https://github.com/${item.repository_link}`}
                         className="block hover:text-blue-700 w-fit text-neutral-700"
                       >
                         <span className="block whitespace-nowrap text-ellipsis overflow-hidden max-w-[16rem] w-fit">

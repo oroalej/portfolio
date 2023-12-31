@@ -71,7 +71,7 @@ export const ScreenshotWrapper = ({
   const onScreenshotSubmitHandler = (value: ScreenshotForm) => {
     const screenshotIndex = items.findIndex((item) => item.id === value.id);
 
-    if (screenshotIndex === -1) onChange([...items, value]);
+    if (screenshotIndex === -1) onChange([value, ...items]);
     else {
       onChange(
         items.map((item, index) => (index === screenshotIndex ? value : item))
