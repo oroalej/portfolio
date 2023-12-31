@@ -23,7 +23,7 @@ const ImagePreviewContainer = forwardRef<
       </button>
 
       <div
-        className="relative flex-1 h-full text-center inline-flex flex-col items-center justify-center gap-3 md:mx-14"
+        className="relative flex-1 h-full text-center inline-flex flex-col items-center justify-center gap-3 w-full"
         ref={ref}
       >
         {children}

@@ -20,6 +20,12 @@ const ProjectList = () => {
     {
       byType: true,
       filter: { project_type_id: projectTypeId as string },
+      sort: [
+        {
+          column: "project_order",
+          order: "asc",
+        },
+      ],
     },
     ProjectListSelector
   );

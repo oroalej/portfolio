@@ -1,7 +1,12 @@
 import SupabaseImage from "@/components/Image/SupabaseImage";
 import React, { Fragment } from "react";
-import { BaseSkeletonLoader } from "@/components";
-import { PiCornersOutLight } from "react-icons/pi";
+import { BaseSkeletonLoader, ExternalLink } from "@/components";
+import {
+  PiCode,
+  PiCornersOutLight,
+  PiFigmaLogoLight,
+  PiGlobeHemisphereWestThin,
+} from "react-icons/pi";
 import { ProjectCardItem } from "@/app/admin/(modules)/projects/_components/ProjectCard";
 
 interface ProjectCardInterface {
@@ -10,12 +15,21 @@ interface ProjectCardInterface {
 }
 
 export const ProjectCard = ({ item, onPreview }: ProjectCardInterface) => {
-  const { id, screenshots, title, description, skills } = item;
+  const {
+    id,
+    screenshots,
+    title,
+    description,
+    skills,
+    repository_link,
+    design_link,
+    website_link,
+  } = item;
 
   return (
     <Fragment>
       <div className="flex flex-col md:flex-row gap-6">
-        {!!screenshots.length && (
+        {!!screenshots.length ? (
           <div
             className="relative h-64 md:h-auto md:w-64 md:aspect-square shrink-0 rounded-md overflow-hidden cursor-pointer hover:bg-neutral-800 group"
             onClick={() => onPreview(item)}
@@ -44,11 +58,56 @@ export const ProjectCard = ({ item, onPreview }: ProjectCardInterface) => {
               height={450}
             />
           </div>
+        ) : (
+          <span className="h-64 md:h-auto md:w-64 md:aspect-square shrink-0 bg-neutral-300 rounded-md" />
         )}
         <div>
-          <h2 className="text-xl font-bold text-neutral-700 dark:text-neutral-200 mb-2">
-            {title}
-          </h2>
+          <div className="flex flex-row gap-4 items-start">
+            <h2 className="text-xl font-bold text-neutral-700 dark:text-neutral-200 mb-2">
+              {title}
+            </h2>
+            <div className="flex flex-row gap-3 items-center">
+              {repository_link && (
+                <ExternalLink
+                  href={`https://github.com/${repository_link}`}
+                  label="Code"
+                  className="transform hover:scale-110 cursor-pointer transition-colors text-neutral-800 dark:text-neutral-200"
+                  data-tooltip-id="guest-tooltip"
+                  data-tooltip-content="Code"
+                  data-tooltip-place="bottom"
+                >
+                  <PiCode size={22} />
+                </ExternalLink>
+              )}
+
+              {website_link && (
+                <ExternalLink
+                  href={`https://${website_link}`}
+                  label="Link"
+                  className="transform hover:scale-110 cursor-pointer transition-colors text-neutral-800 dark:text-neutral-200"
+                  data-tooltip-id="guest-tooltip"
+                  data-tooltip-content="Website"
+                  data-tooltip-place="bottom"
+                >
+                  <PiGlobeHemisphereWestThin size={22} />
+                </ExternalLink>
+              )}
+
+              {design_link && (
+                <ExternalLink
+                  href={`https://www.figma.com/file/${design_link}`}
+                  label="Figma"
+                  className="transform hover:scale-110 cursor-pointer transition-colors text-neutral-800 dark:text-neutral-200"
+                  data-tooltip-id="guest-tooltip"
+                  data-tooltip-content="Design"
+                  data-tooltip-place="bottom"
+                >
+                  <PiFigmaLogoLight size={22} />
+                </ExternalLink>
+              )}
+            </div>
+          </div>
+
           <p className="text-neutral-600 dark:text-neutral-200 mb-4">
             {description}
           </p>

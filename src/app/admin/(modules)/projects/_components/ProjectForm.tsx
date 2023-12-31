@@ -295,7 +295,7 @@ export const ProjectForm = ({
                           <FaFigma />
                         </InputGroupText>
                         <InputGroupText className="text-neutral-500">
-                          https://www.figma.com/file/
+                          https://www.figma.com/
                         </InputGroupText>
                         <InputField
                           type="text"

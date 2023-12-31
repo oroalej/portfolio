@@ -69,7 +69,7 @@ const PreviewProjectImageDialog = ({
     <Dialog isOpen={isOpen}>
       <CardRoot className="h-full md:rounded-md">
         <CardBody className="relative h-full max-w-[1920px] mx-auto">
-          <div className="absolute right-1 top-0 z-10">
+          <div className="absolute right-2 top-2 z-10">
             <button
               className={classNames(
                 "dark:text-neutral-200 text-neutral-800 outline-none p-2 cursor-pointer"
@@ -81,19 +81,21 @@ const PreviewProjectImageDialog = ({
           </div>
 
           <ImagePreviewContainer>
-            <div className="flex flex-col md:flex-row justify-between gap-4 md:gap-12 w-full">
-              <div className="flex flex-row shrink-0">
-                {list?.map((item, index) => (
-                  <Thumbnail
-                    key={`thumbnail-${index}-${item.name}`}
-                    image={item}
-                    isActive={index === selectedIndex}
-                    onSelect={() => onClickThumbnailHandler(index)}
-                  />
-                ))}
+            <div className="flex flex-col md:flex-row justify-between gap-4 md:gap-12 w-full pr-12">
+              <div className="overflow-x-auto ">
+                <div className="flex flex-row shrink-0 pb-2 lg:pb-0">
+                  {list?.map((item, index) => (
+                    <Thumbnail
+                      key={`thumbnail-${index}-${item.name}`}
+                      image={item}
+                      isActive={index === selectedIndex}
+                      onSelect={() => onClickThumbnailHandler(index)}
+                    />
+                  ))}
+                </div>
               </div>
 
-              <div className="dark:text-neutral-200 flex flex-col md:justify-start items-start md:items-end flex-1 gap-2 mb-3 md:mb-0 sm:mr-16">
+              <div className="dark:text-neutral-200 flex flex-col md:justify-start items-start md:items-end flex-1 gap-2 mb-3 md:mb-0">
                 <p className="text-base sm:text-lg block whitespace-nowrap font-bold dark:text-neutral-200 text-neutral-800 font-mono">
                   {title}
                 </p>

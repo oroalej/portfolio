@@ -46,7 +46,7 @@ const IndexProjectHeader = () => {
           </div>
 
           <Button rounded size="small" href="/admin/projects/create">
-            Add New Dream
+            Add Project
           </Button>
         </div>
       </CardHeader>
