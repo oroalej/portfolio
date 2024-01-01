@@ -34,6 +34,8 @@ import { downloadFile } from "@/utils";
 import { useUpdateFileMutation } from "@/features/files/api/updateFile";
 import { GoBookmark, GoBookmarkFill } from "react-icons/go";
 import { RenameDialog } from "@/app/admin/(modules)/gallery/_components/RenameDialog";
+import ExpandImagePreviewPlaceholder from "@/components/Image/ExpandImagePreviewPlaceholder";
+import ImagePreviewDialog from "@/components/Image/ImagePreviewDialog";
 
 interface GalleryItem {
   item: FileAPIDataStructure;
@@ -45,6 +47,7 @@ const GalleryItem = ({ item, isSelected }: GalleryItem) => {
   const router = useRouter();
   const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isPreviewDialogOpen, setIsPreviewDialogOpen] = useState(false);
 
   const deleteFileMutation = useDeleteFileMutation();
   const updateFileMutation = useUpdateFileMutation();
@@ -192,7 +195,10 @@ const GalleryItem = ({ item, isSelected }: GalleryItem) => {
           </DropdownRoot>
         </div>
 
-        <div className="relative aspect-square overflow-hidden cursor-pointer rounded-md">
+        <div
+          className="relative aspect-square overflow-hidden cursor-pointer rounded-md group"
+          onClick={() => setIsPreviewDialogOpen(true)}
+        >
           <Suspense fallback={<ImageSkeletonLoader />}>
             {publicImageUrl.data ? (
               <Suspense
@@ -200,6 +206,7 @@ const GalleryItem = ({ item, isSelected }: GalleryItem) => {
                   <BaseSkeletonLoader className="w-1/2 h-[20px] rounded-md" />
                 }
               >
+                <ExpandImagePreviewPlaceholder />
                 <Image
                   src={publicImageUrl.data}
                   alt={item.name}
@@ -235,6 +242,19 @@ const GalleryItem = ({ item, isSelected }: GalleryItem) => {
         >
           Are you sure you want to delete this?
         </AlertDialog>
+      )}
+
+      {isPreviewDialogOpen && (
+        <ImagePreviewDialog
+          item={{
+            storage_file_path: item.storage_file_path,
+            name: item.name,
+            width: item.width,
+            height: item.height,
+          }}
+          isOpen={isPreviewDialogOpen}
+          onClose={() => setIsPreviewDialogOpen(false)}
+        />
       )}
     </Fragment>
   );

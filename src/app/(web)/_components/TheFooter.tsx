@@ -66,7 +66,7 @@ const TheFooter = () => {
 
             <span className="hidden lg:block w-1.5 h-1.5 rounded-full bg-neutral-400" />
 
-            <div>
+            <div className="flex flex-row gap-6 text-sm sm:gap-8 sm:text-base flex-wrap justify-center items-center">
               <Link
                 scroll
                 href={"/quotes"}

@@ -2,8 +2,10 @@ import { Fragment, Suspense } from "react";
 import { BaseComponent } from "@/types";
 import { Button, CardHeader, CardRoot, CardTitle } from "@/components";
 import { FaRegImages } from "react-icons/fa6";
-import GalleryList from "@/app/admin/(modules)/gallery/_components/GalleryList";
-import GalleryListLoading from "./_components/Loading/GalleryListLoading";
+import {
+  GalleryList,
+  GalleryListLoading,
+} from "@/app/admin/(modules)/gallery/_components/GalleryList";
 
 const AdminGalleryIndexLayout = ({
   children,
@@ -20,7 +22,7 @@ const AdminGalleryIndexLayout = ({
     </CardRoot>
 
     <div className="flex flex-row gap-2">
-      <Suspense fallback={<GalleryListLoading />}>
+      <Suspense fallback={<GalleryListLoading cols={5} />}>
         <GalleryList />
       </Suspense>
 

@@ -7,18 +7,18 @@ import {
 import { IconType } from "react-icons";
 import classNames from "classnames";
 import { BaseSkeletonLoader } from "@/components";
+import { Sizes } from "@/types";
+import { sizesClasses } from "@/components";
 
-export interface InputProps
-  extends DetailedHTMLProps<
-    InputHTMLAttributes<HTMLInputElement>,
-    HTMLInputElement
-  > {
+export type InputProps = {
   isError?: boolean;
   appendIcon?: IconType;
   prependIcon?: IconType;
   appendActions?: ReactNode;
   prependActions?: ReactNode;
-}
+} & {
+  [key in Extract<Sizes, "small" | "extra-small">]?: boolean;
+} & DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
 
 export const InputField = forwardRef<HTMLInputElement, InputProps>(
   (
@@ -30,10 +30,24 @@ export const InputField = forwardRef<HTMLInputElement, InputProps>(
       appendIcon: AppendIcon,
       appendActions: AppendActions,
       prependActions: PrependActions,
+      small = false,
+      "extra-small": extraSmall = false,
       ...remaining
     },
     ref
   ) => {
+    const getSize = () => {
+      if (!small && !extraSmall) {
+        return "default";
+      }
+
+      if (extraSmall) {
+        return "extra-small";
+      }
+
+      return "small";
+    };
+
     return (
       <div
         data-input={true}
@@ -43,11 +57,12 @@ export const InputField = forwardRef<HTMLInputElement, InputProps>(
             !!isError
               ? "border-red-600 text-red-600 focus-within:ring-red-700"
               : "border-neutral-200 text-neutral-600 focus-within:ring-neutral-800",
+            [sizesClasses[getSize()]],
           ],
           {
             "bg-neutral-50": remaining.disabled,
           },
-          "relative flex flex-nowrap flex-row px-3 items-center justify-center rounded-md h-[40px] focus-within:ring-2 overflow-hidden border border-neutral-200 focus-within:z-[1]"
+          "relative flex flex-nowrap flex-row items-center justify-center rounded-md focus-within:ring-2 overflow-hidden border border-neutral-200 focus-within:z-[1]"
         )}
       >
         {PrependIcon && (

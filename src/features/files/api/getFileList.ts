@@ -16,7 +16,6 @@ export const getFiles = ({ bucket_name, page, per_page, q }: FileListProps) => {
 
   query = queryFilterBuilder({
     query,
-    textSearch: { column: "name", value: q },
     sort: [{ column: "created_at", order: "desc" }],
   });
 
@@ -26,9 +25,11 @@ export const getFiles = ({ bucket_name, page, per_page, q }: FileListProps) => {
     per_page,
   });
 
-  query = query.throwOnError();
+  if (!!q) {
+    query = query.ilike("name", `%${q}%`);
+  }
 
-  return query;
+  return query.throwOnError();
 };
 
 export interface FileListProps extends Required<Paginatable>, Searchable {

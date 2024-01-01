@@ -72,9 +72,9 @@ const styles = {
   },
 };
 
-const sizes = {
+export const sizesClasses = {
   large: "px-4 py-2.5 text-lg",
-  default: "px-3.5 py-2 text-base",
+  default: "px-3.5 py-2 text-base h-[40px]",
   small: "px-3 py-2 text-sm",
   "extra-small": "px-2 py-1 text-xs min-h-[28px]",
 };
@@ -95,7 +95,7 @@ const getButtonClasses = ({
       "aspect-square flex flex-row items-center": icon,
       "w-full": block,
     },
-    sizes[size],
+    sizesClasses[size],
     styles[color][variant],
     className
   );
