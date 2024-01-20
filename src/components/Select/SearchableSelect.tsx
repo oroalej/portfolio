@@ -109,7 +109,7 @@ export const SearchableSelect = <Type extends string | number = string>({
           (item) => item.text.toLowerCase() === query.toLowerCase().trim()
         ))
     );
-  }, [query, options]);
+  }, [query, filteredOptions]);
 
   const onSelectHandler = (selected: Type) => {
     onChange(selected);
