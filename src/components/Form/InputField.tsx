@@ -14,8 +14,8 @@ import { sizesClasses } from "@/components";
 
 export type InputProps = {
   isError?: boolean;
-  appendIcon?: IconType;
-  prependIcon?: IconType;
+  appendIcon?: ReactNode;
+  prependIcon?: ReactNode;
   appendActions?: ReactNode;
   prependActions?: ReactNode;
 } & {
@@ -69,7 +69,7 @@ export const InputField = forwardRef<HTMLInputElement, InputProps>(
       >
         {PrependIcon && (
           <div className="pr-2.5 inline-flex justify-center items-center text-opacity-60 h-full">
-            <PrependIcon className="text-lg" />
+            {PrependIcon}
           </div>
         )}
 
@@ -93,7 +93,7 @@ export const InputField = forwardRef<HTMLInputElement, InputProps>(
 
         {AppendIcon && (
           <div className="pl-2 inline-flex justify-center items-center text-opacity-60 h-full">
-            <AppendIcon className="text-lg" />
+            {AppendIcon}
           </div>
         )}
       </div>
