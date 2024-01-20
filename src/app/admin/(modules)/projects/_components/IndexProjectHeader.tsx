@@ -37,8 +37,8 @@ const IndexProjectHeader = () => {
 
           <div className="w-40">
             <ProjectTypeSelect
-              onChange={async (value) => {
-                await setType(value);
+              onChange={(value) => {
+                setType(value).catch();
               }}
               value={type ?? ""}
               placeholder="Project Type"
