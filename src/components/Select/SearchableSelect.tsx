@@ -101,6 +101,16 @@ export const SearchableSelect = <Type extends string | number = string>({
     );
   }, [query, options]);
 
+  const doesntHaveExactValue = useMemo(() => {
+    return (
+      query.length >= 2 &&
+      (filteredOptions.length === 0 ||
+        !filteredOptions.some(
+          (item) => item.text.toLowerCase() === query.toLowerCase().trim()
+        ))
+    );
+  }, [query, filteredOptions]);
+
   const onSelectHandler = (selected: Type) => {
     onChange(selected);
     onClose();
@@ -132,11 +142,7 @@ export const SearchableSelect = <Type extends string | number = string>({
           autoCorrect="off"
           appendActions={
             <div className="flex flex-row items-center gap-1 pl-2 -mr-1.5">
-              {!!(
-                onCreate &&
-                query.length >= 2 &&
-                filteredOptions.length === 0
-              ) && (
+              {onCreate && doesntHaveExactValue && (
                 <Button
                   rounded
                   size="extra-small"

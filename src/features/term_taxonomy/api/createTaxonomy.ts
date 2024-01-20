@@ -36,11 +36,16 @@ export const useStoreTaxonomyMutation = () => {
     },
     onSuccess: (data) => {
       queryClient.setQueryData(
-        ["taxonomy", { term_id: data.term_id }],
+        [
+          "taxonomy",
+          { parent_id: data.parent_id ?? "", term_id: data.term_id },
+        ],
         (prevData: TaxonomyAPIDataStructure[]) => {
-          prevData.push(data);
+          const localPrevDataState = prevData || [];
 
-          return sortBy(prevData, ["name"]);
+          localPrevDataState.push(data);
+
+          return sortBy(localPrevDataState, ["name"]);
         }
       );
     },

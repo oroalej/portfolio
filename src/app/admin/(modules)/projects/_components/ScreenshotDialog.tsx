@@ -119,7 +119,7 @@ export const ScreenshotDialog = ({
             <CardBody>
               <div className="flex flex-col gap-4">
                 <UIScrollArea.Root type="auto">
-                  <UIScrollArea.Viewport className="h-56 p-1 pr-4">
+                  <UIScrollArea.Viewport className="h-64 p-1 pr-4">
                     <Controller
                       name="file_id"
                       control={control}

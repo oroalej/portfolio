@@ -122,7 +122,7 @@ const QuoteTableFilter = () => {
         <div className="flex gap-3">
           <InputGroup>
             <InputField
-              prependIcon={RiSearch2Line}
+              prependIcon={<RiSearch2Line />}
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               onBlur={async () => {

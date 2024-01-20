@@ -18,7 +18,7 @@ const DaydreamTableFilterLoading = () => (
       <div className="flex gap-3">
         <InputGroup>
           <InputField
-            prependIcon={RiSearch2Line}
+            prependIcon={<RiSearch2Line />}
             placeholder="Search description.."
             disabled
           />

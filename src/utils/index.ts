@@ -1,4 +1,4 @@
-import { SelectItem } from "@/components";
+import { type SelectItem } from "@/components";
 import { capitalize } from "lodash";
 
 export const kebabCase = (...value: string[]) => {

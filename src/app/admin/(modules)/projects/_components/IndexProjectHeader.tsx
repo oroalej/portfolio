@@ -24,7 +24,7 @@ const IndexProjectHeader = () => {
         <div className="flex gap-3">
           <InputField
             placeholder="Search.."
-            prependIcon={RiSearch2Line}
+            prependIcon={<RiSearch2Line />}
             value={search ?? undefined}
             onChange={(event) => setSearch(event.target.value)}
             onBlur={(event) => setQ(event.target.value)}
@@ -37,8 +37,8 @@ const IndexProjectHeader = () => {
 
           <div className="w-40">
             <ProjectTypeSelect
-              onChange={async (value) => {
-                await setType(value);
+              onChange={(value) => {
+                setType(value).catch();
               }}
               value={type ?? ""}
               placeholder="Project Type"
