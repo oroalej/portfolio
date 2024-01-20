@@ -91,7 +91,7 @@ const DaydreamTableFilters = () => {
           <InputGroup>
             <InputField
               placeholder="Search description.."
-              prependIcon=<RiSearch2Line />
+              prependIcon={<RiSearch2Line />}
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               onBlur={async () => {

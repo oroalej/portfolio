@@ -24,7 +24,7 @@ const IndexProjectHeader = () => {
         <div className="flex gap-3">
           <InputField
             placeholder="Search.."
-            prependIcon=<RiSearch2Line />
+            prependIcon={<RiSearch2Line />}
             value={search ?? undefined}
             onChange={(event) => setSearch(event.target.value)}
             onBlur={(event) => setQ(event.target.value)}
