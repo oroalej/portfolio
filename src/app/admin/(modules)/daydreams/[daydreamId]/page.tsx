@@ -1,8 +1,8 @@
 import EditDaydreamWrapper from "@/app/admin/(modules)/daydreams/[daydreamId]/_components/EditDaydreamWrapper";
+import DaydreamFormLoading from "@/app/admin/(modules)/daydreams/_components/Loading/DaydreamFormLoading";
 import { BreadcrumbDataSetter } from "src/app/admin/(modules)/_components/Breadcrumbs";
 import { Metadata } from "next";
 import { Fragment, Suspense } from "react";
-import DaydreamFormLoading from "@/app/admin/(modules)/daydreams/_components/Loading/DaydreamFormLoading";
 
 export const metadata: Metadata = {
   title: "Admin - Editing dream..",

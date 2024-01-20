@@ -11,6 +11,15 @@ html, body {
 }
 
 @tailwind components;
+
+.form-input.is-error[data-state="open"] {
+  @apply ring-2 ring-red-600
+}
+
+.form-input:not(.is-error)[data-state="open"] {
+  @apply ring-2 ring-neutral-600
+}
+
 @tailwind utilities;
 
 .font-mono {
