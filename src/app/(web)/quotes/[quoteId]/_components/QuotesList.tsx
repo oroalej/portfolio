@@ -26,6 +26,7 @@ export const QuotesList = () => {
     filter: {
       category_id: quoteId as string,
     },
+    sort: [{ column: "created_at", order: "desc" }],
   });
 
   if (isLoading) {
