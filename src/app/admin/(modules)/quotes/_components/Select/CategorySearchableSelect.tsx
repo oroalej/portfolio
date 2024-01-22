@@ -17,16 +17,19 @@ const CategorySearchableSelect = ({
     filter: { term_id: termData?.id },
   });
 
-  const onCreateHandler = useCallback(async (value: string) => {
-    if (!termData?.id) return;
+  const onCreateHandler = useCallback(
+    async (value: string) => {
+      if (!termData?.id) return;
 
-    const data = await storeTaxonomyMutation.mutateAsync({
-      term_id: termData!.id,
-      name: value,
-    });
+      const data = await storeTaxonomyMutation.mutateAsync({
+        term_id: termData!.id,
+        name: value,
+      });
 
-    onChange(data.id);
-  }, []);
+      onChange(data.id);
+    },
+    [termData?.id]
+  );
 
   return (
     <SearchableSelect

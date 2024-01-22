@@ -35,7 +35,7 @@ const MediaDetailSearchableSelect = ({
 
       onChange(data.id);
     },
-    [sourceId]
+    [termData?.id, sourceId]
   );
 
   return (

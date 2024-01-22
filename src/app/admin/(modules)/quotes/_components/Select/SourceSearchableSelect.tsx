@@ -21,17 +21,20 @@ const SourceSearchableSelect = ({
     filter: { term_id: termData?.id, parent_id: categoryId },
   });
 
-  const onCreateHandler = useCallback(async (value: string) => {
-    if (!termData?.id || !categoryId) return;
+  const onCreateHandler = useCallback(
+    async (value: string) => {
+      if (!termData?.id || !categoryId) return;
 
-    const data = await storeTaxonomyMutation.mutateAsync({
-      name: value,
-      term_id: termData.id,
-      parent_id: categoryId,
-    });
+      const data = await storeTaxonomyMutation.mutateAsync({
+        name: value,
+        term_id: termData.id,
+        parent_id: categoryId,
+      });
 
-    onChange(data.id);
-  }, []);
+      onChange(data.id);
+    },
+    [termData?.id, categoryId]
+  );
 
   return (
     <SearchableSelect
