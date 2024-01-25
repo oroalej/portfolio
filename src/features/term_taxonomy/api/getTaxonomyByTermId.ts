@@ -15,6 +15,10 @@ export interface GetTaxonomyByTermId
     Sortable<TaxonomySortableColumns>,
     Filterable<TaxonomyFilterableColumns> {}
 
+interface getTaxonomyQueryFnProps extends GetTaxonomyByTermId {
+  isEnabled: boolean;
+}
+
 export const getTaxonomyByTermId = ({
   q,
   sort = [],
@@ -39,10 +43,35 @@ export const useGetTaxonomyByTermId = ({
   sort = [],
   q,
 }: GetTaxonomyByTermId) => {
-  const termIdExists = filter?.hasOwnProperty("term_id") && !!filter?.term_id;
+  return useGetTaxonomyQueryFn({
+    isEnabled: !!filter?.term_id,
+    q,
+    sort,
+    filter,
+  });
+};
 
+export const useGetTaxonomyByTermAndParentId = ({
+  q,
+  filter = {},
+  sort = [],
+}: GetTaxonomyByTermId) => {
+  return useGetTaxonomyQueryFn({
+    isEnabled: !!filter?.term_id && !!filter?.parent_id,
+    q,
+    sort,
+    filter,
+  });
+};
+
+const useGetTaxonomyQueryFn = ({
+  isEnabled,
+  q,
+  sort,
+  filter,
+}: getTaxonomyQueryFnProps) => {
   return useQuery({
-    enabled: termIdExists,
+    enabled: isEnabled,
     staleTime: Infinity,
     queryKey: ["taxonomy", filter],
     queryFn: async (): Promise<TaxonomyAPIDataStructure[]> => {

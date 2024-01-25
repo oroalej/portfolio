@@ -1,18 +1,20 @@
 import { SearchableSelect, SearchableSelectProps } from "@/components";
 import { useCallback } from "react";
-import { useGetTermByIdentifier } from "@/features/terms/api/getTermByIdentifier";
 import { useGetTaxonomyByTermId } from "@/features/term_taxonomy/api/getTaxonomyByTermId";
 import { useStoreTaxonomyMutation } from "@/features/term_taxonomy/api/createTaxonomy";
 import { TERM_IDENTIFIER } from "@/data";
+import { useGetTermList } from "@/features/terms/api/getTermList";
 
 const CategorySearchableSelect = ({
   onChange,
   ...props
 }: Omit<SearchableSelectProps<string>, "options" | "onCreate" | "name">) => {
   const storeTaxonomyMutation = useStoreTaxonomyMutation();
-  const { data: termData } = useGetTermByIdentifier(
-    TERM_IDENTIFIER.QUOTE_CATEGORY
+  const { data: termList } = useGetTermList();
+  const termData = termList?.find(
+    (item) => item.identifier === TERM_IDENTIFIER.QUOTE_CATEGORY
   );
+
   const { data } = useGetTaxonomyByTermId({
     filter: { term_id: termData?.id },
   });

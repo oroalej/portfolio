@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/utils/supabase";
-import { durationInMinutes } from "@/utils";
 import { TermAPIDataStructure } from "@/features/terms/types";
 
 export const getTermList = () => {
@@ -9,7 +8,7 @@ export const getTermList = () => {
 
 export const useGetTermList = () =>
   useQuery({
-    staleTime: durationInMinutes(5),
+    staleTime: Infinity,
     queryKey: ["terms"],
     queryFn: async (): Promise<TermAPIDataStructure[]> => {
       const { data } = await getTermList();
