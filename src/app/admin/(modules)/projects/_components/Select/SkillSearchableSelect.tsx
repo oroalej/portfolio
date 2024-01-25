@@ -4,10 +4,11 @@ import {
   MultiSearchableSelect,
   SearchableMultiSelectProps,
 } from "@/components/Select/MultiSearchableSelect";
-import { useGetTermByIdentifier } from "@/features/terms/api/getTermByIdentifier";
 import { TERM_IDENTIFIER } from "@/data";
 import { useGetTaxonomyByTermId } from "@/features/term_taxonomy/api/getTaxonomyByTermId";
 import { useStoreTaxonomyMutation } from "@/features/term_taxonomy/api/createTaxonomy";
+import { useGetTermList } from "@/features/terms/api/getTermList";
+import { useCallback } from "react";
 
 interface SkillSearchableSelect
   extends Omit<SearchableMultiSelectProps, "options" | "onCreate" | "name"> {}
@@ -18,20 +19,25 @@ const SkillSearchableSelect = ({
   ...props
 }: SkillSearchableSelect) => {
   const storeTaxonomyMutation = useStoreTaxonomyMutation();
-
-  const { data: termData } = useGetTermByIdentifier(TERM_IDENTIFIER.SKILL);
+  const { data: termList } = useGetTermList();
+  const termData = termList?.find(
+    (item) => item.identifier === TERM_IDENTIFIER.SKILL
+  );
   const { data: skills } = useGetTaxonomyByTermId({
     filter: { term_id: termData?.id },
   });
 
-  const onCreateHandler = async (name: string) => {
-    const response = await storeTaxonomyMutation.mutateAsync({
-      term_id: termData!.id,
-      name,
-    });
+  const onCreateHandler = useCallback(
+    async (name: string) => {
+      const response = await storeTaxonomyMutation.mutateAsync({
+        term_id: termData!.id,
+        name,
+      });
 
-    onChange([response.id, ...value]);
-  };
+      onChange([response.id, ...value]);
+    },
+    [termData]
+  );
 
   return (
     <MultiSearchableSelect

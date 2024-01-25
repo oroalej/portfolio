@@ -4,15 +4,14 @@ import { NavLink } from "@/app/(web)/_components/NavLink/NavLink";
 import { usePathname } from "next/navigation";
 import { TERM_IDENTIFIER } from "@/data";
 import { useGetTaxonomyByTermId } from "@/features/term_taxonomy/api/getTaxonomyByTermId";
-import { useGetTermByIdentifier } from "@/features/terms/api/getTermByIdentifier";
+import { useGetTermList } from "@/features/terms/api/getTermList";
 
 const ProjectHeader = () => {
   const pathname = usePathname();
-
-  const { data: termData } = useGetTermByIdentifier(
-    TERM_IDENTIFIER.PROJECT_TYPES
+  const { data: termList } = useGetTermList();
+  const termData = termList?.find(
+    (item) => item.identifier === TERM_IDENTIFIER.PROJECT_TYPES
   );
-
   const { data } = useGetTaxonomyByTermId({
     filter: { term_id: termData?.id },
   });

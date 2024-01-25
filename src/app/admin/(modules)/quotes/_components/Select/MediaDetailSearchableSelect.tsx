@@ -1,9 +1,9 @@
 import { SearchableSelect, SearchableSelectProps } from "@/components";
 import { useCallback } from "react";
 import { useStoreTaxonomyMutation } from "@/features/term_taxonomy/api/createTaxonomy";
-import { useGetTermByIdentifier } from "@/features/terms/api/getTermByIdentifier";
 import { TERM_IDENTIFIER } from "@/data";
-import { useGetTaxonomyByTermId } from "@/features/term_taxonomy/api/getTaxonomyByTermId";
+import { useGetTaxonomyByTermAndParentId } from "@/features/term_taxonomy/api/getTaxonomyByTermId";
+import { useGetTermList } from "@/features/terms/api/getTermList";
 
 interface SelectProps
   extends Omit<SearchableSelectProps<string>, "options" | "onCreate" | "name"> {
@@ -16,10 +16,12 @@ const MediaDetailSearchableSelect = ({
   ...props
 }: SelectProps) => {
   const storeTaxonomyMutation = useStoreTaxonomyMutation();
-  const { data: termData } = useGetTermByIdentifier(
-    TERM_IDENTIFIER.MEDIA_DETAIL
+  const { data: termList } = useGetTermList();
+  const termData = termList?.find(
+    (item) => item.identifier === TERM_IDENTIFIER.MEDIA_DETAIL
   );
-  const { data } = useGetTaxonomyByTermId({
+
+  const { data } = useGetTaxonomyByTermAndParentId({
     filter: { term_id: termData?.id, parent_id: sourceId },
   });
 
