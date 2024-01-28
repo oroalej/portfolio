@@ -133,6 +133,7 @@ export const SearchableSelect = <Type extends string | number = string>({
             setQuery(event.target.value);
             onChange(null as any);
           }}
+          className="min-w-[14rem]"
           onFocus={onOpen}
           value={getDisplayValue}
           disabled={disabled}

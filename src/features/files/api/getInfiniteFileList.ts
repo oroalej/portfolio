@@ -1,5 +1,4 @@
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
-import { Paginatable, Searchable } from "@/types";
 import {
   DataWithPagination,
   DEFAULT_PAGINATION_VALUES,
@@ -7,31 +6,29 @@ import {
 } from "@/utils/pagination";
 import { FileListProps, getFiles } from "@/features/files/api/getFileList";
 import { FileAPIDataStructure } from "@/features/files/types";
-
-export interface InfiniteFileListProps
-  extends Pick<FileListProps, "bucket_name">,
-    Paginatable,
-    Searchable {}
+import { removeEmptyValues } from "@/utils";
 
 export const useInfiniteFileList = ({
   bucket_name,
   page = DEFAULT_PAGINATION_VALUES.current_page,
   per_page = DEFAULT_PAGINATION_VALUES.per_page,
   q,
-}: InfiniteFileListProps) => {
+  filter = {},
+}: FileListProps) => {
   const queryClient = useQueryClient();
 
   return useInfiniteQuery(
     {
       staleTime: Infinity,
       initialPageParam: page,
-      queryKey: ["infinite_files", { q }],
+      queryKey: ["infinite_files", { q, ...removeEmptyValues(filter) }],
       queryFn: async ({ pageParam }) => {
         const { data, count } = await getFiles({
           page: pageParam,
           bucket_name,
           per_page,
           q,
+          filter,
         });
 
         return {

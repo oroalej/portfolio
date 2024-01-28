@@ -1,13 +1,22 @@
+import GalleryCategorySelect from "@/app/admin/(modules)/gallery/_components/GalleryCategorySelect";
+import classNames from "classnames";
+import SupabaseImage from "@/components/Image/SupabaseImage";
 import {
   DataWithPagination,
   DEFAULT_PAGINATION_VALUES,
 } from "@/utils/pagination";
-import { ReactNode, Suspense, useMemo, useRef } from "react";
+import {
+  ReactNode,
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { BaseSkeletonLoader, Button } from "@/components";
 import { FileAPIDataStructure } from "@/features/files/types";
 import { useInfiniteFileList } from "@/features/files/api/getInfiniteFileList";
-import classNames from "classnames";
-import SupabaseImage from "@/components/Image/SupabaseImage";
 import { InputField } from "@/components/Form/InputField";
 import { useQueryState } from "next-usequerystate";
 
@@ -48,7 +57,13 @@ const GalleryWrapper = ({
   per_page = DEFAULT_PAGINATION_VALUES.per_page,
 }: GalleryWrapperProps) => {
   const queryRef = useRef<HTMLInputElement | null>(null);
+  const [localCategoryId, setLocalCategoryId] = useState<string | null>(null);
+
   const [query, setQuery] = useQueryState("q", {
+    history: "push",
+  });
+
+  const [categoryId, setCategoryId] = useQueryState("category_id", {
     history: "push",
   });
 
@@ -62,12 +77,23 @@ const GalleryWrapper = ({
     per_page: per_page,
     page: DEFAULT_PAGINATION_VALUES.current_page,
     q: query ?? undefined,
+    filter: { category_id: categoryId },
   });
+
+  useEffect(() => {
+    setLocalCategoryId(categoryId);
+
+    if (queryRef.current) {
+      queryRef.current.value = query || "";
+    }
+  }, []);
 
   const onSearchHandler = () => {
     if (queryRef.current) {
       setQuery(queryRef.current?.value.toLowerCase() ?? "").catch();
     }
+
+    setCategoryId(localCategoryId).catch();
   };
 
   const getActiveIds = Array.isArray(activeId) ? activeId : [activeId];
@@ -76,9 +102,22 @@ const GalleryWrapper = ({
     [excluded, activeId]
   );
 
+  const onGalleryCategoryClearHandler = useCallback(
+    () => setLocalCategoryId(null),
+    []
+  );
+
   return (
     <div className="grid grid-cols-1 gap-4">
       <div className="w-full flex flex-row justify-end gap-2 items-center">
+        <GalleryCategorySelect
+          value={localCategoryId}
+          onChange={setLocalCategoryId}
+          placeholder="Categories"
+          defaultValue={null}
+          onClear={onGalleryCategoryClearHandler}
+        />
+
         <InputField
           placeholder="Search by filename"
           className="w-56"
