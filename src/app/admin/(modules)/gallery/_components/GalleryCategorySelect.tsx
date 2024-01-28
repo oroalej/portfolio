@@ -3,7 +3,6 @@ import { TERM_IDENTIFIER } from "@/data";
 import { useGetTaxonomyByTermId } from "@/features/term_taxonomy/api/getTaxonomyByTermId";
 import { useCallback } from "react";
 import { useStoreTaxonomyMutation } from "@/features/term_taxonomy/api/createTaxonomy";
-import { DEFAULT_FORM_VALUES } from "@/features/daydreams/data";
 import { SearchableSelect, SearchableSelectProps } from "@/components";
 
 interface GalleryCategorySearchableSelect

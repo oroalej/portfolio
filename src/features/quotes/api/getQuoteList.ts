@@ -22,9 +22,9 @@ interface getQuotesParams
 
 interface GetAllQuotesAPIDataStructure
   extends Pick<Tables<"quotes">, "content" | "id" | "created_at"> {
-  category: Pick<Tables<"categories">, "id" | "name">;
-  source: Pick<Tables<"sources">, "id" | "name">;
-  media_detail: Pick<Tables<"media_details">, "id" | "name">;
+  category: Pick<Tables<"term_taxonomy">, "id" | "name">;
+  source: Pick<Tables<"term_taxonomy">, "id" | "name">;
+  media_detail: Pick<Tables<"term_taxonomy">, "id" | "name">;
 }
 
 const getQuoteList = ({
