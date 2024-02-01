@@ -1,6 +1,6 @@
 import { Fragment, Suspense } from "react";
 import { BaseComponent } from "@/types";
-import { Button, CardHeader, CardRoot, CardTitle } from "@/components";
+import { CardHeader, CardRoot, CardTitle } from "@/components";
 import { FaRegImages } from "react-icons/fa6";
 import {
   GalleryList,
