@@ -4,12 +4,12 @@ import { useQueryState } from "next-usequerystate";
 import { createSerializer, parseAsString } from "nuqs/parsers";
 import { removeEmptyValues } from "@/utils";
 
-export const serializer = createSerializer({
-  q: parseAsString,
-  category_id: parseAsString,
-});
-
 export const UseGalleryQueryParams = () => {
+  const serializer = createSerializer({
+    q: parseAsString,
+    category_id: parseAsString,
+  });
+
   const [query] = useQueryState("q", {
     history: "push",
   });
