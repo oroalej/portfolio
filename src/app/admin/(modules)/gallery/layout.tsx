@@ -6,6 +6,7 @@ import {
   GalleryList,
   GalleryListLoading,
 } from "@/app/admin/(modules)/gallery/_components/GalleryList";
+import UploadImageButton from "@/app/admin/(modules)/gallery/_components/UploadImageButton";
 
 const AdminGalleryIndexLayout = ({
   children,
@@ -15,9 +16,7 @@ const AdminGalleryIndexLayout = ({
       <CardHeader className="flex justify-between">
         <CardTitle icon={<FaRegImages />}>Gallery</CardTitle>
 
-        <Button size="small" rounded href="/admin/gallery/create">
-          Upload Image
-        </Button>
+        <UploadImageButton />
       </CardHeader>
     </CardRoot>
 

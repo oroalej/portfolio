@@ -1,43 +1,78 @@
 "use client";
-
 import { Button, Card, Dialog, DialogProps, Scrollbar } from "@/components";
-import classNames from "classnames";
-import { useFileList } from "@/features/files/api/getFileList";
-import { DEFAULT_PAGINATION_VALUES } from "@/utils/pagination";
-import { useState } from "react";
+import { DataWithPagination } from "@/utils/pagination";
+import { useEffect, useState } from "react";
 import { FileAPIDataStructure } from "@/features/files/types";
-import SupabaseImage from "@/components/Image/SupabaseImage";
+import GalleryWrapper, {
+  GallerySingleProps,
+} from "@/app/admin/(modules)/gallery/_components/GalleryWrapper";
+import { useGetTermList } from "@/features/terms/api/getTermList";
+import { TERM_IDENTIFIER } from "@/data";
+import { useGetTaxonomyByTermId } from "@/features/term_taxonomy/api/getTaxonomyByTermId";
 import * as UIScrollArea from "@radix-ui/react-scroll-area";
+import { useQueryClient } from "@tanstack/react-query";
 
-interface GalleryDialogProps extends DialogProps {
-  onSelect: (value: FileAPIDataStructure) => void;
-  selected: FileAPIDataStructure | null;
-}
+interface GalleryDialogProps
+  extends Omit<DialogProps, "children">,
+    Required<Pick<GallerySingleProps, "onSelect">>,
+    Omit<GallerySingleProps, "onSelect" | "cols"> {}
 
 const GalleryDialog = ({
   isOpen,
   onClose,
   onSelect,
-  selected,
+  activeId,
 }: GalleryDialogProps) => {
-  const [page] = useState(DEFAULT_PAGINATION_VALUES.current_page);
   const [localSelected, setLocalSelected] =
     useState<FileAPIDataStructure | null>(null);
 
-  const { data } = useFileList({
-    bucket_name: "images",
-    per_page: DEFAULT_PAGINATION_VALUES.per_page,
-    page,
+  const queryClient = useQueryClient();
+
+  const { data: termList } = useGetTermList();
+  const termData = termList?.find(
+    (item) => item.identifier === TERM_IDENTIFIER.GALLERY_CATEGORIES
+  );
+  const { data: termTaxonomyList } = useGetTaxonomyByTermId({
+    filter: { term_id: termData?.id },
   });
+  const categoryTermTaxonomy = termTaxonomyList?.find(
+    (item) => item.name === "Daydreams"
+  );
 
   const onSelectHandler = () => {
-    if (localSelected !== null) {
+    if (!!localSelected) {
       onSelect(localSelected);
       setLocalSelected(null);
     }
   };
 
-  const selectedId = localSelected?.id ?? selected?.id;
+  useEffect(() => {
+    if (isOpen && categoryTermTaxonomy?.id) {
+      let selectedItem: FileAPIDataStructure | undefined = undefined;
+
+      queryClient
+        .getQueryCache()
+        .findAll({
+          queryKey: [
+            "infinite_files",
+            { category_id: categoryTermTaxonomy!.id },
+          ],
+          exact: false,
+        })
+        ?.forEach((cache) => {
+          (queryClient.getQueryData(cache.queryKey) as any)?.pages.forEach(
+            ({ data }: DataWithPagination<FileAPIDataStructure>) => {
+              selectedItem = data.find((item) => item.id === activeId);
+
+              if (!!selectedItem) {
+                setLocalSelected(selectedItem);
+                return;
+              }
+            }
+          );
+        });
+    }
+  }, [isOpen, categoryTermTaxonomy]);
 
   return (
     <Dialog isOpen={isOpen}>
@@ -47,32 +82,14 @@ const GalleryDialog = ({
         </Card.Header>
         <Card.Body className="flex-1">
           <UIScrollArea.Root type="auto">
-            <UIScrollArea.Viewport className="max-h-96 p-1 pr-3.5">
-              <div className="grid grid-cols-8 gap-2.5">
-                {data?.data.map((item, index) => (
-                  <div
-                    className={classNames(
-                      [
-                        selectedId === item.id
-                          ? "ring-blue-700"
-                          : "ring-transparent",
-                      ],
-                      "relative overflow-hidden bg-neutral-100 hover:bg-neutral-200 transition-colors aspect-square rounded-md cursor-pointer ring-2 ring-offset-2"
-                    )}
-                    key={`gallery-image-${item.id}-${index}`}
-                    onClick={() => setLocalSelected(item)}
-                  >
-                    <SupabaseImage
-                      src={item.storage_file_path}
-                      alt={item.name}
-                      width={480}
-                      height={480}
-                      quality={75}
-                      className="rounded-md pointer-events-none object-center object-cover w-full h-full"
-                    />
-                  </div>
-                ))}
-              </div>
+            <UIScrollArea.Viewport className="h-96 p-1 pr-4">
+              <GalleryWrapper
+                cols={8}
+                per_page={16}
+                activeId={localSelected?.id}
+                categoryId={categoryTermTaxonomy?.id}
+                onSelect={setLocalSelected}
+              />
             </UIScrollArea.Viewport>
             <Scrollbar />
           </UIScrollArea.Root>

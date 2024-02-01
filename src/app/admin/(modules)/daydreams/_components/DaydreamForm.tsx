@@ -361,7 +361,7 @@ const DaydreamForm = ({
           setValue("file_id", value.id, { shouldDirty: true });
           await trigger("file_id");
         }}
-        selected={image}
+        activeId={image?.id}
       />
     </Fragment>
   );

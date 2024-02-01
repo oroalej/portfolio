@@ -21,7 +21,7 @@ export const useInfiniteFileList = ({
     {
       staleTime: Infinity,
       initialPageParam: page,
-      queryKey: ["infinite_files", { q, ...removeEmptyValues(filter) }],
+      queryKey: ["infinite_files", removeEmptyValues({ q, ...filter })],
       queryFn: async ({ pageParam }) => {
         const { data, count } = await getFiles({
           page: pageParam,

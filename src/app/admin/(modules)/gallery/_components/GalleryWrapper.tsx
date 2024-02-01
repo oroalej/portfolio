@@ -25,22 +25,24 @@ interface ChildrenProps {
   isSelected: boolean;
 }
 
-interface BaseGallery {
+export interface BaseGallery {
   cols: number;
-  onSelect: (value: FileAPIDataStructure) => void;
+  onSelect?: (value: FileAPIDataStructure) => void;
   gap?: string;
   per_page?: number;
   excluded?: string[];
   isSearchable?: string;
   children?: ({ item, isSelected }: ChildrenProps) => ReactNode;
+  isCategoryFilterVisible?: boolean;
+  categoryId?: string;
 }
 
-interface GalleryMultiProps extends BaseGallery {
+export interface GalleryMultiProps extends BaseGallery {
   multiple: true;
   activeId?: string[];
 }
 
-interface GallerySingleProps extends BaseGallery {
+export interface GallerySingleProps extends BaseGallery {
   multiple?: false;
   activeId?: string;
 }
@@ -51,6 +53,8 @@ const GalleryWrapper = ({
   children,
   activeId,
   onSelect,
+  isCategoryFilterVisible,
+  categoryId: categoryIdProp,
   cols = 1,
   gap = "12px",
   excluded = [],
@@ -65,6 +69,7 @@ const GalleryWrapper = ({
 
   const [categoryId, setCategoryId] = useQueryState("category_id", {
     history: "push",
+    defaultValue: categoryIdProp ?? "",
   });
 
   const {
@@ -110,13 +115,16 @@ const GalleryWrapper = ({
   return (
     <div className="grid grid-cols-1 gap-4">
       <div className="w-full flex flex-row justify-end gap-2 items-center">
-        <GalleryCategorySelect
-          value={localCategoryId}
-          onChange={setLocalCategoryId}
-          placeholder="Categories"
-          defaultValue={null}
-          onClear={onGalleryCategoryClearHandler}
-        />
+        {isCategoryFilterVisible && (
+          <GalleryCategorySelect
+            value={localCategoryId}
+            onChange={setLocalCategoryId}
+            placeholder="Categories"
+            defaultValue={null}
+            onClear={onGalleryCategoryClearHandler}
+            inputFieldClass="min-w-[14rem]"
+          />
+        )}
 
         <InputField
           placeholder="Search by filename"
@@ -169,6 +177,7 @@ const GalleryWrapper = ({
                     key={`gallery-image-${item.id}-${index}`}
                     onClick={() =>
                       !filteredActiveIdsFromExcluded.includes(item.id) &&
+                      onSelect &&
                       onSelect(item)
                     }
                   >

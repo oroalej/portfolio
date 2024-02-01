@@ -30,7 +30,7 @@ export const getFiles = ({
 }: FileListProps) => {
   let query = supabase
     .from("files")
-    .select("*", { count: "exact" })
+    .select("*, category:category_id(id, name)", { count: "exact" })
     .eq("bucket_name", bucket_name);
 
   query = queryFilterBuilder({

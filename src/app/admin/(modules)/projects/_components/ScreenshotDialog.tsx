@@ -20,6 +20,9 @@ import { SetRequired } from "@/types";
 import { isEqual, pick } from "lodash";
 import * as UIScrollArea from "@radix-ui/react-scroll-area";
 import GalleryWrapper from "@/app/admin/(modules)/gallery/_components/GalleryWrapper";
+import { useGetTermList } from "@/features/terms/api/getTermList";
+import { TERM_IDENTIFIER } from "@/data";
+import { useGetTaxonomyByTermId } from "@/features/term_taxonomy/api/getTaxonomyByTermId";
 
 export interface ScreenshotForm {
   id?: string;
@@ -56,6 +59,17 @@ export const ScreenshotDialog = ({
 }: ScreenshotDialogProps) => {
   const titleInputRef = useRef<HTMLInputElement>(null);
   const [selectedImageId, setSelectedImageId] = useState<string>(item.file_id);
+
+  const { data: termList } = useGetTermList();
+  const termData = termList?.find(
+    (item) => item.identifier === TERM_IDENTIFIER.GALLERY_CATEGORIES
+  );
+  const { data } = useGetTaxonomyByTermId({
+    filter: { term_id: termData?.id },
+  });
+  const categoryTermTaxonomy = data?.find(
+    (item) => item.name === "Project Screenshots"
+  );
 
   const { handleSubmit, formState, control, getValues, trigger, reset } =
     useForm<Pick<ScreenshotForm, "title" | "file_id">>({
@@ -143,6 +157,8 @@ export const ScreenshotDialog = ({
                           }}
                           cols={4}
                           per_page={16}
+                          isCategoryFilterVisible={false}
+                          categoryId={categoryTermTaxonomy?.id}
                         />
                       )}
                     />
