@@ -18,7 +18,7 @@ export const UseGalleryQueryParams = () => {
   });
 
   return serializer({
-    q: query,
-    category_id: categoryId,
+    q: query ?? null,
+    category_id: categoryId ?? null,
   });
 };
