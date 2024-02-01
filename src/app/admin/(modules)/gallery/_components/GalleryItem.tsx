@@ -48,7 +48,7 @@ const GalleryItem = ({ item, isSelected }: GalleryItem) => {
   const serialized = UseGalleryQueryParams();
   const publicImageUrl = useStoragePublicUrl(item.storage_file_path);
   const router = useRouter();
-  const { imageId } = useParams();
+  const params = useParams();
 
   const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -94,7 +94,7 @@ const GalleryItem = ({ item, isSelected }: GalleryItem) => {
       }
     );
 
-    if (imageId) {
+    if (params.imageId) {
       router.replace("/admin/gallery/");
     }
 
