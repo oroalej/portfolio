@@ -1,12 +1,12 @@
 "use client";
 
 import { useQueryState } from "next-usequerystate";
-import { createSerializer, parseAsString } from "nuqs/parsers";
+// import { createSerializer, parseAsString } from "nuqs/parsers";
 
-export const serializer = createSerializer({
-  q: parseAsString,
-  category_id: parseAsString,
-});
+// export const serializer = createSerializer({
+//   q: parseAsString,
+//   category_id: parseAsString,
+// });
 
 export const UseGalleryQueryParams = () => {
   const [query] = useQueryState("q", {
@@ -17,8 +17,10 @@ export const UseGalleryQueryParams = () => {
     history: "push",
   });
 
-  return serializer({
-    q: query ?? null,
-    category_id: categoryId ?? null,
-  });
+  // return serializer({
+  //   q: query ?? null,
+  //   category_id: categoryId ?? null,
+  // });
+
+  return "";
 };
