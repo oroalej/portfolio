@@ -41,6 +41,11 @@ export const useDeleteFileMutation = () => {
         queryKey: ["files"],
         exact: false,
       });
+
+      await queryClient.invalidateQueries({
+        queryKey: ["infinite_files"],
+        exact: false,
+      });
     },
     onError: (error, variables) => {
       toast.error(error.message, { id: variables.id });

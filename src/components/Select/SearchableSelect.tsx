@@ -33,6 +33,7 @@ export interface SearchableSelectProps<Type> {
   defaultValue?: Type | null | undefined;
   disabled?: boolean;
   placeholder?: string;
+  inputFieldClass?: string;
 }
 
 export const SearchableSelectItem = ({
@@ -84,6 +85,7 @@ export const SearchableSelect = <Type extends string | number = string>({
   disabled,
   placeholder,
   name = "searchable-input",
+  inputFieldClass = "",
 }: SearchableSelectProps<Type>) => {
   const [query, setQuery] = useState<string>("");
   const { isOpen, onOpen, onClose } = useOpenable();
@@ -140,6 +142,7 @@ export const SearchableSelect = <Type extends string | number = string>({
           placeholder={placeholder}
           autoComplete="off"
           autoCorrect="off"
+          className={inputFieldClass}
           appendActions={
             <div className="flex flex-row items-center gap-1 pl-2 -mr-1.5">
               {onCreate && doesntHaveExactValue && (

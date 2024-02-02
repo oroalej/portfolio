@@ -3,6 +3,9 @@
 import Image from "next/image";
 import toast from "react-hot-toast";
 import classNames from "classnames";
+import ExpandImagePreviewPlaceholder from "@/components/Image/ExpandImagePreviewPlaceholder";
+import ImagePreviewDialog from "@/components/Image/ImagePreviewDialog";
+
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FileAPIDataStructure } from "@/features/files/types";
 import {
@@ -27,15 +30,14 @@ import {
   AiOutlineLink,
 } from "react-icons/ai";
 import { PiTrash } from "react-icons/pi";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { BiSolidImageAlt } from "react-icons/bi";
 import { getFileBlob } from "@/features/files/api/downloadFile";
 import { downloadFile } from "@/utils";
 import { useUpdateFileMutation } from "@/features/files/api/updateFile";
 import { GoBookmark, GoBookmarkFill } from "react-icons/go";
 import { RenameDialog } from "@/app/admin/(modules)/gallery/_components/RenameDialog";
-import ExpandImagePreviewPlaceholder from "@/components/Image/ExpandImagePreviewPlaceholder";
-import ImagePreviewDialog from "@/components/Image/ImagePreviewDialog";
+import { UseGalleryQueryParams } from "@/app/admin/(modules)/gallery/hooks/useGalleryQueryParams";
 
 interface GalleryItem {
   item: FileAPIDataStructure;
@@ -43,8 +45,11 @@ interface GalleryItem {
 }
 
 const GalleryItem = ({ item, isSelected }: GalleryItem) => {
+  const serialized = UseGalleryQueryParams();
   const publicImageUrl = useStoragePublicUrl(item.storage_file_path);
   const router = useRouter();
+  const params = useParams();
+
   const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isPreviewDialogOpen, setIsPreviewDialogOpen] = useState(false);
@@ -88,6 +93,10 @@ const GalleryItem = ({ item, isSelected }: GalleryItem) => {
         id: item.id,
       }
     );
+
+    if (params.imageId) {
+      router.replace("/admin/gallery/");
+    }
 
     setIsDeleteDialogOpen(false);
   }, []);
@@ -178,7 +187,9 @@ const GalleryItem = ({ item, isSelected }: GalleryItem) => {
                 )}
                 <DropdownItem
                   icon={<AiOutlineInfoCircle />}
-                  onClick={() => router.push(`/admin/gallery/${item.id}`)}
+                  onClick={() =>
+                    router.push(`/admin/gallery/${item.id}${serialized}`)
+                  }
                 >
                   File information
                 </DropdownItem>

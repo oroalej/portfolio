@@ -1,13 +1,22 @@
+import GalleryCategorySelect from "@/app/admin/(modules)/gallery/_components/GalleryCategorySelect";
+import classNames from "classnames";
+import SupabaseImage from "@/components/Image/SupabaseImage";
 import {
   DataWithPagination,
   DEFAULT_PAGINATION_VALUES,
 } from "@/utils/pagination";
-import { ReactNode, Suspense, useMemo, useRef } from "react";
+import {
+  ReactNode,
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { BaseSkeletonLoader, Button } from "@/components";
 import { FileAPIDataStructure } from "@/features/files/types";
 import { useInfiniteFileList } from "@/features/files/api/getInfiniteFileList";
-import classNames from "classnames";
-import SupabaseImage from "@/components/Image/SupabaseImage";
 import { InputField } from "@/components/Form/InputField";
 import { useQueryState } from "next-usequerystate";
 
@@ -16,22 +25,24 @@ interface ChildrenProps {
   isSelected: boolean;
 }
 
-interface BaseGallery {
+export interface BaseGallery {
   cols: number;
-  onSelect: (value: FileAPIDataStructure) => void;
+  onSelect?: (value: FileAPIDataStructure) => void;
   gap?: string;
   per_page?: number;
   excluded?: string[];
   isSearchable?: string;
   children?: ({ item, isSelected }: ChildrenProps) => ReactNode;
+  isCategoryFilterVisible?: boolean;
+  categoryId?: string;
 }
 
-interface GalleryMultiProps extends BaseGallery {
+export interface GalleryMultiProps extends BaseGallery {
   multiple: true;
   activeId?: string[];
 }
 
-interface GallerySingleProps extends BaseGallery {
+export interface GallerySingleProps extends BaseGallery {
   multiple?: false;
   activeId?: string;
 }
@@ -42,14 +53,23 @@ const GalleryWrapper = ({
   children,
   activeId,
   onSelect,
+  isCategoryFilterVisible,
+  categoryId: categoryIdProp,
   cols = 1,
   gap = "12px",
   excluded = [],
   per_page = DEFAULT_PAGINATION_VALUES.per_page,
 }: GalleryWrapperProps) => {
   const queryRef = useRef<HTMLInputElement | null>(null);
+  const [localCategoryId, setLocalCategoryId] = useState<string | null>(null);
+
   const [query, setQuery] = useQueryState("q", {
     history: "push",
+  });
+
+  const [categoryId, setCategoryId] = useQueryState("category_id", {
+    history: "push",
+    defaultValue: categoryIdProp ?? "",
   });
 
   const {
@@ -62,12 +82,23 @@ const GalleryWrapper = ({
     per_page: per_page,
     page: DEFAULT_PAGINATION_VALUES.current_page,
     q: query ?? undefined,
+    filter: { category_id: categoryId },
   });
+
+  useEffect(() => {
+    setLocalCategoryId(categoryId);
+
+    if (queryRef.current) {
+      queryRef.current.value = query || "";
+    }
+  }, []);
 
   const onSearchHandler = () => {
     if (queryRef.current) {
       setQuery(queryRef.current?.value.toLowerCase() ?? "").catch();
     }
+
+    setCategoryId(localCategoryId).catch();
   };
 
   const getActiveIds = Array.isArray(activeId) ? activeId : [activeId];
@@ -76,9 +107,25 @@ const GalleryWrapper = ({
     [excluded, activeId]
   );
 
+  const onGalleryCategoryClearHandler = useCallback(
+    () => setLocalCategoryId(null),
+    []
+  );
+
   return (
     <div className="grid grid-cols-1 gap-4">
       <div className="w-full flex flex-row justify-end gap-2 items-center">
+        {isCategoryFilterVisible && (
+          <GalleryCategorySelect
+            value={localCategoryId}
+            onChange={setLocalCategoryId}
+            placeholder="Categories"
+            defaultValue={null}
+            onClear={onGalleryCategoryClearHandler}
+            inputFieldClass="min-w-[14rem]"
+          />
+        )}
+
         <InputField
           placeholder="Search by filename"
           className="w-56"
@@ -130,6 +177,7 @@ const GalleryWrapper = ({
                     key={`gallery-image-${item.id}-${index}`}
                     onClick={() =>
                       !filteredActiveIdsFromExcluded.includes(item.id) &&
+                      onSelect &&
                       onSelect(item)
                     }
                   >

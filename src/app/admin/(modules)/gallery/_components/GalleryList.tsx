@@ -19,8 +19,8 @@ export const GalleryList = () => {
       <CardBody>
         <GalleryWrapper
           cols={cols}
-          onSelect={() => {}}
           activeId={(params?.imageId ?? "") as string}
+          isCategoryFilterVisible={true}
         >
           {({ item }) => (
             <Suspense

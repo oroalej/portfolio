@@ -1,11 +1,12 @@
 import { Fragment, Suspense } from "react";
 import { BaseComponent } from "@/types";
-import { Button, CardHeader, CardRoot, CardTitle } from "@/components";
+import { CardHeader, CardRoot, CardTitle } from "@/components";
 import { FaRegImages } from "react-icons/fa6";
 import {
   GalleryList,
   GalleryListLoading,
 } from "@/app/admin/(modules)/gallery/_components/GalleryList";
+import UploadImageButton from "@/app/admin/(modules)/gallery/_components/UploadImageButton";
 
 const AdminGalleryIndexLayout = ({
   children,
@@ -15,9 +16,7 @@ const AdminGalleryIndexLayout = ({
       <CardHeader className="flex justify-between">
         <CardTitle icon={<FaRegImages />}>Gallery</CardTitle>
 
-        <Button size="small" rounded href="/admin/gallery/create">
-          Upload Image
-        </Button>
+        <UploadImageButton />
       </CardHeader>
     </CardRoot>
 

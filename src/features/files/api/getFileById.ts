@@ -5,7 +5,7 @@ import { FileAPIDataStructure } from "@/features/files/types";
 export const getFileById = (id: string) => {
   return supabase
     .from("files")
-    .select("*")
+    .select("*, category:category_id(id, name)")
     .eq("id", id)
     .single()
     .throwOnError();

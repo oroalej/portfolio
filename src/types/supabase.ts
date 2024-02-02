@@ -9,27 +9,6 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      categories: {
-        Row: {
-          created_at: string;
-          id: string;
-          name: string;
-          slug: string;
-        };
-        Insert: {
-          created_at?: string;
-          id?: string;
-          name: string;
-          slug: string;
-        };
-        Update: {
-          created_at?: string;
-          id?: string;
-          name?: string;
-          slug?: string;
-        };
-        Relationships: [];
-      };
       daydreams: {
         Row: {
           aperture: number;
@@ -74,6 +53,7 @@ export interface Database {
       files: {
         Row: {
           bucket_name: string;
+          category_id: string | null;
           created_at: string;
           duration: number | null;
           height: number | null;
@@ -87,6 +67,7 @@ export interface Database {
         };
         Insert: {
           bucket_name: string;
+          category_id?: string | null;
           created_at?: string;
           duration?: number | null;
           height?: number | null;
@@ -100,6 +81,7 @@ export interface Database {
         };
         Update: {
           bucket_name?: string;
+          category_id?: string | null;
           created_at?: string;
           duration?: number | null;
           height?: number | null;
@@ -111,33 +93,12 @@ export interface Database {
           type?: string;
           width?: number | null;
         };
-        Relationships: [];
-      };
-      media_details: {
-        Row: {
-          created_at: string;
-          id: string;
-          name: string;
-          source_id: string;
-        };
-        Insert: {
-          created_at?: string;
-          id?: string;
-          name: string;
-          source_id: string;
-        };
-        Update: {
-          created_at?: string;
-          id?: string;
-          name?: string;
-          source_id?: string;
-        };
         Relationships: [
           {
-            foreignKeyName: "media_details_source_id_fkey";
-            columns: ["source_id"];
+            foreignKeyName: "files_category_id_fkey";
+            columns: ["category_id"];
             isOneToOne: false;
-            referencedRelation: "sources";
+            referencedRelation: "term_taxonomy";
             referencedColumns: ["id"];
           }
         ];
@@ -313,35 +274,6 @@ export interface Database {
           }
         ];
       };
-      sources: {
-        Row: {
-          category_id: string;
-          created_at: string;
-          id: string;
-          name: string;
-        };
-        Insert: {
-          category_id: string;
-          created_at?: string;
-          id?: string;
-          name: string;
-        };
-        Update: {
-          category_id?: string;
-          created_at?: string;
-          id?: string;
-          name?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "sources_category_id_fkey";
-            columns: ["category_id"];
-            isOneToOne: false;
-            referencedRelation: "categories";
-            referencedColumns: ["id"];
-          }
-        ];
-      };
       term_taxonomy: {
         Row: {
           description: string | null;
@@ -412,7 +344,7 @@ export interface Database {
           title: string;
           description: string;
           project_type_id: string;
-          skill_ids: string[];
+          skills: string[];
           screenshots?: Database["public"]["CompositeTypes"]["screenshot_form"][];
           website_link?: string;
           design_link?: string;
@@ -433,3 +365,83 @@ export interface Database {
     };
   };
 }
+
+export type Tables<
+  PublicTableNameOrOptions extends
+    | keyof (Database["public"]["Tables"] & Database["public"]["Views"])
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+        Database[PublicTableNameOrOptions["schema"]]["Views"])
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R;
+    }
+    ? R
+    : never
+  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"] &
+      Database["public"]["Views"])
+  ? (Database["public"]["Tables"] &
+      Database["public"]["Views"])[PublicTableNameOrOptions] extends {
+      Row: infer R;
+    }
+    ? R
+    : never
+  : never;
+
+export type TablesInsert<
+  PublicTableNameOrOptions extends
+    | keyof Database["public"]["Tables"]
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I;
+    }
+    ? I
+    : never
+  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+      Insert: infer I;
+    }
+    ? I
+    : never
+  : never;
+
+export type TablesUpdate<
+  PublicTableNameOrOptions extends
+    | keyof Database["public"]["Tables"]
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U;
+    }
+    ? U
+    : never
+  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+      Update: infer U;
+    }
+    ? U
+    : never
+  : never;
+
+export type Enums<
+  PublicEnumNameOrOptions extends
+    | keyof Database["public"]["Enums"]
+    | { schema: keyof Database },
+  EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
+    : never = never
+> = PublicEnumNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
+  ? Database["public"]["Enums"][PublicEnumNameOrOptions]
+  : never;

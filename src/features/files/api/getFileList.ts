@@ -6,17 +6,37 @@ import {
   supabase,
 } from "@/utils/supabase";
 import { Buckets, FileAPIDataStructure } from "@/features/files/types";
-import { Paginatable, Searchable } from "@/types";
+import { Filterable, Paginatable, Searchable, Tables } from "@/types";
+import { removeEmptyValues } from "@/utils";
 
-export const getFiles = ({ bucket_name, page, per_page, q }: FileListProps) => {
+export type FileFilterable = Pick<
+  Tables<"files">,
+  "category_id" | "is_bookmarked" | "bucket_name"
+>;
+
+export interface FileListProps
+  extends Required<Paginatable>,
+    Searchable,
+    Filterable<FileFilterable> {
+  bucket_name: Buckets;
+}
+
+export const getFiles = ({
+  bucket_name,
+  page,
+  per_page,
+  q,
+  filter = {},
+}: FileListProps) => {
   let query = supabase
     .from("files")
-    .select("*", { count: "exact" })
+    .select("*, category:category_id(id, name)", { count: "exact" })
     .eq("bucket_name", bucket_name);
 
   query = queryFilterBuilder({
     query,
     sort: [{ column: "created_at", order: "desc" }],
+    filter: removeEmptyValues(filter),
   });
 
   query = queryPaginationBuilder({
@@ -31,10 +51,6 @@ export const getFiles = ({ bucket_name, page, per_page, q }: FileListProps) => {
 
   return query.throwOnError();
 };
-
-export interface FileListProps extends Required<Paginatable>, Searchable {
-  bucket_name: Buckets;
-}
 
 export const useFileList = (params: FileListProps) =>
   useQuery({

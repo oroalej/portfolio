@@ -3,7 +3,7 @@ import { Tables } from "@/types";
 export type Buckets = "images";
 
 export interface UploadFile
-  extends Pick<Tables<"files">, "size" | "type" | "name"> {
+  extends Pick<Tables<"files">, "size" | "type" | "name" | "category_id"> {
   file: File | null;
 }
 
@@ -17,4 +17,6 @@ export interface AudioOrVideoFileData
   extends UploadFile,
     Required<Pick<Tables<"files">, "duration">> {}
 
-export interface FileAPIDataStructure extends Tables<"files"> {}
+export interface FileAPIDataStructure extends Tables<"files"> {
+  category?: Pick<Tables<"term_taxonomy">, "id" | "name">;
+}
