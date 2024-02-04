@@ -3,13 +3,15 @@
 import { CardBody, CardRoot } from "@/components";
 import { useParams } from "next/navigation";
 import { Suspense } from "react";
-import GalleryItemLoading from "@/app/admin/(modules)/gallery/_components/Loading/GalleryItemLoading";
-import GalleryItem from "@/app/admin/(modules)/gallery/_components/GalleryItem";
+import {
+  GalleryItem,
+  GalleryItemLoading,
+} from "@/app/admin/(modules)/gallery/_components/GalleryItem";
 import GalleryWrapper, {
   GalleryWrapperProps,
 } from "@/app/admin/(modules)/gallery/_components/GalleryWrapper";
 
-const cols = 5;
+const cols = 6;
 
 export const GalleryList = () => {
   const params = useParams();
@@ -19,8 +21,10 @@ export const GalleryList = () => {
       <CardBody>
         <GalleryWrapper
           cols={cols}
+          per_page={12}
           activeId={(params?.imageId ?? "") as string}
           isCategoryFilterVisible={true}
+          childLoadingIndicator={GalleryItemLoading}
         >
           {({ item }) => (
             <Suspense

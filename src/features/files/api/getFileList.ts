@@ -6,7 +6,7 @@ import {
   supabase,
 } from "@/utils/supabase";
 import { Buckets, FileAPIDataStructure } from "@/features/files/types";
-import { Filterable, Paginatable, Searchable, Tables } from "@/types";
+import { Filterable, Paginatable, Searchable, Sortable, Tables } from "@/types";
 import { removeEmptyValues } from "@/utils";
 
 export type FileFilterable = Pick<
@@ -14,10 +14,16 @@ export type FileFilterable = Pick<
   "category_id" | "is_bookmarked" | "bucket_name"
 >;
 
+export type FileSortable = Pick<
+  Tables<"files">,
+  "category_id" | "is_bookmarked"
+>;
+
 export interface FileListProps
   extends Required<Paginatable>,
     Searchable,
-    Filterable<FileFilterable> {
+    Filterable<FileFilterable>,
+    Sortable<FileSortable> {
   bucket_name: Buckets;
 }
 
@@ -26,6 +32,7 @@ export const getFiles = ({
   page,
   per_page,
   q,
+  sort = [],
   filter = {},
 }: FileListProps) => {
   let query = supabase
@@ -35,7 +42,7 @@ export const getFiles = ({
 
   query = queryFilterBuilder({
     query,
-    sort: [{ column: "created_at", order: "desc" }],
+    sort: [...sort, { column: "created_at", order: "desc" }],
     filter: removeEmptyValues(filter),
   });
 
