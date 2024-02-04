@@ -40,8 +40,8 @@ export interface BaseGallery {
 
 type ChildGallery =
   | {
-      children: never;
-      childLoadingIndicator: never;
+      children?: never;
+      childLoadingIndicator?: never;
     }
   | {
       children: ({ item, isSelected }: ChildrenProps) => ReactNode;
@@ -50,12 +50,12 @@ type ChildGallery =
 
 type Gallery = ChildGallery & BaseGallery;
 
-type GalleryMultiProps = {
+export type GalleryMultiProps = {
   multiple: true;
   activeId?: string[];
 } & Gallery;
 
-type GallerySingleProps = {
+export type GallerySingleProps = {
   multiple?: false;
   activeId?: string;
 } & Gallery;
