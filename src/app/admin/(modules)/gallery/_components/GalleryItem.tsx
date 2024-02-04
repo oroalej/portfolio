@@ -29,7 +29,7 @@ import {
   AiOutlineInfoCircle,
   AiOutlineLink,
 } from "react-icons/ai";
-import { PiTrash } from "react-icons/pi";
+import { PiBookmarkSimpleFill, PiTrash } from "react-icons/pi";
 import { useParams, useRouter } from "next/navigation";
 import { BiSolidImageAlt } from "react-icons/bi";
 import { getFileBlob } from "@/features/files/api/downloadFile";
@@ -44,7 +44,7 @@ interface GalleryItem {
   isSelected: boolean;
 }
 
-const GalleryItem = ({ item, isSelected }: GalleryItem) => {
+export const GalleryItem = ({ item, isSelected }: GalleryItem) => {
   const serialized = UseGalleryQueryParams();
   const publicImageUrl = useStoragePublicUrl(item.storage_file_path);
   const router = useRouter();
@@ -102,13 +102,14 @@ const GalleryItem = ({ item, isSelected }: GalleryItem) => {
   }, []);
 
   const onBookmarkHandler = async () => {
-    const bookmark = !item.is_bookmarked;
+    const { id, created_at, category, is_bookmarked, ...remaining } = item;
+    const bookmark = !is_bookmarked;
 
     await toast.promise(
       updateFileMutation.mutateAsync({
         item: item,
         formData: {
-          ...item,
+          ...remaining,
           is_bookmarked: bookmark,
         },
       }),
@@ -210,6 +211,12 @@ const GalleryItem = ({ item, isSelected }: GalleryItem) => {
           className="relative aspect-square overflow-hidden cursor-pointer rounded-md group"
           onClick={() => setIsPreviewDialogOpen(true)}
         >
+          {item?.is_bookmarked && (
+            <span className="absolute top-2.5 right-2.5 text-neutral-200">
+              <PiBookmarkSimpleFill size={18} />
+            </span>
+          )}
+
           <Suspense fallback={<ImageSkeletonLoader />}>
             {publicImageUrl.data ? (
               <Suspense
@@ -271,4 +278,18 @@ const GalleryItem = ({ item, isSelected }: GalleryItem) => {
   );
 };
 
-export default GalleryItem;
+export const GalleryItemLoading = () => (
+  <div className="bg-neutral-100 p-2.5 rounded-md transition-colors w-full">
+    <div className="flex justify-between items-center mb-2.5 gap-6">
+      <BaseSkeletonLoader className="w-1/2 h-[20px] rounded" />
+
+      <button className="outline-none cursor-default">
+        <BsThreeDotsVertical />
+      </button>
+    </div>
+
+    <div className="relative aspect-square overflow-hidden rounded-md">
+      <ImageSkeletonLoader />
+    </div>
+  </div>
+);

@@ -6,6 +6,7 @@ import {
   DEFAULT_PAGINATION_VALUES,
 } from "@/utils/pagination";
 import {
+  ElementType,
   ReactNode,
   Suspense,
   useCallback,
@@ -19,6 +20,7 @@ import { FileAPIDataStructure } from "@/features/files/types";
 import { useInfiniteFileList } from "@/features/files/api/getInfiniteFileList";
 import { InputField } from "@/components/Form/InputField";
 import { useQueryState } from "next-usequerystate";
+import { removeEmptyValues } from "@/utils";
 
 interface ChildrenProps {
   item: FileAPIDataStructure;
@@ -32,36 +34,62 @@ export interface BaseGallery {
   per_page?: number;
   excluded?: string[];
   isSearchable?: string;
-  children?: ({ item, isSelected }: ChildrenProps) => ReactNode;
   isCategoryFilterVisible?: boolean;
-  categoryId?: string;
+  categoryId?: string | null;
 }
 
-export interface GalleryMultiProps extends BaseGallery {
+type ChildGallery =
+  | {
+      children?: never;
+      childLoadingIndicator?: never;
+    }
+  | {
+      children: ({ item, isSelected }: ChildrenProps) => ReactNode;
+      childLoadingIndicator: ElementType;
+    };
+
+type Gallery = ChildGallery & BaseGallery;
+
+export type GalleryMultiProps = {
   multiple: true;
   activeId?: string[];
-}
+} & Gallery;
 
-export interface GallerySingleProps extends BaseGallery {
+export type GallerySingleProps = {
   multiple?: false;
   activeId?: string;
-}
+} & Gallery;
 
 export type GalleryWrapperProps = GalleryMultiProps | GallerySingleProps;
+
+const tabs = [
+  {
+    value: 0,
+    text: "Images",
+  },
+  {
+    value: 1,
+    text: "Bookmarks",
+  },
+];
 
 const GalleryWrapper = ({
   children,
   activeId,
   onSelect,
   isCategoryFilterVisible,
-  categoryId: categoryIdProp,
   cols = 1,
   gap = "12px",
   excluded = [],
   per_page = DEFAULT_PAGINATION_VALUES.per_page,
+  categoryId: categoryIdProp = null,
+  childLoadingIndicator: ChildLoadingIndicator,
 }: GalleryWrapperProps) => {
   const queryRef = useRef<HTMLInputElement | null>(null);
-  const [localCategoryId, setLocalCategoryId] = useState<string | null>(null);
+  const [tab, setTab] = useState<number>(0);
+  const [localCategoryId, setLocalCategoryId] = useState<string | null>(
+    categoryIdProp
+  );
 
   const [query, setQuery] = useQueryState("q", {
     history: "push",
@@ -73,20 +101,24 @@ const GalleryWrapper = ({
   });
 
   const {
-    data: infiniteData,
+    data: imageData,
     fetchNextPage,
     isFetchingNextPage,
+    isLoading,
     hasNextPage,
   } = useInfiniteFileList({
     bucket_name: "images",
     per_page: per_page,
     page: DEFAULT_PAGINATION_VALUES.current_page,
     q: query ?? undefined,
-    filter: { category_id: categoryId },
+    filter: removeEmptyValues({
+      category_id: categoryId,
+      is_bookmarked: Boolean(Number(tab)) || undefined,
+    }),
   });
 
   useEffect(() => {
-    setLocalCategoryId(categoryId);
+    setLocalCategoryId((categoryId || categoryIdProp) ?? null);
 
     if (queryRef.current) {
       queryRef.current.value = query || "";
@@ -112,32 +144,66 @@ const GalleryWrapper = ({
     []
   );
 
+  const LoadingIndicator = () => {
+    if (ChildLoadingIndicator) return <ChildLoadingIndicator />;
+
+    return (
+      <div className="bg-neutral-100 p-2.5 rounded-md transition-colors w-full aspect-square" />
+    );
+  };
+
   return (
     <div className="grid grid-cols-1 gap-4">
-      <div className="w-full flex flex-row justify-end gap-2 items-center">
-        {isCategoryFilterVisible && (
-          <GalleryCategorySelect
-            value={localCategoryId}
-            onChange={setLocalCategoryId}
-            placeholder="Categories"
-            defaultValue={null}
-            onClear={onGalleryCategoryClearHandler}
-            inputFieldClass="min-w-[14rem]"
-          />
-        )}
+      <div className="flex flex-row justify-between w-full">
+        <div className="flex flex-row gap-2 items-center">
+          {tabs.map((item) => {
+            const id = `inputRadio${item.text}`;
 
-        <InputField
-          placeholder="Search by filename"
-          className="w-56"
-          small
-          ref={queryRef}
-          onKeyPress={(event) => {
-            if (event.key === "Enter") onSearchHandler();
-          }}
-        />
-        <Button rounded type="button" size="small" onClick={onSearchHandler}>
-          Search
-        </Button>
+            return (
+              <div key={id}>
+                <input
+                  type="radio"
+                  name="tab"
+                  className="peer hidden"
+                  id={id}
+                  onChange={() => setTab(item.value)}
+                  checked={item.value === tab}
+                />
+                <label
+                  htmlFor={id}
+                  className="cursor-pointer peer-checked:bg-neutral-200 text-sm text-neutral-700 font-medium px-3 py-1.5 hover:bg-neutral-200 rounded-md transition-colors"
+                >
+                  {item.text}
+                </label>
+              </div>
+            );
+          })}
+        </div>
+        <div className="flex flex-row gap-2 items-center">
+          {isCategoryFilterVisible && (
+            <GalleryCategorySelect
+              value={localCategoryId}
+              onChange={setLocalCategoryId}
+              placeholder="Categories"
+              defaultValue={null}
+              onClear={onGalleryCategoryClearHandler}
+              inputFieldClass="min-w-[14rem]"
+            />
+          )}
+
+          <InputField
+            placeholder="Search by filename"
+            className="w-56"
+            small
+            ref={queryRef}
+            onKeyPress={(event) => {
+              if (event.key === "Enter") onSearchHandler();
+            }}
+          />
+          <Button rounded type="button" size="small" onClick={onSearchHandler}>
+            Search
+          </Button>
+        </div>
       </div>
 
       <div
@@ -147,10 +213,14 @@ const GalleryWrapper = ({
           gap,
         }}
       >
-        {!!infiniteData?.pages.length &&
-        !!(infiniteData.pages[0] as DataWithPagination<FileAPIDataStructure>)
-          .pagination.total ? (
-          infiniteData.pages.map((page) =>
+        {isLoading ? (
+          [...Array(2)].map((_, index) => (
+            <LoadingIndicator key={`item-${index}`} />
+          ))
+        ) : !!imageData?.pages.length &&
+          !!(imageData.pages[0] as DataWithPagination<FileAPIDataStructure>)
+            .pagination.total ? (
+          imageData.pages.map((page) =>
             (page as DataWithPagination<FileAPIDataStructure>).data
               // .filter((item) => !filteredActiveIdsFromExcluded.includes(item.id))
               .map((item, index) =>
@@ -214,21 +284,19 @@ const GalleryWrapper = ({
       </div>
 
       {hasNextPage && (
-        <div className="text-center">
-          <Button
-            size="small"
-            color="secondary"
-            rounded
-            type="button"
-            isLoading={isFetchingNextPage}
+        <div className="flex flex-row items-center justify-center mt-2">
+          <button
             onClick={async () => await fetchNextPage()}
+            disabled={isFetchingNextPage}
+            className="bg-neutral-100 hover:bg-neutral-200/70 px-2.5 py-2 w-44 rounded-md transition-all flex items-center justify-center cursor-pointer active:bg-neutral-200/80 h-full"
           >
-            Load More
-          </Button>
+            <span className="text-neutral-700 font-medium text-sm">
+              Load more
+            </span>
+          </button>
         </div>
       )}
     </div>
   );
 };
-
 export default GalleryWrapper;

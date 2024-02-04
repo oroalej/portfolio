@@ -13,6 +13,7 @@ export const useInfiniteFileList = ({
   page = DEFAULT_PAGINATION_VALUES.current_page,
   per_page = DEFAULT_PAGINATION_VALUES.per_page,
   q,
+  sort = [],
   filter = {},
 }: FileListProps) => {
   const queryClient = useQueryClient();
@@ -29,6 +30,7 @@ export const useInfiniteFileList = ({
           per_page,
           q,
           filter,
+          sort,
         });
 
         return {

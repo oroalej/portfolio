@@ -59,7 +59,7 @@ const ImagePreviewDialog = ({
 
   return (
     <Dialog isOpen={isOpen} onClose={onClose}>
-      <div className="absolute -right-1 -top-1 z-10">
+      <div className="absolute right-4 top-3.5 z-10">
         <Button
           icon
           rounded
@@ -68,9 +68,8 @@ const ImagePreviewDialog = ({
           color="secondary"
           onClick={onClose}
         >
-          <MdClose size={26} />
+          <MdClose size={22} />
         </Button>
-        <button className="text-white outline-none p-1.5 cursor-pointer"></button>
       </div>
       {children ? (
         children

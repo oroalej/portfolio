@@ -3,7 +3,6 @@ import toast from "react-hot-toast";
 import { supabase } from "@/utils/supabase";
 import { Tables } from "@/types";
 import { FileAPIDataStructure } from "@/features/files/types";
-import { updatePaginatedDataCache } from "@/utils/pagination";
 import { useMoveFileMutation } from "@/features/files/api/moveFile";
 
 interface UpdateFileParams {
@@ -20,7 +19,7 @@ export const updateFile = ({ id, formData }: updateFileParams) => {
     .from("files")
     .update(formData)
     .eq("id", id)
-    .select("*")
+    .select("*, category:category_id(id, name)")
     .single()
     .throwOnError();
 };
@@ -48,12 +47,6 @@ export const useUpdateFileMutation = () => {
     },
     onSuccess: (data) => {
       queryClient.setQueryData<FileAPIDataStructure>(["file", data.id], data);
-
-      updatePaginatedDataCache({
-        queryKey: ["files"],
-        data,
-        queryClient,
-      });
     },
     onError: (error, { item }) => {
       toast.error(error.message, {

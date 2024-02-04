@@ -45,7 +45,7 @@ const ImagePreviewDialog = ({ isOpen, onClose }: ImagePreviewDialogProps) => {
         {selectedItem?.name ?? ""}
       </div>
 
-      <div className="absolute right-1 top-0 z-10">
+      <div className="absolute right-3 top-3 z-10">
         <button
           className={classNames("text-white outline-none p-1.5 cursor-pointer")}
           onClick={onClose}
