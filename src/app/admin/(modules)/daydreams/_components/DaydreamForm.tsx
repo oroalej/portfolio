@@ -96,6 +96,11 @@ const DaydreamForm = ({
     if (!formState.isSubmitting) {
       setImage((item?.file as FileAPIDataStructure) ?? null);
     }
+
+    if (!item?.file_id) {
+      setValue("file_id", null);
+      setImage(null);
+    }
   }, [item]);
 
   const onSubmitHandler = async () => {

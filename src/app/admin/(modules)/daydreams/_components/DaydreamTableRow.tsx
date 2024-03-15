@@ -23,9 +23,9 @@ export const DaydreamTableRow = ({
   isSelected,
 }: DaydreamTableRowProps) => {
   const { isOpen, onClose, onOpen } = useOpenable();
-  const { data, isLoading } = useStoragePublicUrl(item.file.storage_file_path);
+  const { isLoading } = useStoragePublicUrl(item.file?.storage_file_path || "");
 
-  if (isLoading || !data) {
+  if (isLoading) {
     return <DaydreamTableRowLoading />;
   }
 
@@ -33,23 +33,26 @@ export const DaydreamTableRow = ({
     <Fragment>
       <tr>
         <td className="text-center">
-          <div
-            className="relative aspect-square w-32 h-32 overflow-hidden flex items-center justify-center group"
-            onClick={onOpen}
-          >
-            <SupabaseImage
-              src={item.file.storage_file_path}
-              alt={item.file.name}
-              className="point-events-none absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full object-cover rounded-md"
-              quality={75}
-              width={480}
-              height={480}
-            />
+          {item.file ? (
+            <div
+              className="relative aspect-square w-32 h-32 overflow-hidden flex items-center justify-center group"
+              onClick={onOpen}
+            >
+              <SupabaseImage
+                src={item.file.storage_file_path}
+                alt={item.file.name}
+                className="point-events-none absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full object-cover rounded-md"
+                quality={75}
+                width={480}
+                height={480}
+              />
 
-            <ExpandImagePreviewPlaceholder />
-          </div>
+              <ExpandImagePreviewPlaceholder />
+            </div>
+          ) : (
+            <span className="relative aspect-square w-32 h-32 block bg-neutral-200 rounded-md" />
+          )}
         </td>
-        <td>{item.year}</td>
         <td>{item.description}</td>
         <td>
           <span className="block mb-1 whitespace-nowrap">{item.iso} ISO</span>

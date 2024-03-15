@@ -35,8 +35,8 @@ export const SingleSimpleSelect = <
   value,
   placeholder,
   defaultValue,
-  optionValue = "text" as any,
-  optionText = "value" as any,
+  optionValue = "value" as any,
+  optionText = "text" as any,
 }: SingleSelectProps<ValueType, OptionItem>) => {
   const activeValue = value ?? defaultValue;
   const SelectedItem = options.find(

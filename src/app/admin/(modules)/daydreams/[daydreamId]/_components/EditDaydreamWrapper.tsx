@@ -1,6 +1,6 @@
 "use client";
 
-import { omit } from "lodash";
+import { omit, pick } from "lodash";
 import { DreamFormParams } from "@/features/daydreams/types";
 import { Fragment, Suspense, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -84,13 +84,13 @@ const EditDaydreamWrapper = () => {
           title="Edit Dream"
           item={{
             ...omit(daydreamData, "file"),
-            file_id: daydreamData.file.id,
-            file: {
-              id: daydreamData.file.id,
-              name: daydreamData.file.name,
-              bucket_name: daydreamData.file.bucket_name,
-              storage_file_path: daydreamData.file.storage_file_path,
-            },
+            file_id: daydreamData.file?.id || "",
+            file: pick(daydreamData.file || {}, [
+              "id",
+              "name",
+              "bucket_name",
+              "storage_file_path",
+            ]),
           }}
           onSubmit={onSubmitHandler}
           onDelete={onOpen}
