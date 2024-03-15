@@ -8,7 +8,7 @@ export const getStoragePublicUrl = (path: string) => {
 export const useStoragePublicUrl = (path: string | undefined) =>
   useQuery({
     enabled: !!path,
-    staleTime: 0,
+    staleTime: Infinity,
 
     queryKey: ["file", path],
     queryFn: async (): Promise<string> => {
