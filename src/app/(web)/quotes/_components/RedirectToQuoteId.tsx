@@ -1,11 +1,11 @@
 "use client";
 
-import { Fragment, useEffect } from "react";
+import { useEffect } from "react";
 import { useGetTermList } from "@/features/terms/api/getTermList";
 import { useGetTaxonomyByTermId } from "@/features/term_taxonomy/api/getTaxonomyByTermId";
 import { TERM_IDENTIFIER } from "@/data";
 import { useRouter } from "next/navigation";
-import QuoteIdLoadingPage from "@/app/(web)/quotes/[quoteId]/loading";
+import { QuotesListLoading } from "@/app/(web)/quotes/[quoteId]/_components/QuotesList";
 
 const RedirectToQuoteId = () => {
   const router = useRouter();
@@ -25,11 +25,7 @@ const RedirectToQuoteId = () => {
     if (taxonomy) router.replace(`/quotes/${taxonomy.id}`);
   }, [taxonomy?.id]);
 
-  if (isLoading) {
-    return <QuoteIdLoadingPage />;
-  }
-
-  return <Fragment />;
+  return <QuotesListLoading />;
 };
 
 export default RedirectToQuoteId;

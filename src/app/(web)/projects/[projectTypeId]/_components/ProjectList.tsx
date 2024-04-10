@@ -1,16 +1,18 @@
 "use client";
 
-import ProjectLoading from "@/app/(web)/projects/loading";
 import PreviewProjectImageDialog from "@/app/(web)/projects/[projectTypeId]/_components/PreviewProjectImageDialog";
 import { useParams } from "next/navigation";
 import { useGetProjectList } from "@/features/projects/api/getProjectList";
 import { Fragment, useState } from "react";
-import { ProjectCard } from "@/app/(web)/projects/[projectTypeId]/_components/ProjectCard";
+import {
+  ProjectCard,
+  ProjectCardLoading,
+} from "@/app/(web)/projects/[projectTypeId]/_components/ProjectCard";
 import { useGalleryContext } from "@/context/GalleryContext";
 import { ProjectListSelector } from "@/features/projects/transformers";
 import { ProjectCardItem } from "@/app/admin/(modules)/projects/_components/ProjectCard";
 
-const ProjectList = () => {
+export const ProjectList = () => {
   const { projectTypeId } = useParams();
   const { setList } = useGalleryContext();
   const [selectedProject, setSelectedProject] =
@@ -44,7 +46,7 @@ const ProjectList = () => {
   };
 
   if (isLoading) {
-    return <ProjectLoading />;
+    return <ProjectListLoading />;
   }
 
   return (
@@ -77,4 +79,10 @@ const ProjectList = () => {
   );
 };
 
-export default ProjectList;
+export const ProjectListLoading = () => (
+  <Fragment>
+    {[...Array(3)].map((_, key) => (
+      <ProjectCardLoading key={`project-card-loading-${key}`} />
+    ))}
+  </Fragment>
+);

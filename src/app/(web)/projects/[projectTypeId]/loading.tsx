@@ -1,5 +1,5 @@
-import ProjectPageLoading from "@/app/(web)/projects/loading";
+import { ProjectListLoading } from "@/app/(web)/projects/[projectTypeId]/_components/ProjectList";
 
-const ProjectTypeIdPageLoading = () => <ProjectPageLoading />;
+const ProjectTypeIdPageLoading = () => <ProjectListLoading />;
 
 export default ProjectTypeIdPageLoading;

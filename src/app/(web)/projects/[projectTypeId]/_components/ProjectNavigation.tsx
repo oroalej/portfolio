@@ -1,31 +1,31 @@
 "use client";
 
-import { NavLink } from "@/app/(web)/_components/NavLink/NavLink";
-import { useGetTaxonomyByTermId } from "@/features/term_taxonomy/api/getTaxonomyByTermId";
-import { TERM_IDENTIFIER } from "@/data";
 import { usePathname } from "next/navigation";
-import { BaseSkeletonLoader } from "@/components";
 import { useGetTermList } from "@/features/terms/api/getTermList";
+import { TERM_IDENTIFIER } from "@/data";
+import { useGetTaxonomyByTermId } from "@/features/term_taxonomy/api/getTaxonomyByTermId";
+import { NavLink } from "@/app/(web)/_components/NavLink/NavLink";
+import { BaseSkeletonLoader } from "@/components";
 
-export const QuoteNavigation = () => {
+export const ProjectNavigation = () => {
   const pathname = usePathname();
   const { data: termList, isLoading: isTermLoading } = useGetTermList();
   const termData = termList?.find(
-    (item) => item.identifier === TERM_IDENTIFIER.QUOTE_CATEGORY
+    (item) => item.identifier === TERM_IDENTIFIER.PROJECT_TYPES
   );
   const { data, isLoading } = useGetTaxonomyByTermId({
     filter: { term_id: termData?.id },
   });
 
   if (isLoading || isTermLoading) {
-    return <QuoteNavigationLoading />;
+    return <ProjectNavigationLoading />;
   }
 
   return (
     <div className="flex flex-row justify-end items-center mb-16 gap-5">
       {data?.map((taxonomy) => (
         <NavLink
-          href={`/quotes/${taxonomy.id}`}
+          href={`/projects/${taxonomy.id}`}
           key={taxonomy.id}
           active={pathname.endsWith(taxonomy.id)}
         >
@@ -36,11 +36,11 @@ export const QuoteNavigation = () => {
   );
 };
 
-export const QuoteNavigationLoading = () => (
+export const ProjectNavigationLoading = () => (
   <div className="flex flex-row justify-end items-center mb-16 gap-5">
     {[...Array(3)].map((_, index) => (
       <BaseSkeletonLoader
-        key={`category-button-loading-${index}`}
+        key={`project-navigation-loading-${index}`}
         className="rounded-md w-20"
         style={{ height: "44px" }}
       />
