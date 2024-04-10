@@ -108,7 +108,7 @@ export const DaydreamList = () => {
 
 export const DaydreamListLoading = () => (
   <div className="grid gap-5 grid-cols-1 md:grid-cols-3">
-    {[...Array(2)].map((_, index) => (
+    {[...Array(6)].map((_, index) => (
       <DaydreamCardLoading key={`daydream-loader-${index}`} />
     ))}
   </div>
