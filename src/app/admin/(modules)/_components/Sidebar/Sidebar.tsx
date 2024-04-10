@@ -1,7 +1,7 @@
 "use client";
 
 import { BiSolidQuoteLeft } from "react-icons/bi";
-import { BsFillMoonStarsFill } from "react-icons/bs";
+import { BsFillMoonStarsFill, BsDatabaseFill } from "react-icons/bs";
 import { GoFileDirectoryFill } from "react-icons/go";
 import { ImHome } from "react-icons/im";
 import {
@@ -33,6 +33,11 @@ const data = [
         text: "Gallery",
         href: "/gallery",
         icon: FaRegImages,
+      },
+      {
+        text: "Data Management",
+        href: "/data-management",
+        icon: BsDatabaseFill,
       },
     ],
   },

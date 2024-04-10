@@ -3,18 +3,20 @@ import { sortBy } from "lodash";
 import { supabase } from "@/utils/supabase";
 import { TaxonomyAPIDataStructure } from "@/features/term_taxonomy/types";
 import toast from "react-hot-toast";
+import { removeEmptyValues } from "@/utils";
 
 export interface TaxonomyFormData {
   term_id: string;
   parent_id?: string;
   name: string;
+  description?: string;
 }
 
 export const storeTaxonomy = (formData: TaxonomyFormData) => {
   return supabase
     .from("term_taxonomy")
     .insert(formData)
-    .select("id, term_id, parent_id, name")
+    .select("*")
     .single()
     .throwOnError();
 };
@@ -35,19 +37,24 @@ export const useStoreTaxonomyMutation = () => {
       return data;
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(
-        [
-          "taxonomy",
-          { parent_id: data.parent_id ?? "", term_id: data.term_id },
-        ],
-        (prevData: TaxonomyAPIDataStructure[]) => {
-          const localPrevDataState = prevData || [];
-
-          localPrevDataState.push(data);
-
-          return sortBy(localPrevDataState, ["name"]);
-        }
-      );
+      queryClient
+        .getQueriesData<TaxonomyAPIDataStructure[]>({
+          queryKey: [
+            "taxonomy",
+            {
+              term_id: data.term_id,
+            },
+          ],
+          exact: false,
+        })
+        .forEach(([queryKey]) => {
+          queryClient.setQueryData(
+            queryKey,
+            (prevData: TaxonomyAPIDataStructure[]) => {
+              return sortBy([...(prevData || []), data], ["name"]);
+            }
+          );
+        });
     },
     onError: (error) => {
       toast.error(error.message);

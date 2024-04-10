@@ -1,4 +1,3 @@
 import { Tables } from "@/types";
 
-export interface TaxonomyAPIDataStructure
-  extends Omit<Tables<"term_taxonomy">, "description"> {}
+export interface TaxonomyAPIDataStructure extends Tables<"term_taxonomy"> {}

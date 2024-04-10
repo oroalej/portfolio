@@ -19,14 +19,12 @@ interface getTaxonomyQueryFnProps extends GetTaxonomyByTermId {
   isEnabled: boolean;
 }
 
-export const getTaxonomyByTermId = ({
+export const getTaxonomy = ({
   q,
   sort = [],
   filter = {},
 }: GetTaxonomyByTermId) => {
-  let query = supabase
-    .from("term_taxonomy")
-    .select("id, term_id, parent_id, name");
+  let query = supabase.from("term_taxonomy").select("*");
 
   query = queryFilterBuilder({
     query,
@@ -75,7 +73,7 @@ const useGetTaxonomyQueryFn = ({
     staleTime: Infinity,
     queryKey: ["taxonomy", filter],
     queryFn: async (): Promise<TaxonomyAPIDataStructure[]> => {
-      const { data } = await getTaxonomyByTermId({ filter, sort, q });
+      const { data } = await getTaxonomy({ filter, sort, q });
 
       if (data === null) throw new Error("Data not found.");
 
