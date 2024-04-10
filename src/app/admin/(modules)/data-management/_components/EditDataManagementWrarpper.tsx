@@ -14,6 +14,8 @@ import { BreadcrumbDataSetter } from "@/app/admin/(modules)/_components/Breadcru
 import { useGetTaxonomyById } from "@/features/term_taxonomy/api/getTaxonomyById";
 import { useUpdateTaxonomyMutation } from "@/features/term_taxonomy/api/updateTaxonomy";
 import { useQueryState } from "next-usequerystate";
+import { TAXONOMY_WITH_PARENT_QUERY } from "@/features/term_taxonomy/data";
+import { TaxonomyWithParentAPIDataStructure } from "@/features/term_taxonomy/types";
 
 interface EditDataManagementWrapper {
   taxonomyId: string;
@@ -22,20 +24,26 @@ interface EditDataManagementWrapper {
 export const EditDataManagementWrapper = ({
   taxonomyId,
 }: EditDataManagementWrapper) => {
-  const updateTaxonomyMutation = useUpdateTaxonomyMutation();
+  const updateTaxonomyMutation =
+    useUpdateTaxonomyMutation<TaxonomyWithParentAPIDataStructure>();
 
   const [term] = useQueryState("type", {
     shallow: false,
     defaultValue: "",
   });
 
-  const { data, isLoading } = useGetTaxonomyById(taxonomyId);
+  const { data, isLoading } =
+    useGetTaxonomyById<TaxonomyWithParentAPIDataStructure>({
+      id: taxonomyId,
+      select: TAXONOMY_WITH_PARENT_QUERY,
+    });
 
   const onSubmitHandler = useCallback(async (value: TaxonomyFormData) => {
     await toast.promise(
       updateTaxonomyMutation.mutateAsync({
         id: taxonomyId,
         formData: value,
+        select: TAXONOMY_WITH_PARENT_QUERY,
       }),
       {
         success: "Data has been successfully updated!",

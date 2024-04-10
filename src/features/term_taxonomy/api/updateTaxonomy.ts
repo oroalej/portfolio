@@ -3,13 +3,21 @@ import { TaxonomyFormData } from "@/features/term_taxonomy/api/createTaxonomy";
 import { supabase } from "@/utils/supabase";
 import { TaxonomyAPIDataStructure } from "@/features/term_taxonomy/types";
 import { findIndex } from "lodash";
+import {
+  TAXONOMY_QUERY,
+  TAXONOMY_WITH_PARENT_QUERY,
+} from "@/features/term_taxonomy/data";
 
-export const updateTaxonomyById = (id: string, formData: TaxonomyFormData) => {
+export const updateTaxonomyById = ({
+  id,
+  formData,
+  select,
+}: UpdateTaxonomy) => {
   return supabase
     .from("term_taxonomy")
     .update(formData)
     .eq("id", id)
-    .select("*")
+    .select(select)
     .single()
     .throwOnError();
 };
@@ -17,20 +25,31 @@ export const updateTaxonomyById = (id: string, formData: TaxonomyFormData) => {
 interface UpdateTaxonomy {
   id: string;
   formData: TaxonomyFormData;
+  select?: string;
 }
 
-export const useUpdateTaxonomyMutation = () => {
+export const useUpdateTaxonomyMutation = <
+  Type = TaxonomyAPIDataStructure
+>() => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: async ({ id, formData }: UpdateTaxonomy) => {
-      const { data, error } = await updateTaxonomyById(id, formData);
+  return useMutation<Type, Error, UpdateTaxonomy>({
+    mutationFn: async ({
+      id,
+      formData,
+      select = TAXONOMY_QUERY,
+    }: UpdateTaxonomy) => {
+      const { data, error } = await updateTaxonomyById({
+        id,
+        formData,
+        select,
+      });
 
       if (error) throw error;
 
       if (data === null) throw new Error("Data not found.");
 
-      return data;
+      return data as unknown as Type;
     },
     onSuccess: (data, { id, formData }, context) => {
       queryClient
@@ -39,22 +58,19 @@ export const useUpdateTaxonomyMutation = () => {
           exact: false,
         })
         .forEach(([queryKey]) => {
-          queryClient.setQueryData(
-            queryKey,
-            (prevData: TaxonomyAPIDataStructure[]) => {
-              const selectedIndex = findIndex(prevData, { id });
+          queryClient.setQueryData(queryKey, (prevData: Type[]) => {
+            const selectedIndex = findIndex(prevData, { id } as any);
 
-              if (selectedIndex !== -1) {
-                const localState = [...prevData];
+            if (selectedIndex !== -1) {
+              const localState = [...prevData];
 
-                localState.splice(selectedIndex, 1, data);
+              localState.splice(selectedIndex, 1, data as unknown as Type);
 
-                return localState;
-              }
-
-              return;
+              return localState;
             }
-          );
+
+            return;
+          });
         });
 
       queryClient.setQueryData(["taxonomy", { id }], () => data);

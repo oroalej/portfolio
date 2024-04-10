@@ -7,7 +7,8 @@ import {
   DataManagementTableRowLoading,
 } from "@/app/admin/(modules)/data-management/_components/DataManagementTableRow";
 import { CardBody, CardRoot } from "@/components";
-import { useParams } from "next/navigation";
+import { TaxonomyWithParentAPIDataStructure } from "@/features/term_taxonomy/types";
+import { TAXONOMY_WITH_PARENT_QUERY } from "@/features/term_taxonomy/data";
 
 export const DataManagementTable = () => {
   const [term] = useQueryState("type", {
@@ -15,9 +16,11 @@ export const DataManagementTable = () => {
     defaultValue: "",
   });
 
-  const { data, isLoading } = useGetTaxonomyByTermId({
-    filter: { term_id: term },
-  });
+  const { data, isLoading } =
+    useGetTaxonomyByTermId<TaxonomyWithParentAPIDataStructure>({
+      filter: { term_id: term },
+      select: TAXONOMY_WITH_PARENT_QUERY,
+    });
 
   if (!term) {
     return (
@@ -34,10 +37,10 @@ export const DataManagementTable = () => {
       <table className="border-b border-neutral-200">
         <thead>
           <tr>
-            <th className="w-72">Name</th>
+            <th className="w-56">Name</th>
             <th className="w-auto">Description</th>
-            {/*<th className="w-56">Parent</th>*/}
-            <th className="w-28" />
+            <th className="w-56">Parent Type</th>
+            <th className="w-32" />
           </tr>
         </thead>
         <tbody>

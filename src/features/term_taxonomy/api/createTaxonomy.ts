@@ -4,6 +4,7 @@ import { supabase } from "@/utils/supabase";
 import { TaxonomyAPIDataStructure } from "@/features/term_taxonomy/types";
 import toast from "react-hot-toast";
 import { removeEmptyValues } from "@/utils";
+import { TAXONOMY_QUERY } from "@/features/term_taxonomy/data";
 
 export interface TaxonomyFormData {
   term_id: string;
@@ -12,37 +13,42 @@ export interface TaxonomyFormData {
   description?: string;
 }
 
-export const storeTaxonomy = (formData: TaxonomyFormData) => {
+export const storeTaxonomy = ({ select, formData }: StoreTaxonomy) => {
   return supabase
     .from("term_taxonomy")
     .insert(formData)
-    .select("*")
+    .select(select)
     .single()
     .throwOnError();
 };
 
-export const useStoreTaxonomyMutation = () => {
+interface StoreTaxonomy {
+  formData: TaxonomyFormData;
+  select?: string;
+}
+
+export const useStoreTaxonomyMutation = <Type = TaxonomyAPIDataStructure>() => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: async (
-      formData: TaxonomyFormData
-    ): Promise<TaxonomyAPIDataStructure> => {
-      const { data } = await storeTaxonomy(formData);
+  return useMutation<Type, Error, StoreTaxonomy>({
+    mutationFn: async ({
+      formData,
+      select = TAXONOMY_QUERY,
+    }: StoreTaxonomy): Promise<Type> => {
+      const { data, error } = await storeTaxonomy({ select, formData });
 
-      if (data === null) {
-        throw new Error("Data not found.");
-      }
+      if (error) throw error;
+      if (data === null) throw new Error("Data not found.");
 
-      return data;
+      return data as unknown as Type;
     },
     onSuccess: (data) => {
       queryClient
-        .getQueriesData<TaxonomyAPIDataStructure[]>({
+        .getQueriesData<Type[]>({
           queryKey: [
             "taxonomy",
             {
-              term_id: data.term_id,
+              term_id: (data as any).term_id,
             },
           ],
           exact: false,

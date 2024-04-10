@@ -3,8 +3,9 @@ import { Filterable, Paginatable, Sortable } from "@/types";
 import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 import { getRange } from "@/utils/pagination";
 import { removeEmptyValues } from "@/utils/index";
+import { Database } from "@/types/supabase";
 
-export const supabase = createClientComponentClient();
+export const supabase = createClientComponentClient<Database>();
 
 interface queryFilterBuilder<Row extends Record<string, unknown>>
   extends Sortable<any>,

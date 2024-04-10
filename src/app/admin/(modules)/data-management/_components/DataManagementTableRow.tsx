@@ -3,16 +3,16 @@
 import { AlertDialog, BaseSkeletonLoader, Button } from "@/components";
 import { FaPencilAlt } from "react-icons/fa";
 import { FaChevronRight, FaTrash } from "react-icons/fa6";
-import { TaxonomyAPIDataStructure } from "@/features/term_taxonomy/types";
+import { TaxonomyWithParentAPIDataStructure } from "@/features/term_taxonomy/types";
 import { Fragment, useCallback, useState } from "react";
 import * as Portal from "@radix-ui/react-portal";
 import toast from "react-hot-toast";
 import { useDeleteTaxonomyMutation } from "@/features/term_taxonomy/api/deleteTaxonomy";
 import { pick } from "lodash";
-import { redirect, useParams, useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 export interface DataManagementTableRowProps {
-  item: TaxonomyAPIDataStructure;
+  item: TaxonomyWithParentAPIDataStructure;
 }
 
 export const DataManagementTableRow = ({
@@ -57,6 +57,7 @@ export const DataManagementTableRow = ({
       <tr>
         <td>{item.name}</td>
         <td>{item.description ?? "-"}</td>
+        <td>{item.parent?.name ?? "-"}</td>
         <td>
           {isSelected ? (
             <div className="inline-flex items-center gap-1 font-medium bg-neutral-200 text-neutral-800 px-3 py-2 rounded-md h-[38px] transition-colors">
@@ -112,6 +113,12 @@ export const DataManagementTableRow = ({
 
 export const DataManagementTableRowLoading = () => (
   <tr>
+    <td>
+      <BaseSkeletonLoader
+        className="w-1/2 rounded"
+        style={{ height: "19px" }}
+      />
+    </td>
     <td>
       <BaseSkeletonLoader
         className="w-1/2 rounded"
