@@ -30,7 +30,7 @@ import SkillSearchableSelect from "@/app/admin/(modules)/projects/_components/Se
 export interface ProjectFormParams
   extends Omit<Tables<"projects">, "created_at" | "id" | "project_order"> {
   skills: string[];
-  screenshots: ScreenshotForm[];
+  screenshots: Array<ScreenshotForm & { screenshot_order: number }>;
 }
 
 export const DEFAULT_PROJECT_FORM_VALUES: ProjectFormParams = {

@@ -30,9 +30,11 @@ const MediaDetailSearchableSelect = ({
       if (!termData?.id || !sourceId) return;
 
       const data = await storeTaxonomyMutation.mutateAsync({
-        term_id: termData.id,
-        parent_id: sourceId,
-        name: value,
+        formData: {
+          term_id: termData.id,
+          parent_id: sourceId,
+          name: value,
+        },
       });
 
       onChange(data.id);

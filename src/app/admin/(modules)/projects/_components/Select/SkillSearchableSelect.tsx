@@ -30,8 +30,10 @@ const SkillSearchableSelect = ({
   const onCreateHandler = useCallback(
     async (name: string) => {
       const response = await storeTaxonomyMutation.mutateAsync({
-        term_id: termData!.id,
-        name,
+        formData: {
+          term_id: termData!.id,
+          name,
+        },
       });
 
       onChange([response.id, ...value]);

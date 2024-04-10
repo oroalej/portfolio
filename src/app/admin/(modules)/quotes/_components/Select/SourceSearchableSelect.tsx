@@ -30,9 +30,11 @@ const SourceSearchableSelect = ({
       if (!termData?.id || !categoryId) return;
 
       const data = await storeTaxonomyMutation.mutateAsync({
-        name: value,
-        term_id: termData.id,
-        parent_id: categoryId,
+        formData: {
+          name: value,
+          term_id: termData.id,
+          parent_id: categoryId,
+        },
       });
 
       onChange(data.id);

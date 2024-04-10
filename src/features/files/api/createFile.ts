@@ -63,11 +63,14 @@ export const useStoreFileMutation = () => {
       if (fileBucketResult.data === null)
         throw new Error("Something went wrong, file not save.");
 
-      const { data } = await storeFile({
+      const { data, error } = await storeFile({
         bucket_name: formData.bucket_name,
         storage_file_path: fileBucketResult.data.path,
         data: omit(formData.data, ["file"]),
       });
+
+      if (error) throw error;
+      if (data === null) throw new Error("Something went wrong");
 
       return data;
     },

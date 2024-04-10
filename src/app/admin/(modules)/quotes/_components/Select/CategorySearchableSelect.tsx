@@ -24,8 +24,7 @@ const CategorySearchableSelect = ({
       if (!termData?.id) return;
 
       const data = await storeTaxonomyMutation.mutateAsync({
-        term_id: termData!.id,
-        name: value,
+        formData: { term_id: termData!.id, name: value },
       });
 
       onChange(data.id);
