@@ -26,8 +26,8 @@ const QuoteTableRow = ({ item, isSelected, onSelect }: QuoteTableRow) => {
     >
       <td>{item.category.name}</td>
       <td>{item.content}</td>
-      <td>{item?.media_detail?.name || "-"}</td>
       <td>{item?.source?.name || "-"}</td>
+      <td>{item?.media_detail?.name || "-"}</td>
       <td>
         <div className="flex flex-row gap-1.5 justify-end">
           {isSelected ? (

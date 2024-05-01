@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 
 interface UpdateQuoteParams {
   id: string;
-  formData: Required<Omit<Tables<"quotes">, "id" | "created_at">>;
+  formData: Omit<Tables<"quotes">, "id" | "created_at">;
 }
 
 const updateQuote = ({ id, formData }: UpdateQuoteParams) => {
