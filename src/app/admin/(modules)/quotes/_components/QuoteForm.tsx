@@ -25,13 +25,13 @@ export const DEFAULT_FORM_VALUES: QuoteFormStructure = {
   category_id: "",
   source_id: "",
   content: "",
-  media_detail_id: undefined,
+  media_detail_id: null,
 };
 
 export interface QuoteFormStructure {
   category_id: string;
   source_id: string;
-  media_detail_id?: string;
+  media_detail_id: string | null;
   content: string;
 }
 
@@ -140,7 +140,7 @@ const QuoteForm = ({
                         resetField("media_detail_id");
                         resetField("source_id");
 
-                        setValue("media_detail_id", undefined);
+                        setValue("media_detail_id", null);
                         setValue("source_id", "");
                       }}
                     />
@@ -168,7 +168,7 @@ const QuoteForm = ({
                       onChange={(value) => {
                         onChange(value);
                         resetField("media_detail_id");
-                        setValue("media_detail_id", undefined);
+                        setValue("media_detail_id", null);
                         // trigger("media_detail_id").catch();
                       }}
                     />
