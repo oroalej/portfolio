@@ -25,13 +25,13 @@ export const DEFAULT_FORM_VALUES: QuoteFormStructure = {
   category_id: "",
   source_id: "",
   content: "",
-  media_detail_id: "",
+  media_detail_id: undefined,
 };
 
 export interface QuoteFormStructure {
   category_id: string;
   source_id: string;
-  media_detail_id: string;
+  media_detail_id?: string;
   content: string;
 }
 
@@ -43,6 +43,8 @@ export interface QuoteFormProps {
   submitButtonText?: string;
   cancelButtonText?: string;
 }
+
+const INDIVIDUAL_ID = "58f63111-712f-4e3f-991f-f13a7609fc5c";
 
 export const QuoteSchema = object({
   content: any().refine(
@@ -57,11 +59,20 @@ export const QuoteSchema = object({
     (data) => data !== null,
     "The source field is required"
   ),
-  media_detail_id: any().refine(
-    (data) => data !== null,
-    "The media detail field is required"
-  ),
-});
+  media_detail_id: any().nullable().optional(),
+}).refine(
+  (data) => {
+    if (data.category_id !== INDIVIDUAL_ID) {
+      return !!data.media_detail_id;
+    }
+
+    return true;
+  },
+  {
+    message: "The media detail field is required",
+    path: ["media_detail_id"],
+  }
+);
 
 const QuoteForm = ({
   item = DEFAULT_FORM_VALUES,
@@ -78,6 +89,7 @@ const QuoteForm = ({
     reset,
     setValue,
     watch,
+    resetField,
   } = useForm<QuoteFormStructure>({
     mode: "onChange",
     defaultValues: useMemo(() => item, [item]),
@@ -124,7 +136,11 @@ const QuoteForm = ({
                       error={fieldState.error?.message}
                       onChange={(value) => {
                         onChange(value);
-                        setValue("media_detail_id", "");
+
+                        resetField("media_detail_id");
+                        resetField("source_id");
+
+                        setValue("media_detail_id", undefined);
                         setValue("source_id", "");
                       }}
                     />
@@ -134,7 +150,7 @@ const QuoteForm = ({
             </FormGroup>
 
             <FormGroup>
-              <Label required>Artist, Movie or Book title</Label>
+              <Label required>Person, Artist, Movie or Book title</Label>
 
               <Controller
                 defaultValue={item.source_id}
@@ -151,7 +167,9 @@ const QuoteForm = ({
                       error={fieldState.error?.message}
                       onChange={(value) => {
                         onChange(value);
-                        setValue("media_detail_id", "");
+                        resetField("media_detail_id");
+                        setValue("media_detail_id", undefined);
+                        // trigger("media_detail_id").catch();
                       }}
                     />
                   </Suspense>
@@ -159,28 +177,30 @@ const QuoteForm = ({
               />
             </FormGroup>
 
-            <FormGroup>
-              <Label required>Song Title, Interview, or Character Name</Label>
+            {watch("category_id") !== INDIVIDUAL_ID && (
+              <FormGroup>
+                <Label required>Song Title, Interview, or Character Name</Label>
 
-              <Controller
-                defaultValue={item.media_detail_id}
-                name="media_detail_id"
-                rules={{ required: true }}
-                control={control}
-                render={({ field: { value, onChange }, fieldState }) => (
-                  <Suspense fallback={<QuoteInputFieldLoading />}>
-                    <MediaDetailSearchableSelect
-                      value={value}
-                      sourceId={watch("source_id")}
-                      disabled={!watch("source_id")}
-                      defaultValue={item.media_detail_id}
-                      error={fieldState.error?.message}
-                      onChange={onChange}
-                    />
-                  </Suspense>
-                )}
-              />
-            </FormGroup>
+                <Controller
+                  defaultValue={item.media_detail_id}
+                  name="media_detail_id"
+                  rules={{ required: true }}
+                  control={control}
+                  render={({ field: { value, onChange }, fieldState }) => (
+                    <Suspense fallback={<QuoteInputFieldLoading />}>
+                      <MediaDetailSearchableSelect
+                        value={value || null}
+                        sourceId={watch("source_id")}
+                        disabled={!watch("source_id")}
+                        defaultValue={item.media_detail_id}
+                        error={fieldState.error?.message}
+                        onChange={onChange}
+                      />
+                    </Suspense>
+                  )}
+                />
+              </FormGroup>
+            )}
 
             <FormGroup>
               <Label required htmlFor="input-content">

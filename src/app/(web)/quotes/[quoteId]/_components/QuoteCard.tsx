@@ -3,7 +3,7 @@ import { BaseSkeletonLoader, CardRoot } from "@/components";
 interface QuoteCardProps {
   content: string;
   source_text: string;
-  media_detail_text: string;
+  media_detail_text?: string;
 }
 
 export const QuoteCard = ({
@@ -17,7 +17,9 @@ export const QuoteCard = ({
     </div>
     <div className="px-6 pt-4 pb-6 flex justify-between">
       <p className="inline-block border-b-4 border-transparent transition-colors text-neutral-600 text-base md:text-lg group-hover:border-neutral-700 group-hover:text-neutral-800">
-        {`${media_detail_text}, ${source_text}`}
+        {media_detail_text}
+        {media_detail_text && ", "}
+        {source_text}
       </p>
     </div>
   </div>
