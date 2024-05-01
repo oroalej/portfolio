@@ -169,7 +169,6 @@ const QuoteForm = ({
                         onChange(value);
                         resetField("media_detail_id");
                         setValue("media_detail_id", null);
-                        // trigger("media_detail_id").catch();
                       }}
                     />
                   </Suspense>
