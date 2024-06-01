@@ -33,7 +33,7 @@ const Resume = () => (
         </h3>
 
         <p className="dark:text-neutral-400 mt-3 lg:mt-6 text-sm lg:text-base">
-          Innovative developer with 5 years of professional experience in
+          Innovative developer with 7 years of professional experience in
           object-oriented programming, implementing design interfaces, testing,
           and debugging. Passionate about technology and learning new things.
         </p>
