@@ -19,10 +19,10 @@ jobs:
           node-version: '20.11.0'  # Use the Node.js version required for your project
 
       - name: Install Vercel CLI
-        run: yarn add --global vercel@latest
+        run: npm install --global vercel@latest
 
       - name: Install Dependencies
-        run: yarn
+        run: npm install
 
       - name: Debug Environment Variables
         run: |
@@ -35,7 +35,7 @@ jobs:
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
 #        run: npm run build  # Change this if your build command is different
-        run: yarn build
+        run: npm run build
 
       - name: Deploy to Vercel Preview
         env:
