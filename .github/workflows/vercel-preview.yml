@@ -24,12 +24,6 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Debug Environment Variables
-        run: |
-          echo "NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}"
-          echo "NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}"
-          env
-
       - name: Build Project
         env:
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
@@ -41,4 +35,5 @@ jobs:
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-        run: npx vercel --token $VERCEL_TOKEN --confirm --scope $VERCEL_ORG_ID --env Preview
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: npx vercel --token $VERCEL_TOKEN --yes --scope $VERCEL_ORG_ID --env Preview
