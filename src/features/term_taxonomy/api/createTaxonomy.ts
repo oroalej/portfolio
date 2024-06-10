@@ -3,7 +3,6 @@ import { sortBy } from "lodash";
 import { supabase } from "@/utils/supabase";
 import { TaxonomyAPIDataStructure } from "@/features/term_taxonomy/types";
 import toast from "react-hot-toast";
-import { removeEmptyValues } from "@/utils";
 import { TAXONOMY_QUERY } from "@/features/term_taxonomy/data";
 
 export interface TaxonomyFormData {
@@ -48,7 +47,9 @@ export const useStoreTaxonomyMutation = <Type = TaxonomyAPIDataStructure>() => {
           queryKey: [
             "taxonomy",
             {
-              term_id: (data as any).term_id,
+              filter: {
+                term_id: (data as any).term_id,
+              },
             },
           ],
           exact: false,

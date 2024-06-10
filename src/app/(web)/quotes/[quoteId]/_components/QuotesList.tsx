@@ -41,7 +41,7 @@ export const QuotesList = () => {
             <QuoteCard
               content={item.content}
               source_text={item.source.name}
-              media_detail_text={item.media_detail.name}
+              media_detail_text={item.media_detail?.name}
             />
           </Suspense>
         )) ?? (
