@@ -124,7 +124,7 @@ export const PROJECT_LIST = [
       "I wanted to support the Algorand cryptocurrency ecosystem by creating a project using their blockchain. It was on its designing phase when my colleagues whom I was supposed to build the project with became busy. Hence, the project is currently on hold. I'm responsible for blockchain integration and assistance of UI Design",
     design:
       "https://www.figma.com/proto/0KQUWJDeo48YAsFYWy8Wl5/NFT-Marketplace?page-id=109%3A2&node-id=327%3A2246",
-    uses: ["Python", "VueJS", "PyTeal", "NuxtJS", "TailwindCSS"],
+    uses: ["Python", "ReactJS", "PyTeal", "NextJS", "TailwindCSS"],
   },
   {
     title: "intothealgoverse 1.0",
