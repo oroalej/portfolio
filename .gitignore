@@ -33,4 +33,14 @@ yarn-error.log*
 # vercel
 .vercel
 
+# local agent commands
+.claude/commands/
+.agents/skills/commit/
+.agents/skills/create-pr/
+.agents/skills/desloppify/
+.agents/skills/doc-sync/
+.agents/skills/new-branch/
+.agents/skills/pr-merge-review/
+.agents/skills/review/
+
 /.idea/

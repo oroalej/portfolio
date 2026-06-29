@@ -19,7 +19,8 @@ This file is the canonical agent guidance for this repository. Keep Codex and ot
 
 ## Claude Slash Commands
 
-- Project slash commands live in `.claude/commands`. Keep them aligned with this file, the portfolio skills, and the human docs under `docs/`.
+- Local Claude slash commands may live in `.claude/commands`, which is ignored by Git. Keep local copies aligned with this file, the portfolio skills, and the human docs under `docs/`.
+- Local Codex bridge skills for those commands may live in ignored `.agents/skills/<command-name>` folders. Invoke them in Codex with `$skill-name` or `/skills`; `@` is for file and context mentions.
 - `/review` reviews staged changes only and uses the portfolio skills for architecture, Supabase/admin CRUD, and UI concerns.
 - `/doc-sync` updates `docs/`, `CLAUDE.md`, and project skills when staged source changes affect documented behavior or agent guidance.
 - `/desloppify` performs a read-only maintainability scan over a requested portfolio module or file.
