@@ -77,7 +77,7 @@ const PortfolioSummarySection = () => {
                   <Object name="experience">
                     <span className="text-green-400 mr-0.5">
                       {`'`}
-                      <span className="select-all">5 years</span>
+                      <span className="select-all">9 years</span>
                       {`'`}
                     </span>
                   </Object>

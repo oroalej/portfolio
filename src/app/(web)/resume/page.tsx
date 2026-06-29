@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { EXPERIENCES, INTEREST, SKILLS } from "@/data/resume";
+import { EXPERIENCES, INTEREST, SKILL_GROUPS } from "@/data/resume";
 import { kebabCase } from "@/utils";
 import { FaDownload, FaEnvelope, FaGithub, FaLinkedin } from "react-icons/fa";
 import { FiExternalLink } from "react-icons/fi";
@@ -33,7 +33,7 @@ const Resume = () => (
         </h3>
 
         <p className="dark:text-neutral-400 mt-3 lg:mt-6 text-sm lg:text-base">
-          Innovative developer with 7 years of professional experience in
+          Innovative developer with 9 years of professional experience in
           object-oriented programming, implementing design interfaces, testing,
           and debugging. Passionate about technology and learning new things.
         </p>
@@ -167,11 +167,42 @@ const Resume = () => (
               Skills
             </h2>
 
-            <div className="relative grid grid-cols-2 grid-flow-row py-3 gap-1.5 w-full text-gray-700 dark:text-gray-200 capitalize">
-              {SKILLS.map((entry) => (
-                <span key={kebabCase(entry)} className={"text-sm lg:text-base"}>
-                  {entry}
-                </span>
+            <div className="space-y-4 py-3">
+              {SKILL_GROUPS.map(({ title, items, subgroups }) => (
+                <div className="space-y-1.5" key={kebabCase(title)}>
+                  <h3 className="text-sm lg:text-base font-semibold text-neutral-700 dark:text-neutral-200">
+                    {title}
+                  </h3>
+
+                  <div className="space-y-3">
+                    <div className="relative grid grid-cols-2 grid-flow-row gap-1.5 w-full text-gray-700 dark:text-gray-200 text-sm lg:text-base">
+                      {items.map((item) => (
+                        <span key={kebabCase(title, item)}>{item}</span>
+                      ))}
+                    </div>
+
+                    {subgroups?.map(
+                      ({ title: subgroupTitle, items: subgroupItems }) => (
+                        <div
+                          className="space-y-1.5 border-t border-neutral-200 pt-2 dark:border-neutral-700"
+                          key={kebabCase(title, subgroupTitle)}
+                        >
+                          <h4 className="text-sm font-medium text-neutral-600 dark:text-neutral-300">
+                            {subgroupTitle}
+                          </h4>
+
+                          <div className="relative grid grid-cols-2 grid-flow-row gap-1.5 w-full text-gray-700 dark:text-gray-200 text-sm lg:text-base">
+                            {subgroupItems.map((item) => (
+                              <span key={kebabCase(subgroupTitle, item)}>
+                                {item}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )
+                    )}
+                  </div>
+                </div>
               ))}
             </div>
           </div>
