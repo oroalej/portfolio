@@ -4,7 +4,7 @@ import { SimplePagination } from "@/components";
 import { useParams } from "next/navigation";
 import { useGetQuoteList } from "@/features/quotes/api";
 import { Fragment, Suspense } from "react";
-import { useQueryState } from "next-usequerystate";
+import { useQueryState } from "nuqs";
 import { DEFAULT_PAGINATION_VALUES } from "@/utils/pagination";
 import {
   QuoteCard,

@@ -4,35 +4,33 @@ This runbook captures the verified local commands and operational notes for work
 
 ## Local Setup
 
-The current `README.md` still documents Yarn setup, but this workspace has no `yarn` command available and does have `package-lock.json`. Use npm unless the repository intentionally moves back to Yarn.
+This repository uses pnpm. `pnpm-lock.yaml` is the canonical lockfile; do not reintroduce `package-lock.json` or `yarn.lock`.
 
-On Windows PowerShell, prefer `npm.cmd` because `npm.ps1` may be blocked by execution policy.
+On Windows PowerShell, prefer `pnpm.cmd`.
 
 ## Commands
 
 | Task | Windows PowerShell | Other shells |
 | --- | --- | --- |
-| Install dependencies | `npm.cmd install` | `npm install` |
-| Start dev server | `npm.cmd run dev` | `npm run dev` |
-| Lint | `npm.cmd run lint` | `npm run lint` |
-| Build | `npm.cmd run build` | `npm run build` |
-| Run Jest CI | `npm.cmd run test:ci -- --runInBand` | `npm run test:ci -- --runInBand` |
+| Install dependencies | `pnpm.cmd install` | `pnpm install` |
+| Start dev server | `pnpm.cmd run dev` | `pnpm run dev` |
+| Lint | `pnpm.cmd run lint` | `pnpm run lint` |
+| Build | `pnpm.cmd run build` | `pnpm run build` |
 
 ## Verification Levels
 
 - Use lint for routine documentation and code-change validation.
-- Use build when changing routes, layouts, middleware, client/server boundaries, image config, Supabase data access, or anything that could affect runtime rendering.
-- Do not treat Jest as a passing gate until the stale Pages Router test is repaired.
+- Use build when changing routes, layouts, proxy, client/server boundaries, image config, Supabase data access, or anything that could affect runtime rendering.
 
 ## Known Test State
 
-`npm.cmd run lint` has passed in this workspace.
+`package.json` currently has no `test` or `test:ci` script after the Jest setup was removed.
 
-`npm.cmd run test:ci -- --runInBand` is currently blocked by `__tests__/index.test.tsx`, which imports `../src/pages/index`. The app now uses `src/app`, so that Pages Router import no longer resolves. The existing snapshot under `__tests__/__snapshots__` is also obsolete.
+Run `pnpm.cmd run lint` and `pnpm.cmd run build` after package, routing, proxy, or framework changes.
 
 ## Environment Notes
 
-- Supabase configuration is expected through local environment variables, but the exact required keys are not documented in this repo.
+- Supabase configuration requires `NEXT_PUBLIC_SUPABASE_URL` plus either `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` or the fallback `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
 - The admin area depends on Supabase Auth and redirects unauthenticated users to `/admin/login`.
 - Remote images are configured in `next.config.js` for Unsplash and the project Supabase host.
 

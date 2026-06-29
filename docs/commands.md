@@ -26,9 +26,8 @@ Agent and coding standards remain canonical in `../CLAUDE.md`. These notes descr
 ## Repository Defaults
 
 - Use `main` as the base branch; this workspace has `origin/main`.
-- Use npm commands. On Windows PowerShell, prefer `npm.cmd`.
-- Use `npm.cmd run lint` for routine validation.
-- Do not require `npm.cmd run test:ci` until the stale `../src/pages/index` Jest import is fixed.
+- Use pnpm commands. On Windows PowerShell, prefer `pnpm.cmd`.
+- Use `pnpm.cmd run lint` for routine validation.
 - Keep `CLAUDE.md` and `.claude/skills/portfolio-*` as the source of truth for coding standards.
 
 ## Maintenance

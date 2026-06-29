@@ -4,7 +4,7 @@ import useOpenable from "@/hooks/useOpenable";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import * as UIScrollArea from "@radix-ui/react-scroll-area";
 import { Scrollbar } from "@/components";
-import { FC, forwardRef, ReactNode } from "react";
+import { forwardRef, ReactNode } from "react";
 import classNames from "classnames";
 
 interface ChildrenProps {
@@ -162,7 +162,7 @@ export const DropdownLabel = (props: DropdownMenu.DropdownMenuLabelProps) => {
   );
 };
 
-export const DropdownDescription: FC = (props) => {
+export const DropdownDescription = (props: ChildrenProps) => {
   return (
     <span className="inline-block text-sm px-3.5 text-gray-600 mb-2">
       {props.children}

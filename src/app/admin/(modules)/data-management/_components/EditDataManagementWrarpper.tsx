@@ -13,7 +13,7 @@ import { Fragment, useCallback } from "react";
 import { BreadcrumbDataSetter } from "@/app/admin/(modules)/_components/Breadcrumbs";
 import { useGetTaxonomyById } from "@/features/term_taxonomy/api/getTaxonomyById";
 import { useUpdateTaxonomyMutation } from "@/features/term_taxonomy/api/updateTaxonomy";
-import { useQueryState } from "next-usequerystate";
+import { useQueryState } from "nuqs";
 import { TAXONOMY_WITH_PARENT_QUERY } from "@/features/term_taxonomy/data";
 import { TaxonomyWithParentAPIDataStructure } from "@/features/term_taxonomy/types";
 

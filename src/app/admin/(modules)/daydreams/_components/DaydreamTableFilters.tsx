@@ -17,7 +17,7 @@ import {
 import { InputField } from "@/components/Form/InputField";
 import { RiSearch2Line } from "react-icons/ri";
 import { BsFillMoonStarsFill } from "react-icons/bs";
-import { useQueryState } from "next-usequerystate";
+import { useQueryState } from "nuqs";
 import { VscSettings } from "react-icons/vsc";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

@@ -38,11 +38,11 @@ This route reference is based on files under `src/app`.
 
 | Layer | Source | Purpose |
 | --- | --- | --- |
-| Root layout | `src/app/layout.tsx` | Global CSS and React Query provider. |
+| Root layout | `src/app/layout.tsx` | Global CSS, Nuqs adapter, React Query provider, and root Suspense fallback. |
 | Public layout | `src/app/(web)/layout.tsx` | Public header, footer, contact section, tooltip, toaster, and frame. |
 | Admin auth layout | `src/app/admin/layout.tsx` | Auth provider, admin toaster, tooltip, and React Query Devtools. |
 | Admin module layout | `src/app/admin/(modules)/layout.tsx` | Sidebar, header, breadcrumbs, and admin content shell. |
-| Middleware | `src/middleware.ts` | Redirects unauthenticated `/admin/*` requests to login. |
+| Proxy | `src/proxy.ts` | Redirects unauthenticated `/admin/*` requests to login. |
 
 ## Related Docs
 

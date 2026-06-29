@@ -4,7 +4,9 @@ The application uses Supabase for persistence and TanStack React Query for clien
 
 ## Supabase Client
 
-`src/utils/supabase.ts` exports a typed client from `createClientComponentClient<Database>()`.
+`src/utils/supabase.ts` exports a typed browser client from `createBrowserClient<Database>()` in `@supabase/ssr`.
+
+The browser client and `src/proxy.ts` both require `NEXT_PUBLIC_SUPABASE_URL` plus either `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` or the fallback `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
 
 Most feature API modules import this `supabase` instance directly.
 

@@ -1,15 +1,15 @@
 "use client";
 
-import {FC, Fragment, ReactNode} from "react";
+import { Fragment, ReactNode } from "react";
 
 export interface ObjectInterface {
   children: ReactNode;
-  name: string,
-  isLast?: boolean
+  name: string;
+  isLast?: boolean;
 }
 
-export const Object: FC<ObjectInterface> = (props: ObjectInterface) => {
-  const {children, name, isLast = false} = props;
+const CodeObject = (props: ObjectInterface) => {
+  const { children, name, isLast = false } = props;
 
   return (
     <Fragment>
@@ -18,5 +18,7 @@ export const Object: FC<ObjectInterface> = (props: ObjectInterface) => {
       {children}
       {!isLast && <span className="text-white">,</span>}
     </Fragment>
-  )
-}
+  );
+};
+
+export { CodeObject as Object };

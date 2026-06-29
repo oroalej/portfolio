@@ -48,9 +48,7 @@ export const getDaydreamList = ({
     per_page,
   });
 
-  query = query.throwOnError();
-
-  return query;
+  return query.throwOnError();
 };
 
 export const useGetDaydreamList = <Type extends any = DaydreamAPIDataStructure>(

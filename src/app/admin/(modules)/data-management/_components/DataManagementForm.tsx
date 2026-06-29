@@ -14,7 +14,7 @@ import {
 } from "@/components";
 import { InputField } from "@/components/Form/InputField";
 import { useGetTermList } from "@/features/terms/api/getTermList";
-import { useQueryState } from "next-usequerystate";
+import { useQueryState } from "nuqs";
 import { FormEvent, Suspense, useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -77,8 +77,10 @@ export const DataManagementForm = ({
   const TaxonomySchema = useMemo(() => {
     return object({
       name: string().min(1, "The name field is required"),
-      description: string().nullable(),
-      parent_id: any().refine(
+      description: string().optional(),
+      parent_id: any()
+        .optional()
+        .refine(
         (input) => !(getParentType && !input?.length),
         "The Parent Type field is required."
       ),

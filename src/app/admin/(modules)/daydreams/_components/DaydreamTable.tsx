@@ -13,7 +13,7 @@ import {
 } from "@/app/admin/(modules)/daydreams/_components/DaydreamTableRow";
 import { useQueryClient } from "@tanstack/react-query";
 import { removeEmptyValues } from "@/utils";
-import { useQueryState } from "next-usequerystate";
+import { useQueryState } from "nuqs";
 import { Fragment, Suspense, useCallback, useState } from "react";
 import { DEFAULT_PAGINATION_VALUES } from "@/utils/pagination";
 import { DaydreamAPIDataStructure } from "@/features/daydreams/types";
@@ -68,7 +68,7 @@ const DaydreamTable = () => {
     });
 
     if (data?.data.length === 1) {
-      await setPage(data?.pagination?.per_page - 1 ?? 1);
+      await setPage(Math.max((data.pagination?.current_page ?? 1) - 1, 1));
     } else {
       await queryClient.invalidateQueries({
         queryKey: ["daydreams"],

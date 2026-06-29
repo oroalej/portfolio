@@ -4,18 +4,17 @@ This file is the canonical agent guidance for this repository. Keep Codex and ot
 
 ## Project Shape
 
-- This is a personal portfolio and admin CMS built with Next.js 13 App Router, React 18, TypeScript strict mode, Tailwind CSS, Supabase, TanStack React Query, React Hook Form, Zod, Radix UI primitives, and Jest.
+- This is a personal portfolio and admin CMS built with Next.js App Router, React, TypeScript strict mode, Tailwind CSS, Supabase, TanStack React Query, React Hook Form, Zod, and Radix UI primitives.
 - Use `src/app` for App Router routes. Route groups separate the public site under `(web)` from the authenticated admin area under `admin`.
 - Use `src/components` for shared UI primitives, `src/features` for domain data access/types/transformers, `src/context` for providers, `src/hooks` for shared hooks, `src/utils` for generic helpers, `src/data` for static portfolio content, and `src/types` for shared TypeScript types.
 - Import application code through the `@/*` alias unless an existing file intentionally uses another local path.
 
 ## Commands
 
-- On Windows PowerShell, prefer `npm.cmd` because `npm.ps1` may be blocked by execution policy.
-- Run `npm.cmd run lint` on Windows PowerShell, or `npm run lint` in shells where `npm` works normally.
-- Run `npm run build` for production build validation when the change could affect routing, rendering, data fetching, or Next.js config.
-- `npm run test:ci` is currently not a required success gate. The existing Jest test imports the removed Pages Router path `../src/pages/index`, and the old snapshot is obsolete.
-- The README still documents Yarn, but `yarn` is not installed in the current local environment and `package-lock.json` is present. Use npm commands unless the repository is intentionally moved back to Yarn.
+- Use pnpm for package management. On Windows PowerShell, prefer `pnpm.cmd`.
+- Run `pnpm.cmd run lint` on Windows PowerShell, or `pnpm run lint` in shells where `pnpm` works normally.
+- Run `pnpm run build` for production build validation when the change could affect routing, rendering, data fetching, or Next.js config.
+- `pnpm-lock.yaml` is the canonical lockfile. Do not reintroduce `package-lock.json` or `yarn.lock`.
 
 ## Claude Slash Commands
 
@@ -59,15 +58,15 @@ This file is the canonical agent guidance for this repository. Keep Codex and ot
 
 - Use App Router `loading.tsx` files and local loading components for route-level pending states.
 - Use Suspense boundaries around client components that fetch or depend on async UI state when the existing route pattern does so.
-- Keep admin authentication behavior aligned with `src/middleware.ts` and `SupabaseContext`: unauthenticated `/admin/*` routes redirect to `/admin/login?from=...`.
+- Keep admin authentication behavior aligned with `src/proxy.ts` and `SupabaseContext`: unauthenticated `/admin/*` routes redirect to `/admin/login?from=...`.
 - Use `next/navigation` hooks in client components only.
 
 ## Review Expectations
 
 - Before editing, inspect the relevant route, feature API, types, and shared component patterns.
 - Keep changes narrowly scoped. Do not refactor unrelated files or clean up existing dirty worktree changes unless asked.
-- If you change behavior, update or add focused tests when the current test setup can cover it. If the existing Jest setup blocks useful testing, state the blocker clearly.
-- Always run lint after code changes when practical. For this Windows workspace, the verified command is `npm.cmd run lint`.
+- If you change behavior, validate it with focused lint/build checks or available manual verification until a test runner is reintroduced.
+- Always run lint after code changes when practical. For this Windows workspace, the verified command is `pnpm.cmd run lint`.
 
 ## Project Skills
 

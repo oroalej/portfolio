@@ -19,7 +19,7 @@ import { BaseSkeletonLoader, Button } from "@/components";
 import { FileAPIDataStructure } from "@/features/files/types";
 import { useInfiniteFileList } from "@/features/files/api/getInfiniteFileList";
 import { InputField } from "@/components/Form/InputField";
-import { useQueryState } from "next-usequerystate";
+import { useQueryState } from "nuqs";
 import { removeEmptyValues } from "@/utils";
 
 interface ChildrenProps {

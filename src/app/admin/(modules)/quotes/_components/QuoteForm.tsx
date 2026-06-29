@@ -59,7 +59,7 @@ export const QuoteSchema = object({
     (data) => data !== null,
     "The source field is required"
   ),
-  media_detail_id: any().nullable().optional(),
+  media_detail_id: any().nullable(),
 }).refine(
   (data) => {
     if (data.category_id !== INDIVIDUAL_ID) {

@@ -7,7 +7,7 @@ import { useOpenable } from "@/hooks";
 import { useParams, useSearchParams } from "next/navigation";
 import { removeEmptyValues } from "@/utils";
 import { useDeleteQuoteMutation, useGetQuoteList } from "@/features/quotes/api";
-import { useQueryState } from "next-usequerystate";
+import { useQueryState } from "nuqs";
 import { GetAllQuotesAPIDataStructure } from "@/features/quotes/types";
 import QuoteTableLoading from "@/app/admin/(modules)/quotes/_components/Loading/QuoteTableLoading";
 import QuoteTableRow from "@/app/admin/(modules)/quotes/_components/QuoteTableRow";

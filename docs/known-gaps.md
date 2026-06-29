@@ -2,21 +2,10 @@
 
 These are known documentation, tooling, or source-truth gaps observed during the docs pass.
 
-## Testing
-
-- `npm run test:ci` is blocked by `__tests__/index.test.tsx` importing the old Pages Router path `../src/pages/index`.
-- The obsolete snapshot under `__tests__/__snapshots__` should be removed or regenerated after the test is rewritten for App Router.
-
-## Package Manager Documentation
-
-- `README.md` still says to run `yarn && yarn run dev`.
-- This workspace does not have `yarn` available, while `package-lock.json` exists and `npm.cmd run lint` works.
-
 ## Supabase Source Of Truth
 
 - `src/types/supabase.ts` documents the database tables and `store_project` RPC, but not the `top_sources_per_category` RPC used by the dashboard.
 - The repository does not include Supabase migration files or a documented schema-generation command.
-- Required `.env.local` keys are not documented in a committed example file.
 
 ## Dashboard Stability
 

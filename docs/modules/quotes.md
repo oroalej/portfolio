@@ -63,7 +63,7 @@ Quotes store quote content with category, source, and optional media-detail taxo
 - Check source/media-detail dependency when category changes.
 - Check the `INDIVIDUAL_ID` branch for quotes that do not require media detail.
 - Check admin filtering preserves pagination behavior.
-- Run `npm.cmd run lint` after quote changes.
+- Run `pnpm.cmd run lint` after quote changes.
 
 ## Open Questions
 

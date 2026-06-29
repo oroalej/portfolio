@@ -66,7 +66,7 @@ Projects document portfolio work and power both the public project gallery and t
 - Check public filtering by project type.
 - Check admin create, edit, skill diffing, screenshot diffing, and reorder behavior.
 - Check links are rendered with the expected URL prefixes in public preview dialogs.
-- Run `npm.cmd run lint` after project changes.
+- Run `pnpm.cmd run lint` after project changes.
 
 ## Open Questions
 

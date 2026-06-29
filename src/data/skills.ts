@@ -1,10 +1,10 @@
 import {
-  SiCss3,
+  SiCss,
   SiHtml5,
   SiJavascript,
   SiLaravel,
   SiMysql,
-  SiNuxtdotjs,
+  SiNuxt,
   SiPhp,
   SiReact,
   SiTailwindcss,
@@ -15,12 +15,12 @@ import { SkillInterface } from "@/app/(web)/(index)/_components/Skill";
 
 export const FRONTEND_SKILL: Array<SkillInterface> = [
   { icon: SiHtml5, text: "HTML5" },
-  { icon: SiCss3, text: ["CSS3", "SASS"] },
+  { icon: SiCss, text: ["CSS3", "SASS"] },
   { icon: SiTailwindcss, text: "TailwindCSS" },
   { icon: SiJavascript, text: "Javascript" },
   { icon: SiTypescript, text: "Typescript" },
   { icon: SiVuedotjs, text: ["VueJS", "Router"] },
-  { icon: SiNuxtdotjs, text: "Nuxt.js" },
+  { icon: SiNuxt, text: "Nuxt.js" },
   { text: ["Vuex"] },
   { icon: SiReact, text: "ReactJs" },
 ];

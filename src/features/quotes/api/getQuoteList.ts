@@ -56,9 +56,7 @@ const getQuoteList = ({
     per_page,
   });
 
-  query = query.throwOnError();
-
-  return query;
+  return query.throwOnError();
 };
 
 export const useGetQuoteList = (params: getQuotesParams) =>

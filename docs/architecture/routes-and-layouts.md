@@ -4,7 +4,7 @@ The app uses Next.js App Router under `src/app`. Route groups separate public pa
 
 ## Root Layout
 
-`src/app/layout.tsx` imports global CSS, sets the root HTML language, and wraps the application in `ReactQueryClientProvider`.
+`src/app/layout.tsx` imports global CSS, sets the root HTML language, and wraps the application in `NuqsAdapter`, `ReactQueryClientProvider`, and a root Suspense boundary with a `null` fallback.
 
 The root body uses a white background and minimum viewport height. All query state shares the single client created in `src/context/ReactQueryContext.tsx`.
 
@@ -45,11 +45,11 @@ Admin pages live under `src/app/admin`.
 - Header.
 - Main work area with left padding for the sidebar.
 
-## Auth Middleware
+## Auth Proxy
 
-`src/middleware.ts` guards `/admin/*` except `/admin/login`.
+`src/proxy.ts` guards `/admin/*` except `/admin/login`.
 
-If no Supabase session exists, the middleware redirects to `/admin/login` and preserves the requested path in the `from` query parameter.
+If no Supabase user exists, the proxy redirects to `/admin/login` and preserves the requested path in the `from` query parameter.
 
 After successful login, `AuthProvider` redirects to `from` or `/admin/dashboard`.
 

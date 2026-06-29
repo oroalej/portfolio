@@ -21,7 +21,7 @@ import {
   parseAsString,
   useQueryState,
   useQueryStates,
-} from "next-usequerystate";
+} from "nuqs";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { object, string } from "zod";
@@ -38,7 +38,7 @@ const QUOTE_TABLE_FILTER_DEFAULT_VALUES = {
 };
 
 interface QuoteTableFilterParams {
-  category_id?: string;
+  category_id: string;
   source_id?: string;
   media_detail_id?: string;
 }

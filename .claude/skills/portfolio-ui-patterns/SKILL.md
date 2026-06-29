@@ -49,6 +49,6 @@ Start by reading `CLAUDE.md`. Use this skill for UI, styling, and component comp
 
 ## Validation
 
-- Run `npm.cmd run lint` after UI code changes.
+- Run `pnpm.cmd run lint` after UI code changes.
 - Use browser/manual verification for layout-heavy changes when possible.
-- Run `npm run build` when changing layouts, route files, images config, middleware, or public/admin shell behavior.
+- Run `pnpm run build` when changing layouts, route files, images config, proxy, or public/admin shell behavior.

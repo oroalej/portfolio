@@ -2,7 +2,7 @@
 
 import { useGetDaydreamList } from "@/features/daydreams/api";
 import { DEFAULT_PAGINATION_VALUES } from "@/utils/pagination";
-import { useQueryState } from "next-usequerystate";
+import { useQueryState } from "nuqs";
 import { Fragment, Suspense, useEffect } from "react";
 import { SimplePagination } from "@/components";
 import {

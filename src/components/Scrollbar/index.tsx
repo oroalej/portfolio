@@ -1,13 +1,13 @@
 "use client";
 
 import * as UIScrollArea from "@radix-ui/react-scroll-area";
-import { ScrollAreaScrollbarVisibleProps } from "@radix-ui/react-scroll-area";
+import type { ScrollAreaScrollbarProps } from "@radix-ui/react-scroll-area";
 import classNames from "classnames";
 import { BaseComponent } from "@/types";
 
 export const Scrollbar = ({
   orientation = "vertical",
-}: Pick<ScrollAreaScrollbarVisibleProps, "orientation">) => {
+}: Partial<Pick<ScrollAreaScrollbarProps, "orientation">>) => {
   return (
     <UIScrollArea.Scrollbar
       className={classNames(

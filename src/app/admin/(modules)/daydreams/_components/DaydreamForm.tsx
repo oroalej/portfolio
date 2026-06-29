@@ -53,7 +53,11 @@ export const DreamSchema = object({
   ),
   year: number(),
   description: string().trim().min(1, "The description field is required."),
-  file_id: string().trim().min(1, "Image is required."),
+  file_id: string()
+    .trim()
+    .min(1, "Image is required.")
+    .nullable()
+    .refine((value) => !!value, "Image is required."),
 });
 
 interface DaydreamFormComponentProps {

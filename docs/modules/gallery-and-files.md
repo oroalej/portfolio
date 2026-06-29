@@ -60,7 +60,7 @@ The gallery module manages image files in Supabase storage and mirrors file meta
 - Check rename moves the storage path and updates metadata.
 - Check delete removes both storage object and metadata row.
 - Check bookmark tab filtering and category filter behavior.
-- Run `npm.cmd run lint` after gallery/file changes.
+- Run `pnpm.cmd run lint` after gallery/file changes.
 
 ## Open Questions
 

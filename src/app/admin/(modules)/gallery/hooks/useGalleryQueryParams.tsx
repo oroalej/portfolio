@@ -1,6 +1,6 @@
 "use client";
 
-import { useQueryState } from "next-usequerystate";
+import { useQueryState } from "nuqs";
 import { removeEmptyValues } from "@/utils";
 
 export const UseGalleryQueryParams = () => {

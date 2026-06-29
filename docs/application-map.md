@@ -4,11 +4,12 @@ This is a personal portfolio and admin CMS built on Next.js App Router. The publ
 
 ## Runtime Stack
 
-- Next.js 13 App Router with React 18.
+- Next.js App Router with React.
 - TypeScript strict mode with generated Supabase table types.
 - Tailwind CSS for styling.
 - Supabase Auth, database tables, storage, and RPC functions.
 - TanStack React Query for query/mutation state.
+- Nuqs for URL query state.
 - React Hook Form and Zod for admin forms.
 - Radix primitives for dialogs, dropdowns, popovers, and related UI surfaces.
 
@@ -17,7 +18,7 @@ This is a personal portfolio and admin CMS built on Next.js App Router. The publ
 | Area | Primary routes | Main source roots | Main data |
 | --- | --- | --- | --- |
 | Public site | `/`, `/resume`, `/projects`, `/quotes`, `/daydreams` | `src/app/(web)`, `src/data` | Static data plus projects, quotes, daydreams, taxonomy, files |
-| Admin shell | `/admin/login`, `/admin/*` | `src/app/admin`, `src/context/SupabaseContext.tsx`, `src/middleware.ts` | Supabase auth session |
+| Admin shell | `/admin/login`, `/admin/*` | `src/app/admin`, `src/context/SupabaseContext.tsx`, `src/proxy.ts` | Supabase auth session |
 | Projects | `/projects/*`, `/admin/projects/*` | `src/features/projects`, project route components | `projects`, `project_screenshots`, `project_skills`, `files`, `term_taxonomy` |
 | Quotes | `/quotes/*`, `/admin/quotes/*` | `src/features/quotes`, quote route components | `quotes`, `term_taxonomy`, `terms` |
 | Daydreams | `/daydreams`, `/admin/daydreams/*` | `src/features/daydreams`, daydream route components | `daydreams`, `files` |
@@ -27,7 +28,7 @@ This is a personal portfolio and admin CMS built on Next.js App Router. The publ
 
 ## Shared Infrastructure
 
-- `src/app/layout.tsx` loads global CSS and wraps the app in `ReactQueryClientProvider`.
+- `src/app/layout.tsx` loads global CSS and wraps the app in `NuqsAdapter`, `ReactQueryClientProvider`, and a root Suspense boundary.
 - `src/context/ReactQueryContext.tsx` creates one `QueryClient` with query retry disabled.
 - `src/utils/supabase.ts` exports the typed Supabase client plus filter and pagination query builders.
 - `src/utils/pagination.ts` centralizes pagination metadata and paginated cache updates.

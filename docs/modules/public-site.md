@@ -58,7 +58,7 @@ The public site has no write forms. It uses read-only data displays, navigation,
 - Validate navigation redirects for `/projects` and `/quotes` when taxonomy data exists.
 - Validate empty states for projects, quotes, and daydreams.
 - Validate image preview behavior where `GalleryProvider` is used.
-- Run `npm.cmd run lint` after UI changes.
+- Run `pnpm.cmd run lint` after UI changes.
 
 ## Open Questions
 

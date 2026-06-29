@@ -29,11 +29,11 @@ export const RenameFormSchema = object({
 });
 
 export interface RenameFormStructure {
-  name: string | undefined;
+  name: string;
 }
 
 export const RENAME_DEFAULT_FORM_VALUES: RenameFormStructure = {
-  name: undefined,
+  name: "",
 };
 
 export const RenameDialog = ({ isOpen, onClose, item }: RenameDialogProps) => {

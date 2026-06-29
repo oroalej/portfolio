@@ -4,7 +4,6 @@ import { queryFilterBuilder, supabase } from "@/utils/supabase";
 import { TaxonomyAPIDataStructure } from "@/features/term_taxonomy/types";
 import { Filterable, Searchable, Sortable, Tables } from "@/types";
 import { TAXONOMY_QUERY } from "@/features/term_taxonomy/data";
-import type { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 
 export type TaxonomySortableColumns = Pick<Tables<"term_taxonomy">, "name">;
 export type TaxonomyFilterableColumns = Pick<
@@ -30,14 +29,7 @@ export const getTaxonomy = ({
   filter = {},
   select,
 }: GetTaxonomyByTermId) => {
-  let query = supabase
-    .from("term_taxonomy")
-    .select(select) as PostgrestFilterBuilder<
-    any,
-    Record<string, unknown>,
-    Record<string, unknown>[],
-    unknown
-  >;
+  let query = supabase.from("term_taxonomy").select(select);
 
   query = queryFilterBuilder({
     query,

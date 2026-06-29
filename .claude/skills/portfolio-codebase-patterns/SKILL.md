@@ -37,6 +37,5 @@ Start by reading `CLAUDE.md`. Use this skill for architecture and placement deci
 
 ## Validation
 
-- Run `npm.cmd run lint` on Windows PowerShell after code changes.
-- Use `npm run build` when changing routing, layouts, config, middleware, server/client boundaries, or data fetching behavior.
-- Treat `npm run test:ci` as a known-blocked command until the stale Pages Router test is fixed.
+- Run `pnpm.cmd run lint` on Windows PowerShell after code changes.
+- Use `pnpm run build` when changing routing, layouts, config, proxy, server/client boundaries, or data fetching behavior.

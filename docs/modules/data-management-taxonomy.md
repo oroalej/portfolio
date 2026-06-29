@@ -67,7 +67,7 @@ Data Management is the admin interface for managing taxonomy data. Taxonomy valu
 - Check the `type` query param is preserved when creating and editing.
 - Check source/media-detail parent requirements.
 - Check taxonomy selector consumers in projects, quotes, daydreams, and gallery after taxonomy changes.
-- Run `npm.cmd run lint` after taxonomy changes.
+- Run `pnpm.cmd run lint` after taxonomy changes.
 
 ## Open Questions
 

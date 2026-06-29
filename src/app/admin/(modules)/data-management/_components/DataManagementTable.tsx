@@ -1,7 +1,7 @@
 "use client";
 
 import { useGetTaxonomyByTermId } from "@/features/term_taxonomy/api/getTaxonomyByTermId";
-import { useQueryState } from "next-usequerystate";
+import { useQueryState } from "nuqs";
 import {
   DataManagementTableRow,
   DataManagementTableRowLoading,

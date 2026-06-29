@@ -3,13 +3,22 @@ import { supabase } from "@/utils/supabase";
 import { useMutation } from "@tanstack/react-query";
 import { ProjectFormParams } from "@/app/admin/(modules)/projects/_components/ProjectForm";
 
+export interface StoreProjectParams
+  extends Omit<ProjectFormParams, "screenshots"> {
+  screenshots: {
+    file_id: string;
+    title: string;
+    screenshot_order: number;
+  }[];
+}
+
 export const storeProject = async ({
   design_link,
   repository_link,
   website_link,
   screenshots,
   ...remaining
-}: ProjectFormParams) => {
+}: StoreProjectParams) => {
   const { data: projectId } = await supabase
     .rpc("store_project", {
       design_link: design_link ?? undefined,
@@ -25,7 +34,7 @@ export const storeProject = async ({
 
 export const useStoreProjectMutation = () => {
   return useMutation({
-    mutationFn: async (formData: ProjectFormParams): Promise<string> => {
+    mutationFn: async (formData: StoreProjectParams): Promise<string> => {
       const data = await storeProject(formData);
 
       if (data === null) {

@@ -30,7 +30,7 @@ import SkillSearchableSelect from "@/app/admin/(modules)/projects/_components/Se
 export interface ProjectFormParams
   extends Omit<Tables<"projects">, "created_at" | "id" | "project_order"> {
   skills: string[];
-  screenshots: Array<ScreenshotForm & { screenshot_order: number }>;
+  screenshots: ScreenshotForm[];
 }
 
 export const DEFAULT_PROJECT_FORM_VALUES: ProjectFormParams = {
@@ -53,10 +53,10 @@ export interface ProjectFormProps {
 export const ProjectSchema = object({
   title: string().trim().min(1, "The title field is required."),
   description: string().trim().min(1, "The description field is required."),
-  website_link: string().trim().optional(),
-  design_link: string().trim().optional(),
-  repository_link: string().trim().optional(),
-  screenshots: array(ScreenshotSchema).optional(),
+  website_link: string().trim().nullable(),
+  design_link: string().trim().nullable(),
+  repository_link: string().trim().nullable(),
+  screenshots: array(ScreenshotSchema),
   skills: array(string().trim()).min(1, "The Skill(s) field is required."),
   project_type_id: string().trim().min(1, "The type field is required."),
 });

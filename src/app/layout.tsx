@@ -1,6 +1,7 @@
 import "@/styles/global.css";
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
 import ReactQueryClientProvider from "@/context/ReactQueryContext";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 interface BaseComponent {
   children?: ReactNode;
@@ -11,7 +12,11 @@ const RootLayout = ({ children }: Pick<BaseComponent, "children">) => {
   return (
     <html lang="en" className="!scroll-smooth">
       <body className="min-h-screen bg-white relative">
-        <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
+        <NuqsAdapter>
+          <ReactQueryClientProvider>
+            <Suspense fallback={null}>{children}</Suspense>
+          </ReactQueryClientProvider>
+        </NuqsAdapter>
       </body>
     </html>
   );

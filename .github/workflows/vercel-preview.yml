@@ -3,7 +3,7 @@ name: Deploy Preview to Vercel
 on:
   pull_request:
     branches:
-      - main  # This triggers the workflow on PRs targeting the main branch
+      - main
 
 jobs:
   deploy-preview:
@@ -11,29 +11,37 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Install Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: '20.11.0'  # Use the Node.js version required for your project
+          node-version: "22.13.0"
 
-      - name: Install Vercel CLI
-        run: npm install --global vercel@latest
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.19.0
+
+      - name: Setup pnpm cache
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.13.0"
+          cache: pnpm
 
       - name: Install Dependencies
-        run: npm install
+        run: pnpm install --frozen-lockfile
 
       - name: Build Project
         env:
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-#        run: npm run build  # Change this if your build command is different
-        run: npm run build
+        run: pnpm run build
 
       - name: Deploy to Vercel Preview
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-        run: npx vercel --token $VERCEL_TOKEN --yes --scope $VERCEL_ORG_ID --env Preview
+        run: pnpm dlx vercel --token $VERCEL_TOKEN --yes --scope $VERCEL_ORG_ID --target=preview

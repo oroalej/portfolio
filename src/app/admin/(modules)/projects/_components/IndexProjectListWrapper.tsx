@@ -6,7 +6,7 @@ import {
   GetProjectListParams,
   useGetProjectList,
 } from "@/features/projects/api/getProjectList";
-import { useQueryState } from "next-usequerystate";
+import { useQueryState } from "nuqs";
 import {
   closestCorners,
   DndContext,
@@ -20,8 +20,7 @@ import {
 } from "@dnd-kit/core";
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { find, pick } from "lodash";
-import { Fragment, Suspense, useEffect, useState } from "react";
-import { useId } from "@radix-ui/react-id";
+import { Fragment, Suspense, useEffect, useId, useState } from "react";
 import {
   restrictToVerticalAxis,
   restrictToWindowEdges,

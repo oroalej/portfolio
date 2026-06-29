@@ -6,5 +6,6 @@
 ```bash
 git clone https://github.com/oroalej/portfolio.git portfolio
 cd portfolio
-yarn && yarn run dev
+pnpm install
+pnpm run dev
 ```

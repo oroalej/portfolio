@@ -16,7 +16,7 @@ The admin area provides an authenticated CMS shell for managing projects, quotes
 
 ## Source Map
 
-- Middleware guard: `src/middleware.ts`.
+- Proxy guard: `src/proxy.ts`.
 - Admin auth wrapper: `src/app/admin/layout.tsx`.
 - Admin shell layout: `src/app/admin/(modules)/layout.tsx`.
 - Auth context: `src/context/SupabaseContext.tsx`.
@@ -33,8 +33,8 @@ The admin area provides an authenticated CMS shell for managing projects, quotes
 
 ## Workflows
 
-- `src/middleware.ts` allows `/admin/login` and guards all other `/admin/*` paths.
-- If no session exists, middleware redirects to `/admin/login?from=<requested-path>`.
+- `src/proxy.ts` allows `/admin/login` and guards all other `/admin/*` paths.
+- If no Supabase user exists, the proxy redirects to `/admin/login?from=<requested-path>`.
 - `AuthProvider` checks the current Supabase session on mount.
 - Login calls `supabase.auth.signInWithPassword`.
 - Successful login redirects to `from` or `/admin/dashboard`.
@@ -59,9 +59,8 @@ The admin area provides an authenticated CMS shell for managing projects, quotes
 - Check unauthenticated `/admin/projects` redirects to `/admin/login?from=/admin/projects`.
 - Check successful login uses the `from` parameter when present.
 - Check sidebar active states for admin module routes.
-- Run `npm.cmd run lint` after shell or auth changes.
+- Run `pnpm.cmd run lint` after shell or auth changes.
 
 ## Open Questions
 
 - There is no role-based authorization layer documented in source; any valid Supabase session appears sufficient for admin access.
-- Required Supabase environment variables are not documented in a committed `.env.example`.

@@ -1,3 +1,5 @@
+@reference "../../../../../styles/global.css";
+
 .breadcrumb-item {
   @apply relative font-medium text-neutral-600 hover:text-neutral-700 transition-colors cursor-pointer text-sm capitalize;
 }

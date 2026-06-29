@@ -39,7 +39,7 @@ The dashboard has no forms.
 ## Verification Notes
 
 - Runtime verification requires a Supabase project with the `top_sources_per_category` RPC.
-- Run `npm.cmd run lint` after dashboard changes.
+- Run `pnpm.cmd run lint` after dashboard changes.
 
 ## Open Questions
 

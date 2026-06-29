@@ -63,7 +63,7 @@ Daydreams are photography-style entries with an image, year, description, and ca
 - Check gallery image selection and clear behavior.
 - Check year filter and search in admin list.
 - Check public preview and pagination behavior.
-- Run `npm.cmd run lint` after daydream changes.
+- Run `pnpm.cmd run lint` after daydream changes.
 
 ## Open Questions
 

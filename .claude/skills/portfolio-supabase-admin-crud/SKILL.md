@@ -45,6 +45,6 @@ Start by reading `CLAUDE.md`. Use this skill for admin CMS features backed by Su
 
 ## Validation
 
-- Run `npm.cmd run lint` after changes.
-- Run `npm run build` when route-level behavior, middleware, data dependencies, or client/server boundaries changed.
-- Do not treat the existing Jest suite as a passing gate until the stale `src/pages/index` import is fixed.
+- Run `pnpm.cmd run lint` after changes.
+- Run `pnpm run build` when route-level behavior, proxy, data dependencies, or client/server boundaries changed.
+- Use focused manual verification when lint/build do not cover the changed behavior.
