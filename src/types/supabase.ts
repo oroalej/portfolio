@@ -11,30 +11,30 @@ export type Database = {
     Tables: {
       daydreams: {
         Row: {
-          aperture: number;
+          aperture: number | null;
           created_at: string;
           description: string;
           id: string;
-          iso: number;
-          shutter_speed: number;
+          iso: number | null;
+          shutter_speed: number | null;
           year: number;
         };
         Insert: {
-          aperture: number;
+          aperture?: number | null;
           created_at?: string;
           description: string;
           id?: string;
-          iso: number;
-          shutter_speed: number;
+          iso?: number | null;
+          shutter_speed?: number | null;
           year: number;
         };
         Update: {
-          aperture?: number;
+          aperture?: number | null;
           created_at?: string;
           description?: string;
           id?: string;
-          iso?: number;
-          shutter_speed?: number;
+          iso?: number | null;
+          shutter_speed?: number | null;
           year?: number;
         };
         Relationships: [];
@@ -366,12 +366,12 @@ export type Database = {
     Functions: {
       save_daydream: {
         Args: {
-          p_aperture: number;
+          p_aperture: number | null;
           p_description: string;
           p_id: string | null;
           p_image_file_ids: string[];
-          p_iso: number;
-          p_shutter_speed: number;
+          p_iso: number | null;
+          p_shutter_speed: number | null;
           p_year: number;
         };
         Returns: Json;

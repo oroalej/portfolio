@@ -6,12 +6,25 @@ import {
   DreamFormImage,
 } from "@/features/daydreams/types";
 import {
-  FaChevronDown,
-  FaChevronUp,
-  FaRegImages,
-  FaTrash,
-} from "react-icons/fa6";
-import { Suspense, useMemo, useState } from "react";
+  closestCorners,
+  DndContext,
+  DragEndEvent,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { FaRegImages, FaTrash } from "react-icons/fa6";
+import { MdOutlineDragIndicator } from "react-icons/md";
+import { Suspense, useId, useMemo, useState } from "react";
 import GalleryDialog from "@/app/admin/(modules)/daydreams/_components/GalleryDialog";
 import SupabaseImage from "@/components/Image/SupabaseImage";
 import classNames from "classnames";
@@ -38,13 +51,110 @@ const applyImageOrder = (items: DreamFormImage[]): DreamFormImage[] =>
     image_order: index + 1,
   }));
 
+interface SortableDaydreamImageItemProps {
+  item: DreamFormImage;
+  index: number;
+  onRemove: (index: number) => void | Promise<void>;
+}
+
+const SortableDaydreamImageItem = ({
+  item,
+  index,
+  onRemove,
+}: SortableDaydreamImageItemProps) => {
+  const file = item.file;
+  const {
+    attributes,
+    isDragging,
+    isOver,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+  } = useSortable({ id: item.file_id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={classNames(
+        "flex items-center gap-3 rounded-md border border-neutral-200 p-2 transition-colors",
+        isDragging ? "border-dashed bg-neutral-100" : "bg-white",
+        {
+          "!bg-blue-100": isOver,
+        }
+      )}
+    >
+      <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-md bg-neutral-100">
+        {file?.storage_file_path ? (
+          <Suspense fallback={<BaseSkeletonLoader className="h-full w-full" />}>
+            <SupabaseImage
+              src={file.storage_file_path}
+              alt={file.name ?? "Daydream image"}
+              className="h-full w-full object-cover"
+              quality={75}
+              width={240}
+              height={240}
+            />
+          </Suspense>
+        ) : (
+          <FaRegImages className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-neutral-400" />
+        )}
+      </div>
+
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-sm font-medium text-neutral-700">
+          {file?.name ?? item.file_id}
+        </p>
+        <p className="text-xs text-neutral-500">Image {index + 1}</p>
+      </div>
+
+      <div className="flex shrink-0 items-center gap-1">
+        <button
+          type="button"
+          className="rounded bg-neutral-50 px-0.5 py-1.5 text-neutral-600 transition-colors hover:bg-neutral-200 cursor-pointer"
+          data-tooltip-id="admin-tooltip"
+          data-tooltip-content="Reorder"
+          {...listeners}
+          {...attributes}
+        >
+          <MdOutlineDragIndicator size={18} />
+        </button>
+        <Button
+          icon
+          rounded
+          type="button"
+          size="extra-small"
+          variant="text"
+          color="dark"
+          data-tooltip-id="admin-tooltip"
+          data-tooltip-content="Remove"
+          onClick={() => onRemove(index)}
+        >
+          <FaTrash />
+        </Button>
+      </div>
+    </div>
+  );
+};
+
 const DaydreamImageManager = ({
   error,
   items = [],
   onChange,
 }: DaydreamImageManagerProps) => {
+  const id = useId();
   const [isGalleryDialogOpen, setIsGalleryDialogOpen] = useState(false);
   const visibleItems = useMemo(() => applyImageOrder(items), [items]);
+  const sortableImageIds = useMemo(
+    () => visibleItems.map((item) => item.file_id),
+    [visibleItems]
+  );
   const selectedImages = useMemo(
     () =>
       visibleItems
@@ -59,19 +169,22 @@ const DaydreamImageManager = ({
     );
   };
 
-  const onMoveHandler = async (index: number, direction: -1 | 1) => {
-    const nextIndex = index + direction;
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
-    if (nextIndex < 0 || nextIndex >= items.length) return;
+  const onDragEndHandler = ({ active, over }: DragEndEvent) => {
+    if (!over || active.id === over.id) return;
 
-    const updatedItems = [...items];
-    const [selectedItem] = updatedItems.splice(index, 1);
+    const activeIndex = items.findIndex((item) => item.file_id === active.id);
+    const overIndex = items.findIndex((item) => item.file_id === over.id);
 
-    if (!selectedItem) return;
+    if (activeIndex === -1 || overIndex === -1) return;
 
-    updatedItems.splice(nextIndex, 0, selectedItem);
-
-    await onChange(applyImageOrder(updatedItems));
+    void onChange(applyImageOrder(arrayMove(items, activeIndex, overIndex)));
   };
 
   return (
@@ -99,92 +212,28 @@ const DaydreamImageManager = ({
         </div>
 
         {visibleItems.length ? (
-          <div className="grid grid-cols-1 gap-2">
-            {visibleItems.map((item, index) => {
-              const file = item.file;
-
-              return (
-                <div
-                  key={`${item.file_id}-${index}`}
-                  className="flex items-center gap-3 rounded-md border border-neutral-200 bg-white p-2"
-                >
-                  <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-md bg-neutral-100">
-                    {file?.storage_file_path ? (
-                      <Suspense
-                        fallback={
-                          <BaseSkeletonLoader className="h-full w-full" />
-                        }
-                      >
-                        <SupabaseImage
-                          src={file.storage_file_path}
-                          alt={file.name ?? "Daydream image"}
-                          className="h-full w-full object-cover"
-                          quality={75}
-                          width={240}
-                          height={240}
-                        />
-                      </Suspense>
-                    ) : (
-                      <FaRegImages className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-neutral-400" />
-                    )}
-                  </div>
-
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-neutral-700">
-                      {file?.name ?? item.file_id}
-                    </p>
-                    <p className="text-xs text-neutral-500">
-                      Image {index + 1}
-                    </p>
-                  </div>
-
-                  <div className="flex shrink-0 items-center gap-1">
-                    <Button
-                      icon
-                      rounded
-                      type="button"
-                      size="extra-small"
-                      variant="text"
-                      color="secondary"
-                      disabled={index === 0}
-                      data-tooltip-id="admin-tooltip"
-                      data-tooltip-content="Move up"
-                      onClick={() => onMoveHandler(index, -1)}
-                    >
-                      <FaChevronUp />
-                    </Button>
-                    <Button
-                      icon
-                      rounded
-                      type="button"
-                      size="extra-small"
-                      variant="text"
-                      color="secondary"
-                      disabled={index === visibleItems.length - 1}
-                      data-tooltip-id="admin-tooltip"
-                      data-tooltip-content="Move down"
-                      onClick={() => onMoveHandler(index, 1)}
-                    >
-                      <FaChevronDown />
-                    </Button>
-                    <Button
-                      icon
-                      rounded
-                      type="button"
-                      size="extra-small"
-                      variant="text"
-                      color="danger"
-                      data-tooltip-id="admin-tooltip"
-                      data-tooltip-content="Remove"
-                      onClick={() => onRemoveHandler(index)}
-                    >
-                      <FaTrash />
-                    </Button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          <DndContext
+            collisionDetection={closestCorners}
+            id={id}
+            onDragEnd={onDragEndHandler}
+            sensors={sensors}
+          >
+            <SortableContext
+              items={sortableImageIds}
+              strategy={verticalListSortingStrategy}
+            >
+              <div className="grid grid-cols-1 gap-2">
+                {visibleItems.map((item, index) => (
+                  <SortableDaydreamImageItem
+                    index={index}
+                    item={item}
+                    key={item.file_id}
+                    onRemove={onRemoveHandler}
+                  />
+                ))}
+              </div>
+            </SortableContext>
+          </DndContext>
         ) : (
           <button
             type="button"

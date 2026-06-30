@@ -6,7 +6,7 @@ This reference summarizes the generated types in `src/types/supabase.ts` and sou
 
 ### `daydreams`
 
-Fields: `id`, `created_at`, `description`, `year`, `iso`, `shutter_speed`, `aperture`.
+Fields: `id`, `created_at`, `description`, `year`, nullable `iso`, nullable `shutter_speed`, nullable `aperture`.
 
 Used by:
 
@@ -141,9 +141,9 @@ Arguments:
 - nullable `p_id`; pass `null` for creates and the daydream id for updates
 - `p_year`
 - `p_description`
-- `p_iso`
-- `p_shutter_speed`
-- `p_aperture`
+- nullable `p_iso`
+- nullable `p_shutter_speed`
+- nullable `p_aperture`
 - `p_image_file_ids`
 
 Returns:

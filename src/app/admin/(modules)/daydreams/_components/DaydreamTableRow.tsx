@@ -25,6 +25,8 @@ export const DaydreamTableRow = ({
   const { isOpen, onClose, onOpen } = useOpenable();
   const coverImage = item.images[0]?.file;
   const { isLoading } = useStoragePublicUrl(coverImage?.storage_file_path);
+  const hasCameraSettings =
+    item.iso !== null || item.shutter_speed !== null || item.aperture !== null;
 
   if (isLoading) {
     return <DaydreamTableRowLoading />;
@@ -56,13 +58,31 @@ export const DaydreamTableRow = ({
         </td>
         <td>{item.description}</td>
         <td>
-          <span className="block mb-1 whitespace-nowrap">{item.iso} ISO</span>
-          <span className="block mb-1 whitespace-nowrap">
-            {item.shutter_speed} <abbr title="Shutter Speed">SS</abbr>
-          </span>
-          <span className="block mb-1 whitespace-nowrap">
-            {item.aperture} Aperture
-          </span>
+          {hasCameraSettings ? (
+            <Fragment>
+              {item.iso !== null && (
+                <span className="block mb-1 whitespace-nowrap">
+                  {item.iso} ISO
+                </span>
+              )}
+              
+              {item.shutter_speed !== null && (
+                <span className="block mb-1 whitespace-nowrap">
+                  {item.shutter_speed} <abbr title="Shutter Speed">SS</abbr>
+                </span>
+              )}
+
+              {item.aperture !== null && (
+                <span className="block mb-1 whitespace-nowrap">
+                  {item.aperture} Aperture
+                </span>
+              )}
+            </Fragment>
+          ) : (
+            <span className="text-sm text-neutral-400">
+              No camera settings
+            </span>
+          )}
         </td>
         <td>{new Date(item.created_at).toLocaleDateString()}</td>
         <td>

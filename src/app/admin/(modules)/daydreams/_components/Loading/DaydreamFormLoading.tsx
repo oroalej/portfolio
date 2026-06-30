@@ -19,7 +19,7 @@ const DaydreamFormLoading = ({
   title,
   submitButtonText,
 }: DaydreamFormLoadingProps) => (
-  <CardRoot rounded className="max-w-md w-full sticky top-2">
+  <CardRoot rounded className="max-w-lg w-full sticky top-2">
     <CardHeader className="pb-0">
       <CardTitle>{title}</CardTitle>
     </CardHeader>
@@ -59,7 +59,7 @@ const DaydreamFormLoading = ({
 
         <div className="grid grid-cols-2 gap-x-4">
           <FormGroup>
-            <Label required>ISO</Label>
+            <Label>ISO</Label>
 
             <BaseSkeletonLoader
               className="rounded-md"
@@ -68,7 +68,7 @@ const DaydreamFormLoading = ({
           </FormGroup>
 
           <FormGroup>
-            <Label required>Shutter Speed</Label>
+            <Label>Shutter Speed</Label>
 
             <BaseSkeletonLoader
               className="rounded-md"
@@ -77,7 +77,7 @@ const DaydreamFormLoading = ({
           </FormGroup>
 
           <FormGroup>
-            <Label required>Aperture</Label>
+            <Label>Aperture</Label>
 
             <BaseSkeletonLoader
               className="rounded-md"

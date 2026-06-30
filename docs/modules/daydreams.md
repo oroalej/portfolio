@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Daydreams are photography-style entries with one or more ordered images, year, description, and camera settings. They power the public daydream gallery and the admin daydream CMS.
+Daydreams are photography-style entries with one or more ordered images, year, description, and optional post-level camera settings. They power the public daydream gallery and the admin daydream CMS.
 
 ## User-Facing Routes
 
@@ -27,7 +27,7 @@ Daydreams are photography-style entries with one or more ordered images, year, d
 
 ## Data Model
 
-- `daydreams`: year, description, ISO, shutter speed, and aperture.
+- `daydreams`: year, description, optional ISO, optional shutter speed, and optional aperture.
 - `daydream_images`: ordered file relationships for each daydream post.
 - `files`: image metadata and storage path.
 - Gallery category taxonomy is used when selecting images from the gallery dialog.
@@ -36,11 +36,11 @@ Daydreams are photography-style entries with one or more ordered images, year, d
 ## Workflows
 
 - Public daydream list loads 21 posts at a time, sorted by year descending and created date descending, then fetches the next page through an intersection-observer sentinel.
-- Public cards use the first ordered image as the cover and show an image count when a post has multiple images.
-- Public preview uses `GalleryProvider` plus `DaydreamPreviewDialog` and navigates only the selected post's images.
+- Public cards use the first ordered image as the cover, show an image count when a post has multiple images, and omit missing camera-setting rows.
+- Public preview uses `GalleryProvider` plus `DaydreamPreviewDialog`, navigates only the selected post's images, and shows the camera-setting block only when at least one camera setting is present.
 - Admin index supports search, year filtering, pagination, row selection, and delete confirmation.
 - Admin create/edit uses a gallery dialog to select one or more existing gallery images.
-- Image selection writes ordered `images` into the form and supports add, remove, and reorder.
+- Image selection writes ordered `images` into the form and supports add, remove, and drag-handle reorder.
 - Create and update save through the `save_daydream` RPC so parent and image-row writes happen in one database transaction.
 - Delete invalidates daydream lists and removes active detail queries.
 
@@ -59,7 +59,7 @@ Daydreams are photography-style entries with one or more ordered images, year, d
 ## Forms And Validation
 
 - `DaydreamForm` uses React Hook Form and `DreamSchema`.
-- Required fields: at least one image, year, description, ISO, shutter speed, aperture.
+- Required fields: at least one image, year, description.
 - Defaults come from `src/features/daydreams/data`.
 - Gallery upload image rules are owned by `src/features/files/data`.
 - Accepted gallery upload types are JPG, JPEG, PNG, WEBP, GIF, and AVIF.

@@ -23,6 +23,8 @@ export const DaydreamCard = ({
   image_count,
 }: DaydreamCardProps) => {
   const { isLoading, data } = useStoragePublicUrl(image_path);
+  const hasCameraSettings =
+    iso !== null || shutter_speed !== null || aperture !== null;
 
   return (
     <button
@@ -56,21 +58,31 @@ export const DaydreamCard = ({
       </div>
 
       <div className="flex flex-row justify-between text-neutral-600 text-sm gap-6">
-        <div className="flex flex-col grow gap-0.5">
-          <span className="whitespace-nowrap">
-            {iso}{" "}
-            <abbr title="International Organization for Standardization">
-              ISO
-            </abbr>
-          </span>
-          <span className="whitespace-nowrap">
-            {shutter_speed} <abbr title="Shutter Speed">SS</abbr>
-          </span>
-          <span className="whitespace-nowrap">
-            {aperture} <abbr title="Aperture">A</abbr>
-          </span>
-        </div>
-        <div className="flex flex-col gap-0.5 items-end text-right">
+        {hasCameraSettings && (
+          <div className="flex flex-col grow gap-0.5">
+            {iso !== null && (
+              <span className="whitespace-nowrap">
+                {iso}{" "}
+                <abbr title="International Organization for Standardization">
+                  ISO
+                </abbr>
+              </span>
+            )}
+            
+            {shutter_speed !== null && (
+              <span className="whitespace-nowrap">
+                {shutter_speed} <abbr title="Shutter Speed">SS</abbr>
+              </span>
+            )}
+
+            {aperture !== null && (
+              <span className="whitespace-nowrap">
+                {aperture} <abbr title="Aperture">A</abbr>
+              </span>
+            )}
+          </div>
+        )}
+        <div className="ml-auto flex flex-col gap-0.5 items-end text-right">
           <span>{description}</span>
           <span className="whitespace-nowrap">{year}</span>
         </div>

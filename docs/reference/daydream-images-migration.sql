@@ -32,4 +32,9 @@ alter table public.daydreams
 alter table public.daydreams
   drop column if exists file_id;
 
+alter table public.daydreams
+  alter column iso drop not null,
+  alter column shutter_speed drop not null,
+  alter column aperture drop not null;
+
 commit;

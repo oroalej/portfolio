@@ -37,6 +37,8 @@ const DaydreamPreviewDialog = ({
     useElementSize<HTMLDivElement>();
   const { selectedItem, selectedIndex } = useGalleryContext();
   const { isLoading, startLoading, endLoading } = useLoadable();
+  const hasCameraSettings =
+    iso !== null || shutter_speed !== null || aperture !== null;
   const safeImageDimensions = getSafeImageDimensions(selectedItem ?? undefined);
 
   const scale = safeImageDimensions.height / (containerHeight || 950);
@@ -121,41 +123,49 @@ const DaydreamPreviewDialog = ({
               </FormGroup>
             </div>
 
-            <div className="grow">
-              <h3 className="hidden lg:block ext-lg font-bold capitalize text-neutral-600 dark:text-white mb-2">
-                Camera Setting:
-              </h3>
+            {hasCameraSettings && (
+              <div className="grow">
+                <h3 className="hidden lg:block ext-lg font-bold capitalize text-neutral-600 dark:text-white mb-2">
+                  Camera Setting:
+                </h3>
 
-              <FormGroup>
-                <Label className="!mb-0">
-                  <abbr title="International Organization for Standardization">
-                    ISO
-                  </abbr>
-                </Label>
-                <p className="text-neutral-700 dark:text-white text-sm lg:text-lg">
-                  {iso}
-                </p>
-              </FormGroup>
+                {iso !== null && (
+                  <FormGroup>
+                    <Label className="!mb-0">
+                      <abbr title="International Organization for Standardization">
+                        ISO
+                      </abbr>
+                    </Label>
+                    <p className="text-neutral-700 dark:text-white text-sm lg:text-lg">
+                      {iso}
+                    </p>
+                  </FormGroup>
+                )}
 
-              <FormGroup>
-                <Label className="!mb-0">
-                  <span className="hidden xs:block">Shutter Speed</span>
-                  <span className="xs:hidden">
-                    <abbr title="Shutter Speed">SS</abbr>
-                  </span>
-                </Label>
-                <p className="text-neutral-700 dark:text-white text-sm lg:text-lg">
-                  {shutter_speed}
-                </p>
-              </FormGroup>
+                {shutter_speed !== null && (
+                  <FormGroup>
+                    <Label className="!mb-0">
+                      <span className="hidden xs:block">Shutter Speed</span>
+                      <span className="xs:hidden">
+                        <abbr title="Shutter Speed">SS</abbr>
+                      </span>
+                    </Label>
+                    <p className="text-neutral-700 dark:text-white text-sm lg:text-lg">
+                      {shutter_speed}
+                    </p>
+                  </FormGroup>
+                )}
 
-              <FormGroup>
-                <Label className="!mb-0">Aperture</Label>
-                <p className="text-neutral-700 dark:text-white text-sm lg:text-lg">
-                  {aperture}
-                </p>
-              </FormGroup>
-            </div>
+                {aperture !== null && (
+                  <FormGroup>
+                    <Label className="!mb-0">Aperture</Label>
+                    <p className="text-neutral-700 dark:text-white text-sm lg:text-lg">
+                      {aperture}
+                    </p>
+                  </FormGroup>
+                )}
+              </div>
+            )}
           </div>
         </CardBody>
       </CardRoot>

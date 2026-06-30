@@ -19,25 +19,16 @@ import {
   YEARS,
 } from "@/features/daydreams/data";
 import { FormEvent, Fragment, useEffect, useMemo } from "react";
-import { isEmpty, parseInt } from "lodash";
+import { isEmpty } from "lodash";
 import { SelectDataFormatter } from "@/utils";
 import { DreamFormParams } from "@/features/daydreams/types";
 import { any, array, number, object, string } from "zod";
 import DaydreamImageManager from "@/app/admin/(modules)/daydreams/_components/DaydreamImageManager";
 
 export const DreamSchema = object({
-  shutter_speed: any().refine(
-    (item) => !isNaN(parseInt(item)),
-    "The shutter speed field is required."
-  ),
-  aperture: any().refine(
-    (item) => !isNaN(parseInt(item)),
-    "The aperture field is required."
-  ),
-  iso: any().refine(
-    (item) => !isNaN(parseInt(item)),
-    "The iso field is required."
-  ),
+  shutter_speed: number().nullable(),
+  aperture: number().nullable(),
+  iso: number().nullable(),
   year: number(),
   description: string().trim().min(1, "The description field is required."),
   images: array(
@@ -90,7 +81,7 @@ const DaydreamForm = ({
       <form
         method="post"
         onSubmit={(event: FormEvent) => handleSubmit(onSubmitHandler)(event)}
-        className="max-w-md w-full sticky top-2"
+        className="max-w-lg w-full sticky top-2"
       >
         <fieldset
           className="disabled:opacity-95"
@@ -122,7 +113,7 @@ const DaydreamForm = ({
                 )}
               />
 
-              <div>
+              <div className="mt-3">
                 <h3 className="text-base font-bold text-neutral-600 mb-3">
                   {"Details: "}
                 </h3>
@@ -177,19 +168,19 @@ const DaydreamForm = ({
 
                 <div className="grid grid-cols-2 gap-x-4">
                   <FormGroup>
-                    <Label required>ISO</Label>
+                    <Label>ISO</Label>
 
                     <Controller
                       name="iso"
                       control={control}
-                      rules={{ required: true }}
-                      defaultValue={DEFAULT_FORM_VALUES.iso as any}
+                      defaultValue={DEFAULT_FORM_VALUES.iso}
                       render={({ field: { onChange, value }, fieldState }) => (
                         <SearchableSelect
                           value={value}
                           options={SelectDataFormatter<number>(ISO)}
                           onChange={onChange}
                           defaultValue={DEFAULT_FORM_VALUES.iso}
+                          onClear={() => onChange(null)}
                           error={fieldState.error?.message}
                         />
                       )}
@@ -197,12 +188,11 @@ const DaydreamForm = ({
                   </FormGroup>
 
                   <FormGroup>
-                    <Label required>Shutter Speed</Label>
+                    <Label>Shutter Speed</Label>
 
                     <Controller
                       name="shutter_speed"
                       control={control}
-                      rules={{ required: true }}
                       defaultValue={DEFAULT_FORM_VALUES.shutter_speed}
                       render={({ field: { onChange, value }, fieldState }) => (
                         <SearchableSelect
@@ -210,6 +200,7 @@ const DaydreamForm = ({
                           value={value}
                           onChange={onChange}
                           defaultValue={DEFAULT_FORM_VALUES.shutter_speed}
+                          onClear={() => onChange(null)}
                           error={fieldState.error?.message}
                         />
                       )}
@@ -217,12 +208,11 @@ const DaydreamForm = ({
                   </FormGroup>
 
                   <FormGroup>
-                    <Label required>Aperture</Label>
+                    <Label>Aperture</Label>
 
                     <Controller
                       name="aperture"
                       control={control}
-                      rules={{ required: true }}
                       defaultValue={DEFAULT_FORM_VALUES.aperture}
                       render={({ field: { onChange, value }, fieldState }) => (
                         <SearchableSelect
@@ -230,6 +220,7 @@ const DaydreamForm = ({
                           value={value}
                           onChange={onChange}
                           defaultValue={DEFAULT_FORM_VALUES.aperture}
+                          onClear={() => onChange(null)}
                           error={fieldState.error?.message}
                         />
                       )}
@@ -242,7 +233,7 @@ const DaydreamForm = ({
               <div>
                 {!!onDelete && (
                   <Button
-                    color="danger"
+                    color="dark"
                     type="button"
                     size="small"
                     onClick={onDelete}
