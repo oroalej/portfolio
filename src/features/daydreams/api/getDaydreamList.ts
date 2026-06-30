@@ -17,6 +17,7 @@ import {
   getNextPaginationPageParam,
 } from "@/utils/pagination";
 import { durationInMinutes, removeEmptyValues } from "@/utils";
+import { DAYDREAM_SELECT } from "@/features/daydreams/api/constants";
 
 type DaydreamListSortable = Pick<
   Tables<"daydreams">,
@@ -40,16 +41,18 @@ export const getDaydreamList = ({
 }: GetDaydreamListParams) => {
   let query = supabase
     .from("daydreams")
-    .select(
-      "id, year, description, iso, shutter_speed, aperture, created_at, file:file_id(id, name, width, height, size, storage_file_path, type)",
-      { count: "exact" }
-    );
+    .select(DAYDREAM_SELECT, { count: "exact" });
 
   query = queryFilterBuilder({
     query,
     textSearch: { column: "description", value: q },
     sort,
     filter,
+  });
+
+  query = query.order("image_order", {
+    foreignTable: "daydream_images",
+    ascending: true,
   });
 
   query = queryPaginationBuilder({

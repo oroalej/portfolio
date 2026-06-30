@@ -66,8 +66,8 @@ See [Query Keys Reference](../reference/query-keys.md) for the full module map.
 
 ## Runtime Caveats
 
-- There are no committed Supabase migrations in this repo.
-- Generated types document `store_project`, but the dashboard RPC `top_sources_per_category` is not present in the generated function list.
+- The repo does not have a Supabase migrations directory; daydream schema, RPC, and RLS SQL is currently stored as reference snippets under `docs/reference`.
+- Generated types document `store_project` and `save_daydream`, but the dashboard RPC `top_sources_per_category` is not present in the generated function list.
 - The docs describe source behavior, not live database policies or data.
 
 ## Related Docs

@@ -39,9 +39,9 @@ Cache notes:
 
 Cache notes:
 
-- Create sets detail cache and invalidates daydream lists.
-- Update sets detail cache and patches active paginated list cache.
-- Delete removes active detail and invalidates daydream lists.
+- Create sets detail cache and invalidates admin and public daydream lists.
+- Update sets detail cache, patches active paginated admin list cache, and invalidates public daydream lists.
+- Delete removes active detail and invalidates admin and public daydream lists.
 
 ## Files And Gallery
 

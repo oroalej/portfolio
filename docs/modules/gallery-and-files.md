@@ -25,7 +25,7 @@ The gallery module manages image files in Supabase storage and mirrors file meta
 - `files`: file metadata, storage path, bucket, category, size, type, width, height, duration, bookmark state.
 - Supabase storage bucket: `images`.
 - `term_taxonomy`: gallery categories.
-- `daydreams.file_id` and `project_screenshots.file_id` reference `files.id`.
+- `daydream_images.file_id` and `project_screenshots.file_id` reference `files.id`.
 
 ## Workflows
 

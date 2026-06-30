@@ -3,3 +3,4 @@ export * from "./updateDaydream";
 export * from "./deleteDaydream";
 export * from "./getDaydreamById";
 export * from "./getDaydreamList";
+export * from "./saveDaydream";

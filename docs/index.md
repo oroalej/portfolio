@@ -4,7 +4,7 @@ This folder is an Obsidian-compatible documentation vault for the portfolio appl
 
 Coding standards and agent instructions live in `../CLAUDE.md`. Keep this vault focused on human-facing application knowledge.
 
-Last source review: 2026-06-29.
+Last source review: 2026-06-30.
 
 ## Start Here
 
@@ -35,6 +35,9 @@ Last source review: 2026-06-29.
 - [Routes Reference](reference/routes.md)
 - [Supabase Schema Reference](reference/supabase-schema.md)
 - [Query Keys Reference](reference/query-keys.md)
+- [Daydream Image Migration SQL](reference/daydream-images-migration.sql)
+- [Daydream Save RPC SQL](reference/daydream-save-rpc.sql)
+- [Daydream RLS SQL](reference/daydream-rls.sql)
 
 ## Maintenance Notes
 

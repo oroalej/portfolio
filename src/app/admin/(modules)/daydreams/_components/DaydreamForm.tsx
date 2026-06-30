@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  BaseSkeletonLoader,
   Button,
   Card,
   FormGroup,
@@ -19,24 +18,12 @@ import {
   SHUTTER_SPEED,
   YEARS,
 } from "@/features/daydreams/data";
-import {
-  FormEvent,
-  Fragment,
-  Suspense,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { FormEvent, Fragment, useEffect, useMemo } from "react";
 import { isEmpty, parseInt } from "lodash";
 import { SelectDataFormatter } from "@/utils";
 import { DreamFormParams } from "@/features/daydreams/types";
-import { any, number, object, string } from "zod";
-import { FileAPIDataStructure } from "@/features/files/types";
-import { FaRegImages } from "react-icons/fa6";
-import { PiXBold } from "react-icons/pi";
-import GalleryDialog from "@/app/admin/(modules)/daydreams/_components/GalleryDialog";
-import SupabaseImage from "@/components/Image/SupabaseImage";
-import classNames from "classnames";
+import { any, array, number, object, string } from "zod";
+import DaydreamImageManager from "@/app/admin/(modules)/daydreams/_components/DaydreamImageManager";
 
 export const DreamSchema = object({
   shutter_speed: any().refine(
@@ -53,11 +40,14 @@ export const DreamSchema = object({
   ),
   year: number(),
   description: string().trim().min(1, "The description field is required."),
-  file_id: string()
-    .trim()
-    .min(1, "Image is required.")
-    .nullable()
-    .refine((value) => !!value, "Image is required."),
+  images: array(
+    object({
+      file: any().optional(),
+      file_id: string().trim().min(1, "Image is required."),
+      id: string().optional(),
+      image_order: number().optional(),
+    })
+  ).min(1, "At least one image is required."),
 });
 
 interface DaydreamFormComponentProps {
@@ -75,37 +65,16 @@ const DaydreamForm = ({
   onDelete,
   submitButtonText = "Submit",
 }: DaydreamFormComponentProps) => {
-  const [isGalleryDialogOpen, setIsGalleryDialogOpen] = useState(false);
-  const itemImage = (item?.file as FileAPIDataStructure) ?? null;
-  const itemImageKey = item?.file_id ?? itemImage?.id ?? "";
-  const [imageOverride, setImageOverride] = useState<{
-    key: string;
-    value: FileAPIDataStructure | null;
-  } | null>(null);
-  const image =
-    imageOverride?.key === itemImageKey ? imageOverride.value : itemImage;
-
-  const {
-    handleSubmit,
-    formState,
-    control,
-    getValues,
-    reset,
-    setValue,
-    trigger,
-  } = useForm<DreamFormParams>({
-    mode: "onChange",
-    defaultValues: useMemo(() => item, [item]),
-    resolver: zodResolver(DreamSchema),
-  });
+  const { handleSubmit, formState, control, getValues, reset, trigger } =
+    useForm<DreamFormParams>({
+      mode: "onChange",
+      defaultValues: useMemo(() => item, [item]),
+      resolver: zodResolver(DreamSchema),
+    });
 
   useEffect(() => {
     reset(item);
-
-    if (!item?.file_id) {
-      setValue("file_id", null);
-    }
-  }, [item, reset, setValue]);
+  }, [item, reset]);
 
   const onSubmitHandler = async () => {
     await onSubmit(getValues());
@@ -113,7 +82,6 @@ const DaydreamForm = ({
   };
 
   const onResetFormHandler = () => {
-    setImageOverride(null);
     reset(item);
   };
 
@@ -134,73 +102,25 @@ const DaydreamForm = ({
             </Card.Header>
             <Card.Body>
               <h3 className="text-base font-bold text-neutral-600 mb-3">
-                {"Photo: "}
+                {"Photos: "}
               </h3>
 
-              <div className="w-full mb-3">
-                <div
-                  className={classNames(
-                    [
-                      !!formState.errors.file_id
-                        ? "border-red-700 bg-red-100"
-                        : "border-neutral-200 hover:border-neutral-400 bg-neutral-100",
-                    ],
-                    "group relative w-52 mx-auto aspect-square overflow-hidden border-2 border-dashed rounded-md"
-                  )}
-                >
-                  {image && (
-                    <button
-                      type="button"
-                      className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 text-neutral-600 hover:text-neutral-700 transition-colors cursor-pointer p-1 z-[1]"
-                      onClick={async () => {
-                        setImageOverride({
-                          key: itemImageKey,
-                          value: null,
-                        });
-                        setValue("file_id", null);
-                        await trigger("file_id");
-                      }}
-                    >
-                      <PiXBold size={20} />
-                    </button>
-                  )}
-
-                  <div
-                    className="relative h-full w-full inline-flex items-center justify-center cursor-pointer"
-                    onClick={() => setIsGalleryDialogOpen(true)}
-                  >
-                    {image ? (
-                      <Suspense
-                        fallback={
-                          <div className="p-1 w-full h-full">
-                            <BaseSkeletonLoader className="aspect-square" />
-                          </div>
-                        }
-                      >
-                        <SupabaseImage
-                          src={image.storage_file_path}
-                          alt={image.name}
-                          className="w-full h-full object-contain group-hover:opacity-90"
-                          quality={75}
-                          width={480}
-                          height={480}
-                        />
-                      </Suspense>
-                    ) : (
-                      <FaRegImages
-                        className={classNames(
-                          [
-                            !!formState.errors.file_id
-                              ? "text-red-600 group-hover:text-red-700"
-                              : "text-neutral-400 group-hover:text-neutral-500",
-                          ],
-                          "text-2xl transition-colors pointer-events-none "
-                        )}
-                      />
-                    )}
-                  </div>
-                </div>
-              </div>
+              <Controller
+                name="images"
+                control={control}
+                rules={{ required: true }}
+                defaultValue={DEFAULT_FORM_VALUES.images}
+                render={({ field: { onChange, value }, fieldState }) => (
+                  <DaydreamImageManager
+                    items={value}
+                    error={fieldState.error?.message}
+                    onChange={async (value) => {
+                      onChange(value);
+                      await trigger("images");
+                    }}
+                  />
+                )}
+              />
 
               <div>
                 <h3 className="text-base font-bold text-neutral-600 mb-3">
@@ -364,21 +284,6 @@ const DaydreamForm = ({
           </Card>
         </fieldset>
       </form>
-
-      <GalleryDialog
-        isOpen={isGalleryDialogOpen}
-        onClose={() => setIsGalleryDialogOpen(false)}
-        onSelect={async (value) => {
-          setImageOverride({
-            key: itemImageKey,
-            value,
-          });
-          setIsGalleryDialogOpen(false);
-          setValue("file_id", value.id, { shouldDirty: true });
-          await trigger("file_id");
-        }}
-        activeId={image?.id}
-      />
     </Fragment>
   );
 };

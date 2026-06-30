@@ -14,7 +14,6 @@ export type Database = {
           aperture: number;
           created_at: string;
           description: string;
-          file_id: string | null;
           id: string;
           iso: number;
           shutter_speed: number;
@@ -24,7 +23,6 @@ export type Database = {
           aperture: number;
           created_at?: string;
           description: string;
-          file_id?: string | null;
           id?: string;
           iso: number;
           shutter_speed: number;
@@ -34,15 +32,42 @@ export type Database = {
           aperture?: number;
           created_at?: string;
           description?: string;
-          file_id?: string | null;
           id?: string;
           iso?: number;
           shutter_speed?: number;
           year?: number;
         };
+        Relationships: [];
+      };
+      daydream_images: {
+        Row: {
+          daydream_id: string;
+          file_id: string;
+          id: string;
+          image_order: number;
+        };
+        Insert: {
+          daydream_id: string;
+          file_id: string;
+          id?: string;
+          image_order: number;
+        };
+        Update: {
+          daydream_id?: string;
+          file_id?: string;
+          id?: string;
+          image_order?: number;
+        };
         Relationships: [
           {
-            foreignKeyName: "daydreams_file_id_fkey";
+            foreignKeyName: "daydream_images_daydream_id_fkey";
+            columns: ["daydream_id"];
+            isOneToOne: false;
+            referencedRelation: "daydreams";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "daydream_images_file_id_fkey";
             columns: ["file_id"];
             isOneToOne: false;
             referencedRelation: "files";
@@ -339,6 +364,18 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      save_daydream: {
+        Args: {
+          p_aperture: number;
+          p_description: string;
+          p_id: string | null;
+          p_image_file_ids: string[];
+          p_iso: number;
+          p_shutter_speed: number;
+          p_year: number;
+        };
+        Returns: Json;
+      };
       store_project: {
         Args: {
           title: string;

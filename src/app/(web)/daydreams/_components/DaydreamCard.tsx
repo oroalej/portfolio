@@ -6,9 +6,10 @@ import { BaseSkeletonLoader, ImageSkeletonLoader } from "@/components";
 import Image from "next/image";
 
 export interface DaydreamCardProps
-  extends Omit<Tables<"daydreams">, "created_at" | "id" | "file_id"> {
+  extends Omit<Tables<"daydreams">, "created_at" | "id"> {
   onSelect: () => void;
-  image_path: string;
+  image_count: number;
+  image_path?: string;
 }
 
 export const DaydreamCard = ({
@@ -19,6 +20,7 @@ export const DaydreamCard = ({
   shutter_speed,
   aperture,
   onSelect,
+  image_count,
 }: DaydreamCardProps) => {
   const { isLoading, data } = useStoragePublicUrl(image_path);
 
@@ -31,6 +33,11 @@ export const DaydreamCard = ({
     >
       <div className="relative aspect-square mb-4 group overflow-hidden">
         <div className="absolute inset-0 z-10" />
+        {image_count > 1 && (
+          <span className="absolute right-2 top-2 z-20 rounded-md bg-neutral-900/80 px-2 py-1 text-xs font-medium text-white">
+            {image_count} images
+          </span>
+        )}
 
         {isLoading || !data ? (
           <ImageSkeletonLoader />

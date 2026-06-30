@@ -6,7 +6,7 @@ export const DEFAULT_FORM_VALUES: DreamFormParams = {
   aperture: 2.8,
   year: new Date().getFullYear(),
   description: "",
-  file_id: null,
+  images: [],
 };
 
 export const YEARS = [...Array(30)].map((_, index) => {

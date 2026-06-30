@@ -21,7 +21,7 @@ This is a personal portfolio and admin CMS built on Next.js App Router. The publ
 | Admin shell | `/admin/login`, `/admin/*` | `src/app/admin`, `src/context/SupabaseContext.tsx`, `src/proxy.ts` | Supabase auth session |
 | Projects | `/projects/*`, `/admin/projects/*` | `src/features/projects`, project route components | `projects`, `project_screenshots`, `project_skills`, `files`, `term_taxonomy` |
 | Quotes | `/quotes/*`, `/admin/quotes/*` | `src/features/quotes`, quote route components | `quotes`, `term_taxonomy`, `terms` |
-| Daydreams | `/daydreams`, `/admin/daydreams/*` | `src/features/daydreams`, daydream route components | `daydreams`, `files` |
+| Daydreams | `/daydreams`, `/admin/daydreams/*` | `src/features/daydreams`, daydream route components | `daydreams`, `daydream_images`, `files` |
 | Gallery/files | `/admin/gallery/*` | `src/features/files`, gallery route components | `files`, Supabase storage bucket `images`, `term_taxonomy` |
 | Taxonomy | `/admin/data-management/*` | `src/features/term_taxonomy`, `src/features/terms` | `terms`, `term_taxonomy` |
 | Dashboard | `/admin/dashboard` | dashboard route, taxonomy RPC | `top_sources_per_category` RPC |

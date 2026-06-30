@@ -4,8 +4,8 @@ These are known documentation, tooling, or source-truth gaps observed during the
 
 ## Supabase Source Of Truth
 
-- `src/types/supabase.ts` documents the database tables and `store_project` RPC, but not the `top_sources_per_category` RPC used by the dashboard.
-- The repository does not include Supabase migration files or a documented schema-generation command.
+- `src/types/supabase.ts` documents the database tables plus `store_project` and `save_daydream` RPCs, but not the `top_sources_per_category` RPC used by the dashboard.
+- The repository has daydream reference SQL under `docs/reference`, but does not include a Supabase migrations directory or a documented schema-generation command.
 
 ## Dashboard Stability
 

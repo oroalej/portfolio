@@ -24,6 +24,11 @@ export const useDeleteDaydreamMutation = () => {
         queryKey: ["daydreams"],
         exact: false,
       });
+
+      await queryClient.invalidateQueries({
+        queryKey: ["infinite_daydreams"],
+        exact: false,
+      });
     },
     onError: (error, variables) => {
       toast.error(error.message, { id: variables });

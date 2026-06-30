@@ -6,11 +6,28 @@ This reference summarizes the generated types in `src/types/supabase.ts` and sou
 
 ### `daydreams`
 
-Fields: `id`, `created_at`, `description`, `year`, `iso`, `shutter_speed`, `aperture`, `file_id`.
+Fields: `id`, `created_at`, `description`, `year`, `iso`, `shutter_speed`, `aperture`.
+
+Used by:
+
+- [Daydreams](../modules/daydreams.md)
+
+### `daydream_images`
+
+Fields: `id`, `daydream_id`, `file_id`, `image_order`.
 
 Relationships:
 
+- `daydream_id` references `daydreams.id`.
 - `file_id` references `files.id`.
+
+Reference SQL:
+
+- [Daydream image migration SQL](daydream-images-migration.sql)
+- [Daydream save RPC SQL](daydream-save-rpc.sql)
+- [Daydream RLS SQL](daydream-rls.sql)
+
+These files are checked-in reference snippets; this repo still does not have a Supabase migrations directory.
 
 Used by:
 
@@ -114,6 +131,28 @@ Used by:
 - [Gallery And Files](../modules/gallery-and-files.md)
 
 ## RPC Functions
+
+### `save_daydream`
+
+Generated type exists in `src/types/supabase.ts`.
+
+Arguments:
+
+- nullable `p_id`; pass `null` for creates and the daydream id for updates
+- `p_year`
+- `p_description`
+- `p_iso`
+- `p_shutter_speed`
+- `p_aperture`
+- `p_image_file_ids`
+
+Returns:
+
+- one JSON daydream record shaped like `DaydreamAPIDataStructure`, including ordered nested images and file metadata
+
+Used by:
+
+- Daydream create and update.
 
 ### `store_project`
 

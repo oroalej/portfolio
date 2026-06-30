@@ -22,7 +22,7 @@ import { Tables } from "@/types";
 
 interface DaydreamPreviewDialogProps
   extends Required<Pick<DialogProps, "isOpen" | "onClose">>,
-    Omit<Tables<"daydreams">, "created_at" | "file_id" | "id"> {}
+    Omit<Tables<"daydreams">, "created_at" | "id"> {}
 
 const DaydreamPreviewDialog = ({
   isOpen,

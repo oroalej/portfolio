@@ -1,11 +1,12 @@
-import { DaydreamAPIDataStructure } from "@/features/daydreams/types";
 import { GalleryItem } from "@/context/GalleryContext";
+import { DaydreamAPIDataStructure } from "@/features/daydreams/types";
 
-export const DaydreamGalleryItemTransformer = (
+export const DaydreamGalleryItemsTransformer = (
   item: DaydreamAPIDataStructure
-): GalleryItem => ({
-  storage_file_path: item.file.storage_file_path,
-  name: item.file.name,
-  height: item.file.height,
-  width: item.file.width,
-});
+): GalleryItem[] =>
+  item.images.map(({ file }) => ({
+    storage_file_path: file.storage_file_path,
+    name: file.name,
+    height: file.height,
+    width: file.width,
+  }));

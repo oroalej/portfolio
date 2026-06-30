@@ -31,7 +31,7 @@ The public site presents the portfolio homepage, resume, project portfolio, quot
 - The downloadable resume PDF lives at `public/alexander-jeam-oro-resume.pdf`.
 - Dynamic projects use `projects`, `project_screenshots`, `project_skills`, `files`, and `term_taxonomy`.
 - Dynamic quotes use `quotes`, `term_taxonomy`, and `terms`.
-- Dynamic daydreams use `daydreams` and `files`.
+- Dynamic daydreams use `daydreams`, `daydream_images`, and `files`.
 - Project and quote navigation depend on taxonomy terms from `terms` and `term_taxonomy`.
 
 ## Workflows
@@ -43,7 +43,7 @@ The public site presents the portfolio homepage, resume, project portfolio, quot
 - `/resume` renders static resume entries, downloads `/alexander-jeam-oro-resume.pdf`, and categorizes technology badge labels as frontend, backend, data/API, AI/developer tools, workflow/platform, or other.
 - `/quotes` fetches terms, finds `TERM_IDENTIFIER.QUOTE_CATEGORY`, loads taxonomy for that term, and redirects to the first taxonomy id.
 - `/quotes/[quoteId]` loads quotes filtered by `category_id` and fetches additional pages through infinite scroll.
-- `/daydreams` loads daydreams sorted by year descending and created date descending, fetches additional pages through infinite scroll, then uses `GalleryProvider` for preview state.
+- `/daydreams` loads daydream posts sorted by year descending and created date descending, fetches additional pages through infinite scroll, uses the first ordered image as each cover, then uses `GalleryProvider` for selected-post image preview state.
 
 ## Cache And State
 

@@ -2,20 +2,23 @@
 
 import { useInfiniteDaydreamList } from "@/features/daydreams/api";
 import { DEFAULT_PAGINATION_VALUES } from "@/utils/pagination";
-import { Suspense, useEffect, useMemo, useRef } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import {
   DaydreamCard,
   DaydreamCardLoading,
 } from "@/app/(web)/daydreams/_components/DaydreamCard";
 import { useGalleryContext } from "@/context/GalleryContext";
 import { useOpenable } from "@/hooks";
-import { DaydreamGalleryItemTransformer } from "@/features/daydreams/transformers";
+import { DaydreamGalleryItemsTransformer } from "@/features/daydreams/transformers";
 import DaydreamPreviewDialog from "@/app/(web)/daydreams/_components/DaydreamPreviewDialog";
 
 export const DaydreamList = () => {
-  const { setList, setSelectedIndex, selectedIndex } = useGalleryContext();
+  const { setList } = useGalleryContext();
   const { isOpen, onOpen, onClose } = useOpenable();
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
+  const [selectedDaydreamIndex, setSelectedDaydreamIndex] = useState<
+    number | null
+  >(null);
 
   const {
     data,
@@ -36,25 +39,28 @@ export const DaydreamList = () => {
     () => data?.pages.flatMap((page) => page.data) ?? [],
     [data?.pages]
   );
-  const galleryItems = useMemo(
-    () => daydreams.map(DaydreamGalleryItemTransformer),
-    [daydreams]
-  );
 
-  const selectedDaydream = Number.isInteger(selectedIndex)
-    ? daydreams[selectedIndex ?? 0]
+  const selectedDaydream = Number.isInteger(selectedDaydreamIndex)
+    ? daydreams[selectedDaydreamIndex ?? 0]
     : undefined;
 
   const onSelectHandler = (index: number) => {
-    setSelectedIndex(index);
+    const selectedDaydream = daydreams[index];
+
+    if (!selectedDaydream) return;
+
+    setSelectedDaydreamIndex(index);
+    setList(DaydreamGalleryItemsTransformer(selectedDaydream));
     onOpen();
   };
 
   useEffect(() => {
-    setList(galleryItems, {
-      shouldResetSelectedIndex: !isOpen,
+    if (!isOpen || !selectedDaydream) return;
+
+    setList(DaydreamGalleryItemsTransformer(selectedDaydream), {
+      shouldResetSelectedIndex: false,
     });
-  }, [galleryItems, isOpen, setList]);
+  }, [isOpen, selectedDaydream, setList]);
 
   useEffect(() => {
     const loadMoreElement = loadMoreRef.current;
@@ -89,7 +95,8 @@ export const DaydreamList = () => {
               fallback={<DaydreamCardLoading />}
             >
               <DaydreamCard
-                image_path={item.file.storage_file_path}
+                image_path={item.images[0]?.file.storage_file_path}
+                image_count={item.images.length}
                 iso={item.iso}
                 shutter_speed={item.shutter_speed}
                 aperture={item.aperture}
@@ -114,7 +121,10 @@ export const DaydreamList = () => {
       {selectedDaydream && (
         <DaydreamPreviewDialog
           isOpen={isOpen}
-          onClose={onClose}
+          onClose={() => {
+            onClose();
+            setSelectedDaydreamIndex(null);
+          }}
           year={selectedDaydream.year}
           description={selectedDaydream.description}
           aperture={selectedDaydream.aperture}

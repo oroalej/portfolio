@@ -1,6 +1,5 @@
 "use client";
 
-import { omit, pick } from "lodash";
 import { DreamFormParams } from "@/features/daydreams/types";
 import { Fragment, Suspense, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -31,7 +30,7 @@ const EditDaydreamWrapper = () => {
   const { isOpen, onClose, onOpen } = useOpenable();
 
   const onSubmitHandler = useCallback(
-    async ({ file, ...formData }: DreamFormParams) => {
+    async (formData: DreamFormParams) => {
       if (!daydreamData) return;
 
       await toast.promise(
@@ -73,6 +72,21 @@ const EditDaydreamWrapper = () => {
     );
   }
 
+  const formItem: DreamFormParams = {
+    aperture: daydreamData.aperture,
+    description: daydreamData.description,
+    images: daydreamData.images.map(({ file, file_id, id, image_order }) => ({
+      file,
+      file_id,
+      id,
+      image_order,
+    })),
+    iso: daydreamData.iso,
+    shutter_speed: daydreamData.shutter_speed,
+    year: daydreamData.year,
+  };
+
+
   return (
     <Fragment>
       <Suspense
@@ -85,16 +99,7 @@ const EditDaydreamWrapper = () => {
       >
         <DaydreamForm
           title="Edit Dream"
-          item={{
-            ...omit(daydreamData, "file"),
-            file_id: daydreamData.file?.id || "",
-            file: pick(daydreamData.file || {}, [
-              "id",
-              "name",
-              "bucket_name",
-              "storage_file_path",
-            ]),
-          }}
+          item={formItem}
           onSubmit={onSubmitHandler}
           onDelete={onOpen}
           submitButtonText="Update Dream"
