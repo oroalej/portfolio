@@ -21,3 +21,15 @@ export interface ScreenshotAPIDataStructure {
   > &
     Required<Pick<Tables<"files">, "width" | "height">>;
 }
+
+export interface ProjectScreenshotItem
+  extends Pick<Tables<"files">, "height" | "storage_file_path" | "width"> {
+  name: string;
+}
+
+export interface ProjectCardItem
+  extends Omit<Tables<"projects">, "created_at" | "project_type_id"> {
+  skills: Pick<Tables<"term_taxonomy">, "id" | "name">[];
+  project_type: Pick<Tables<"term_taxonomy">, "name" | "id">;
+  screenshots: ProjectScreenshotItem[];
+}

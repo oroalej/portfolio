@@ -31,10 +31,8 @@ import {
 } from "@/features/projects/api/reorderProjects";
 import { useQueryClient } from "@tanstack/react-query";
 import { GalleryProvider } from "@/context/GalleryContext";
-import {
-  ProjectCard,
-  ProjectCardItem,
-} from "@/app/admin/(modules)/projects/_components/ProjectCard";
+import { ProjectCard } from "@/app/admin/(modules)/projects/_components/ProjectCard";
+import type { ProjectCardItem } from "@/features/projects/types";
 import { ProjectListSelector } from "@/features/projects/transformers";
 import ProjectCardLoading from "@/app/admin/(modules)/projects/_components/Loading/ProjectCardLoading";
 

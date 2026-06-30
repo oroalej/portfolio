@@ -3,8 +3,7 @@
 import classNames from "classnames";
 import SupabaseImage from "@/components/Image/SupabaseImage";
 import { useLoadable } from "@/hooks";
-import { FC } from "react";
-import { GalleryItem } from "@/context/GalleryContext";
+import type { GalleryItem } from "@/context/GalleryContext";
 
 export interface ThumbnailInterface {
   image: GalleryItem;
@@ -12,7 +11,7 @@ export interface ThumbnailInterface {
   onSelect?: () => void;
 }
 
-export const Thumbnail: FC<ThumbnailInterface> = ({
+export const Thumbnail = ({
   image,
   isActive,
   onSelect,
@@ -20,10 +19,13 @@ export const Thumbnail: FC<ThumbnailInterface> = ({
   const { isLoading, endLoading } = useLoadable(true);
 
   return (
-    <div
+    <button
+      type="button"
+      aria-label={`Preview ${image.name}`}
+      aria-pressed={isActive}
       onClick={onSelect}
       className={classNames(
-        "m-1 w-16 md:w-20 aspect-square overflow-hidden rounded-md border border-solid border-neutral-300 transition-colors shrink-0",
+        "m-1 w-16 md:w-20 aspect-square overflow-hidden rounded-md border border-solid border-neutral-300 transition-colors shrink-0 bg-transparent p-0",
         {
           "ring dark:ring-neutral-200 ring-neutral-800 dark:ring-offset-neutral-200 border-transparent":
             isActive,
@@ -40,13 +42,14 @@ export const Thumbnail: FC<ThumbnailInterface> = ({
             quality={65}
             width={450}
             height={450}
-            onLoadingComplete={endLoading}
+            onLoad={endLoading}
             loading="lazy"
+            sizes="(min-width: 768px) 5rem, 4rem"
             className="object-cover absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 h-full w-full"
           />
         </div>
       </div>
-    </div>
+    </button>
   );
 };
 

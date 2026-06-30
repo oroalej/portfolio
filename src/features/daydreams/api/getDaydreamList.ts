@@ -2,7 +2,6 @@ import {
   keepPreviousData,
   useInfiniteQuery,
   useQuery,
-  useQueryClient,
 } from "@tanstack/react-query";
 import {
   queryFilterBuilder,
@@ -26,7 +25,7 @@ type DaydreamListSortable = Pick<
 
 type DaydreamListFilterable = Pick<Tables<"daydreams">, "year">;
 
-export interface getDaydreamListParams
+export interface GetDaydreamListParams
   extends Required<Paginatable>,
     Sortable<DaydreamListSortable>,
     Filterable<DaydreamListFilterable>,
@@ -38,7 +37,7 @@ export const getDaydreamList = ({
   page,
   sort = [{ column: "created_at", order: "desc" }],
   filter = {},
-}: getDaydreamListParams) => {
+}: GetDaydreamListParams) => {
   let query = supabase
     .from("daydreams")
     .select(
@@ -62,8 +61,8 @@ export const getDaydreamList = ({
   return query.throwOnError();
 };
 
-export const useGetDaydreamList = <Type extends any = DaydreamAPIDataStructure>(
-  params: getDaydreamListParams,
+export const useGetDaydreamList = <Type = DaydreamAPIDataStructure>(
+  params: GetDaydreamListParams,
   transformer?: (value: DaydreamAPIDataStructure[]) => Type[]
 ) =>
   useQuery({
@@ -100,39 +99,33 @@ export const useInfiniteDaydreamList = ({
   q,
   sort = [{ column: "created_at", order: "desc" }],
   filter = {},
-}: getDaydreamListParams) => {
-  const queryClient = useQueryClient();
-
-  return useInfiniteQuery(
-    {
-      initialPageParam: page,
-      staleTime: durationInMinutes(2),
-      queryKey: [
-        "infinite_daydreams",
-        removeEmptyValues({ q, ...filter }),
-        sort,
+}: GetDaydreamListParams) =>
+  useInfiniteQuery({
+    initialPageParam: page,
+    staleTime: durationInMinutes(2),
+    queryKey: [
+      "infinite_daydreams",
+      removeEmptyValues({ q, ...filter }),
+      sort,
+      per_page,
+    ],
+    queryFn: async ({ pageParam }) => {
+      const { data, count } = await getDaydreamList({
         per_page,
-      ],
-      queryFn: async ({ pageParam }) => {
-        const { data, count } = await getDaydreamList({
-          per_page,
-          page: pageParam,
-          q,
-          sort,
-          filter,
-        });
+        page: pageParam,
+        q,
+        sort,
+        filter,
+      });
 
-        return {
-          data: (data as unknown as DaydreamAPIDataStructure[]) || [],
-          pagination: generatePaginationData(
-            Number(per_page),
-            Number(pageParam),
-            count || 0
-          ),
-        };
-      },
-      getNextPageParam: getNextPaginationPageParam<DaydreamAPIDataStructure>,
+      return {
+        data: (data as unknown as DaydreamAPIDataStructure[]) || [],
+        pagination: generatePaginationData(
+          Number(per_page),
+          Number(pageParam),
+          count || 0
+        ),
+      };
     },
-    queryClient
-  );
-};
+    getNextPageParam: getNextPaginationPageParam<DaydreamAPIDataStructure>,
+  });

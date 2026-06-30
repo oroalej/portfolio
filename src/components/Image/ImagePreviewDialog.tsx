@@ -3,9 +3,10 @@
 import { BaseSkeletonLoader, Button, Dialog, DialogProps } from "@/components";
 import { FileAPIDataStructure } from "@/features/files/types";
 import { MdClose } from "react-icons/md";
-import React, { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import SupabaseImage from "@/components/Image/SupabaseImage";
-import { useLoadable } from "@/hooks";
+import { getSafeImageDimensions } from "@/components/Image/getSafeImageDimensions";
+import { useElementSize, useLoadable } from "@/hooks";
 import classNames from "classnames";
 
 interface ImagePreviewDialogProps extends DialogProps {
@@ -21,36 +22,37 @@ const ImagePreviewDialog = ({
   children,
   item,
 }: ImagePreviewDialogProps) => {
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const {
+    element: containerElement,
+    height: containerHeight,
+    ref: containerRef,
+    width: containerWidth,
+  } = useElementSize<HTMLDivElement>();
   const { isLoading, startLoading, endLoading } = useLoadable();
 
-  const height = item.height ?? 0;
-  const width = item.width ?? 0;
+  const { height, width } = getSafeImageDimensions(item);
+  const availableHeight = containerHeight || 950;
+  const availableWidth = containerWidth || 1024;
+  const constrainedWidth = availableWidth >= 1024 ? 1024 : availableWidth;
 
   /**
    * If picture is landscape, get scale value using height.
    * If picture is portrait, get scale value using width. And if the default width is larger than the window width, use clientWidth.
    */
-  const scale =
-    width > height
-      ? height / (containerRef.current?.clientHeight ?? 950)
-      : width /
-        ((containerRef.current?.clientWidth ?? 1024) >= 1024
-          ? 1024
-          : containerRef.current!.clientWidth);
+  const scale = width > height ? height / availableHeight : width / constrainedWidth;
 
   const scaleWidth = width / scale;
   const scaleHeight = height / scale;
 
   useEffect(() => {
     startLoading();
-  }, [item.name]);
+  }, [item.name, startLoading]);
 
   const onLoadingCompleteHandler = () => {
-    containerRef.current?.scrollTo({
+    containerElement?.scrollTo({
       top: 0,
     });
-    containerRef.current?.focus();
+    containerElement?.focus();
 
     setTimeout(() => {
       endLoading();
@@ -66,6 +68,7 @@ const ImagePreviewDialog = ({
           size="extra-small"
           variant="text"
           color="secondary"
+          aria-label="Close preview"
           onClick={onClose}
         >
           <MdClose size={22} />
@@ -101,8 +104,8 @@ const ImagePreviewDialog = ({
               alt={item.name}
               width={scaleWidth}
               height={scaleHeight}
-              onLoadingComplete={onLoadingCompleteHandler}
               onLoad={onLoadingCompleteHandler}
+              sizes="100vw"
             />
           </div>
         </div>

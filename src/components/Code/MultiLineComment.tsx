@@ -1,38 +1,64 @@
-"use client";
+import { Children, Fragment, ReactNode } from "react";
+import { CodeBlock } from "./CodeBlock";
+import { CodeToken } from "./CodeToken";
+import { CodeLanguage } from "./types";
 
-import {FC, Fragment, ReactNode} from "react"
-import {CodeBlock} from "@/components";
-
-export interface MultiLineCommentInterface {
-  children: Array<ReactNode>,
-  startCount?: number
+export interface MultiLineCommentProps {
+  children: ReactNode;
+  language?: CodeLanguage;
+  startCount?: number;
+  startLine?: number;
+  withTrailingBlankLine?: boolean;
 }
 
-const MultiLineComment: FC<MultiLineCommentInterface> = (props: MultiLineCommentInterface) => {
-  const {children, startCount = 1} = props;
+const MultiLineComment = ({
+  children,
+  language = "javascript",
+  startCount,
+  startLine,
+  withTrailingBlankLine = false,
+}: MultiLineCommentProps) => {
+  const comments = Children.toArray(children);
+  const firstLine = startLine ?? startCount ?? 1;
 
   return (
     <Fragment>
-      <CodeBlock line={startCount}>
-        <span className="text-neutral-500">{`/**`}</span>
+      <CodeBlock line={firstLine}>
+        <CodeToken type="comment" language={language}>{`/**`}</CodeToken>
       </CodeBlock>
 
-      {
-        children.map((comment, index) => (
-          <CodeBlock line={startCount + 1 + index} key={`multi-${index}`} className="flex-nowrap">
-            <span className="text-neutral-500 ml-[0.60rem] mr-2">*</span>
-            <span className="text-neutral-500">{comment}</span>
-          </CodeBlock>
-        ))
-      }
+      {comments.map((comment, index) => (
+        <CodeBlock
+          line={firstLine + 1 + index}
+          key={`multi-${index}`}
+          contentClassName="flex-nowrap"
+        >
+          <CodeToken
+            type="comment"
+            language={language}
+            className="ml-[0.60rem] mr-2"
+          >
+            *
+          </CodeToken>
+          <CodeToken type="comment" language={language}>
+            {comment}
+          </CodeToken>
+        </CodeBlock>
+      ))}
 
-      <CodeBlock line={startCount + children.length + 1}>
-        <span className="text-neutral-500 ml-[0.60rem]">{`*/`}</span>
+      <CodeBlock line={firstLine + comments.length + 1}>
+        <CodeToken
+          type="comment"
+          language={language}
+          className="ml-[0.60rem]"
+        >{`*/`}</CodeToken>
       </CodeBlock>
 
-      <CodeBlock line={startCount + children.length + 2}/>
+      {withTrailingBlankLine && (
+        <CodeBlock line={firstLine + comments.length + 2} />
+      )}
     </Fragment>
-  )
-}
+  );
+};
 
-export default MultiLineComment
+export default MultiLineComment;

@@ -36,6 +36,10 @@ export const DaydreamList = () => {
     () => data?.pages.flatMap((page) => page.data) ?? [],
     [data?.pages]
   );
+  const galleryItems = useMemo(
+    () => daydreams.map(DaydreamGalleryItemTransformer),
+    [daydreams]
+  );
 
   const selectedDaydream = Number.isInteger(selectedIndex)
     ? daydreams[selectedIndex ?? 0]
@@ -47,10 +51,10 @@ export const DaydreamList = () => {
   };
 
   useEffect(() => {
-    setList(daydreams.map(DaydreamGalleryItemTransformer), {
+    setList(galleryItems, {
       shouldResetSelectedIndex: !isOpen,
     });
-  }, [daydreams, isOpen]);
+  }, [galleryItems, isOpen, setList]);
 
   useEffect(() => {
     const loadMoreElement = loadMoreRef.current;

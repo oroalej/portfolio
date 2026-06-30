@@ -18,11 +18,13 @@ const TheHeader = () => {
 
   // Add overflow hidden to HTML when navbar is open.
   useEffect(() => {
-    const HTML = document.getElementsByTagName("html").item(0);
+    const html = document.documentElement;
 
-    if (HTML) {
-      HTML.style.overflow = isOpen ? "hidden" : "";
-    }
+    html.style.overflow = isOpen ? "hidden" : "";
+
+    return () => {
+      html.style.overflow = "";
+    };
   }, [isOpen]);
 
   return (
@@ -43,6 +45,8 @@ const TheHeader = () => {
         <div className="relative flex flex-col items-center lg:flex-row py-24 lg:py-0">
           {isOpen && (
             <button
+              type="button"
+              aria-label="Close navigation"
               className="absolute top-4 right-4 sm:top-8 sm:right-8 lg:hidden"
               onClick={onClose}
             >
@@ -98,6 +102,7 @@ const TheHeader = () => {
           <div className="mt-12 flex flex-row gap-5 items-center lg:ml-auto lg:mt-0">
             <ExternalLink
               href="https://github.com/oroalej/portfolio"
+              label="Github Repository"
               className="text-neutral-700 bg-white hover:bg-neutral-200 p-3 rounded-full transition-colors"
               data-tooltip-id="guest-tooltip"
               data-tooltip-content="Github Repository"
@@ -110,7 +115,10 @@ const TheHeader = () => {
         </div>
       </div>
 
-      <div
+      <button
+        type="button"
+        aria-label="Open navigation"
+        aria-expanded={isOpen}
         className="p-2 cursor-pointer -mr-2 block lg:hidden"
         onClick={onToggle}
       >
@@ -118,7 +126,7 @@ const TheHeader = () => {
           size={32}
           className="dark:text-neutral-300 text-neutral-700"
         />
-      </div>
+      </button>
     </Container>
   );
 };

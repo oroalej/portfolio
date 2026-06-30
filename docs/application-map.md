@@ -1,6 +1,6 @@
 # Application Map
 
-This is a personal portfolio and admin CMS built on Next.js App Router. The public site presents portfolio content, projects, quotes, resume data, and daydream images. The admin area manages Supabase-backed content for projects, quotes, daydreams, files, and taxonomy data.
+This is a personal portfolio and admin CMS built on Next.js App Router. The public site presents portfolio content, projects, quotes, resume data, a downloadable resume PDF, and daydream images. The admin area manages Supabase-backed content for projects, quotes, daydreams, files, and taxonomy data.
 
 ## Runtime Stack
 
@@ -17,7 +17,7 @@ This is a personal portfolio and admin CMS built on Next.js App Router. The publ
 
 | Area | Primary routes | Main source roots | Main data |
 | --- | --- | --- | --- |
-| Public site | `/`, `/resume`, `/projects`, `/quotes`, `/daydreams` | `src/app/(web)`, `src/data` | Static data plus projects, quotes, daydreams, taxonomy, files |
+| Public site | `/`, `/resume`, `/projects`, `/quotes`, `/daydreams` | `src/app/(web)`, `src/data`, `public` | Static data, local resume PDF, projects, quotes, daydreams, taxonomy, files |
 | Admin shell | `/admin/login`, `/admin/*` | `src/app/admin`, `src/context/SupabaseContext.tsx`, `src/proxy.ts` | Supabase auth session |
 | Projects | `/projects/*`, `/admin/projects/*` | `src/features/projects`, project route components | `projects`, `project_screenshots`, `project_skills`, `files`, `term_taxonomy` |
 | Quotes | `/quotes/*`, `/admin/quotes/*` | `src/features/quotes`, quote route components | `quotes`, `term_taxonomy`, `terms` |
@@ -41,7 +41,7 @@ This is a personal portfolio and admin CMS built on Next.js App Router. The publ
 - Domain data access lives under `src/features/<domain>/api`.
 - Domain API response shapes live under `src/features/<domain>/types`.
 - Mapping between Supabase API shapes and UI shapes lives under feature `transformers` folders.
-- Static portfolio content lives under `src/data`.
+- Static portfolio content lives under `src/data`; public static assets such as the downloadable resume PDF live under `public`.
 
 ## Related Docs
 

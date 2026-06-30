@@ -11,4 +11,7 @@ export {
 }
 
 export * from "./CodeBlock";
+export * from "./CodeLine";
+export * from "./CodeToken";
 export * from "./Object";
+export * from "./types";

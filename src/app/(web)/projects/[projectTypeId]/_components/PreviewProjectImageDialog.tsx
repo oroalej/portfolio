@@ -1,7 +1,10 @@
+"use client";
+
 import classNames from "classnames";
+import { getSafeImageDimensions } from "@/components/Image/getSafeImageDimensions";
 import ImagePreviewContainer from "@/components/Image/ImagePreviewContainer";
 import SupabaseImage from "@/components/Image/SupabaseImage";
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { MdClose } from "react-icons/md";
 import { useGalleryContext } from "@/context/GalleryContext";
 import {
@@ -20,7 +23,7 @@ import {
   PiFigmaLogoLight,
   PiGlobeHemisphereWestThin,
 } from "react-icons/pi";
-import { ProjectCardItem } from "@/app/admin/(modules)/projects/_components/ProjectCard";
+import type { ProjectCardItem } from "@/features/projects/types";
 import { Thumbnail } from "@/app/(web)/projects/[projectTypeId]/_components/Thumbnail";
 
 interface PreviewProjectImageDialogProps
@@ -41,7 +44,8 @@ const PreviewProjectImageDialog = ({
   const { selectedItem, list, selectedIndex, setSelectedIndex } =
     useGalleryContext();
   const { isLoading, startLoading, endLoading } = useLoadable();
-  const scale = selectedItem.width / 1920;
+  const safeImageDimensions = getSafeImageDimensions(selectedItem ?? undefined);
+  const scale = safeImageDimensions.width / 1920;
   const imageContainerRef = useRef<HTMLDivElement>(null);
 
   useHotkeys(["esc", "escape"], onClose);
@@ -63,7 +67,9 @@ const PreviewProjectImageDialog = ({
 
   useEffect(() => {
     startLoading();
-  }, [selectedIndex]);
+  }, [selectedIndex, startLoading]);
+
+  if (!selectedItem) return null;
 
   return (
     <Dialog isOpen={isOpen}>
@@ -71,6 +77,8 @@ const PreviewProjectImageDialog = ({
         <CardBody className="relative h-full max-w-[1920px] mx-auto">
           <div className="absolute right-2 top-2 z-10">
             <button
+              type="button"
+              aria-label="Close preview"
               className={classNames(
                 "dark:text-neutral-200 text-neutral-800 outline-none p-2 cursor-pointer"
               )}
@@ -160,9 +168,10 @@ const PreviewProjectImageDialog = ({
                     <SupabaseImage
                       src={selectedItem.storage_file_path}
                       alt={selectedItem.name}
-                      width={selectedItem.width / scale}
-                      height={selectedItem.height / scale}
-                      onLoadingComplete={onLoadingCompleteHandler}
+                      width={safeImageDimensions.width / scale}
+                      height={safeImageDimensions.height / scale}
+                      onLoad={onLoadingCompleteHandler}
+                      sizes="100vw"
                     />
                   </div>
                 </div>

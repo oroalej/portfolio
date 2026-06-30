@@ -5,6 +5,12 @@ export const metadata: Metadata = {
   title: "Alexander Jeam Oro - Projects",
 };
 
-const ProjectSlugPage = () => <ProjectList />;
+const ProjectSlugPage = async ({
+  params,
+}: PageProps<"/projects/[projectTypeId]">) => {
+  const { projectTypeId } = await params;
+
+  return <ProjectList projectTypeId={projectTypeId} />;
+};
 
 export default ProjectSlugPage;

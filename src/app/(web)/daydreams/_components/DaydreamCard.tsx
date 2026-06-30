@@ -1,3 +1,5 @@
+"use client";
+
 import { Tables } from "@/types";
 import { useStoragePublicUrl } from "@/features/files/api";
 import { BaseSkeletonLoader, ImageSkeletonLoader } from "@/components";
@@ -21,8 +23,10 @@ export const DaydreamCard = ({
   const { isLoading, data } = useStoragePublicUrl(image_path);
 
   return (
-    <div
-      className="bg-white p-5 overflow-hidden cursor-pointer transition-all dark:bg-neutral-100 hover:drop-shadow-lg"
+    <button
+      type="button"
+      aria-label={`Preview ${description}`}
+      className="block w-full bg-white p-5 overflow-hidden cursor-pointer transition-all dark:bg-neutral-100 hover:drop-shadow-lg text-left"
       onClick={onSelect}
     >
       <div className="relative aspect-square mb-4 group overflow-hidden">
@@ -37,6 +41,7 @@ export const DaydreamCard = ({
             width={450}
             height={450}
             quality={75}
+            sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
             style={{ width: "100%", height: "100%" }}
             className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 point-events-none object-cover"
           />
@@ -63,7 +68,7 @@ export const DaydreamCard = ({
           <span className="whitespace-nowrap">{year}</span>
         </div>
       </div>
-    </div>
+    </button>
   );
 };
 

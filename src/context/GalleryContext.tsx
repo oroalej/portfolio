@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useCallback, useContext, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 import { BaseComponent, Tables } from "@/types";
 import { useHotkeys } from "react-hotkeys-hook";
 
@@ -13,7 +19,7 @@ interface GalleryContextProps {
   setSelectedIndex: (value: number) => void;
   selectedIndex?: number | null;
   list: GalleryItem[];
-  selectedItem: Record<string, any>;
+  selectedItem: GalleryItem | null;
   onNext: () => void;
   onPrev: () => void;
   isFirst?: boolean;
@@ -22,8 +28,7 @@ interface GalleryContextProps {
 }
 
 export interface GalleryItem
-  extends Pick<Tables<"files">, "storage_file_path">,
-    Required<Pick<Tables<"files">, "width" | "height">> {
+  extends Pick<Tables<"files">, "height" | "storage_file_path" | "width"> {
   name: string;
 }
 
@@ -32,7 +37,7 @@ const GalleryContext = createContext<GalleryContextProps>({
   setSelectedIndex: () => {},
   onNext: () => {},
   onPrev: () => {},
-  selectedItem: {},
+  selectedItem: null,
   total: 1,
   list: [],
 });
@@ -48,56 +53,68 @@ export const GalleryProvider = ({ children }: BaseComponent) => {
   const total = list.length;
   const selectedItem = list?.[selectedIndex] ?? null;
 
-  const setList = (
-    value: GalleryItem[],
-    { shouldResetSelectedIndex = true }: SetGalleryListOptions = {}
-  ) => {
-    setListable(value);
-    setSelectedIndex((prevState) => {
-      if (shouldResetSelectedIndex) return 0;
+  const setList = useCallback(
+    (
+      value: GalleryItem[],
+      { shouldResetSelectedIndex = true }: SetGalleryListOptions = {}
+    ) => {
+      setListable(value);
+      setSelectedIndex((prevState) => {
+        if (shouldResetSelectedIndex) return 0;
 
-      return Math.min(prevState, Math.max(value.length - 1, 0));
-    });
-  };
+        return Math.min(prevState, Math.max(value.length - 1, 0));
+      });
+    },
+    []
+  );
 
   const onPrev = useCallback(
     () =>
       setSelectedIndex((prevState) => {
-        if (isFirst) return prevState;
-
-        return prevState - 1;
+        return Math.max(prevState - 1, 0);
       }),
-    [isFirst]
+    []
   );
 
   const onNext = useCallback(
     () =>
       setSelectedIndex((prevState) => {
-        if (isLast) return prevState;
-
-        return prevState + 1;
+        return Math.min(prevState + 1, Math.max(list.length - 1, 0));
       }),
-    [isLast]
+    [list.length]
   );
 
   useHotkeys("right", onNext);
   useHotkeys("left", onPrev);
 
+  const contextValue = useMemo(
+    () => ({
+      setList,
+      setSelectedIndex,
+      onNext,
+      onPrev,
+      selectedIndex,
+      list,
+      selectedItem,
+      isFirst,
+      isLast,
+      total,
+    }),
+    [
+      setList,
+      onNext,
+      onPrev,
+      selectedIndex,
+      list,
+      selectedItem,
+      isFirst,
+      isLast,
+      total,
+    ]
+  );
+
   return (
-    <GalleryContext.Provider
-      value={{
-        setList,
-        setSelectedIndex,
-        onNext,
-        onPrev,
-        selectedIndex,
-        list,
-        selectedItem,
-        isFirst,
-        isLast,
-        total,
-      }}
-    >
+    <GalleryContext.Provider value={contextValue}>
       {children}
     </GalleryContext.Provider>
   );

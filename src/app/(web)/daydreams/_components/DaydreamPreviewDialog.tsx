@@ -1,4 +1,7 @@
+"use client";
+
 import classNames from "classnames";
+import { getSafeImageDimensions } from "@/components/Image/getSafeImageDimensions";
 import ImagePreviewContainer from "@/components/Image/ImagePreviewContainer";
 import SupabaseImage from "@/components/Image/SupabaseImage";
 import { MdClose } from "react-icons/md";
@@ -13,8 +16,8 @@ import {
 } from "@/components";
 import { useGalleryContext } from "@/context/GalleryContext";
 import { useHotkeys } from "react-hotkeys-hook";
-import { useLoadable } from "@/hooks";
-import { useEffect, useRef } from "react";
+import { useElementSize, useLoadable } from "@/hooks";
+import { useEffect } from "react";
 import { Tables } from "@/types";
 
 interface DaydreamPreviewDialogProps
@@ -30,26 +33,29 @@ const DaydreamPreviewDialog = ({
   description,
   aperture,
 }: DaydreamPreviewDialogProps) => {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const { height: containerHeight, ref: containerRef } =
+    useElementSize<HTMLDivElement>();
   const { selectedItem, selectedIndex } = useGalleryContext();
   const { isLoading, startLoading, endLoading } = useLoadable();
+  const safeImageDimensions = getSafeImageDimensions(selectedItem ?? undefined);
 
-  const scale =
-    selectedItem?.height / (containerRef.current?.clientHeight ?? 950);
+  const scale = safeImageDimensions.height / (containerHeight || 950);
 
-  const height = selectedItem?.height / scale;
-  const width = selectedItem?.width / scale;
+  const height = safeImageDimensions.height / scale;
+  const width = safeImageDimensions.width / scale;
 
   useHotkeys(["esc", "escape"], onClose);
 
   useEffect(() => {
     startLoading();
-  }, [selectedIndex]);
+  }, [selectedIndex, startLoading]);
 
   return (
     <Dialog isOpen={isOpen} isOverlayVisible={false}>
       <CardRoot className="h-full sm:rounded-md">
         <button
+          type="button"
+          aria-label="Close preview"
           className={classNames(
             "dark:text-neutral-200 text-neutral-800 outline-none p-2 cursor-pointer absolute right-1.5 top-1.5 z-10"
           )}
@@ -71,8 +77,8 @@ const DaydreamPreviewDialog = ({
             <ImagePreviewContainer ref={containerRef}>
               {selectedItem?.storage_file_path && (
                 <SupabaseImage
-                  src={selectedItem!.storage_file_path}
-                  alt={selectedItem?.name ?? ""}
+                  src={selectedItem.storage_file_path}
+                  alt={selectedItem.name}
                   className={classNames(
                     "object-contain pointer-events-none max-w-full max-h-full w-auto h-auto",
                     {
@@ -87,8 +93,8 @@ const DaydreamPreviewDialog = ({
                     width: "auto",
                     height: "auto",
                   }}
-                  onLoadingComplete={endLoading}
                   onLoad={endLoading}
+                  sizes="100vw"
                 />
               )}
             </ImagePreviewContainer>

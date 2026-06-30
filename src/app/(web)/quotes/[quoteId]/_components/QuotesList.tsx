@@ -1,6 +1,5 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import { useInfiniteQuoteList } from "@/features/quotes/api";
 import { Suspense, useEffect, useMemo, useRef } from "react";
 import { DEFAULT_PAGINATION_VALUES } from "@/utils/pagination";
@@ -9,8 +8,11 @@ import {
   QuoteCardLoading,
 } from "@/app/(web)/quotes/[quoteId]/_components/QuoteCard";
 
-export const QuotesList = () => {
-  const { quoteId } = useParams();
+interface QuotesListProps {
+  quoteId: string;
+}
+
+export const QuotesList = ({ quoteId }: QuotesListProps) => {
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   const {
@@ -23,7 +25,7 @@ export const QuotesList = () => {
     per_page: DEFAULT_PAGINATION_VALUES.per_page,
     page: DEFAULT_PAGINATION_VALUES.current_page,
     filter: {
-      category_id: quoteId as string,
+      category_id: quoteId,
     },
     sort: [{ column: "created_at", order: "desc" }],
   });

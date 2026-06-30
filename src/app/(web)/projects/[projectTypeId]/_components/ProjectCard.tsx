@@ -1,5 +1,7 @@
+"use client";
+
 import SupabaseImage from "@/components/Image/SupabaseImage";
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import { BaseSkeletonLoader, ExternalLink } from "@/components";
 import {
   PiCode,
@@ -7,7 +9,7 @@ import {
   PiFigmaLogoLight,
   PiGlobeHemisphereWestThin,
 } from "react-icons/pi";
-import { ProjectCardItem } from "@/app/admin/(modules)/projects/_components/ProjectCard";
+import type { ProjectCardItem } from "@/features/projects/types";
 
 interface ProjectCardInterface {
   item: ProjectCardItem;
@@ -30,13 +32,15 @@ export const ProjectCard = ({ item, onPreview }: ProjectCardInterface) => {
     <Fragment>
       <div className="flex flex-col md:flex-row gap-6">
         {!!screenshots.length ? (
-          <div
-            className="relative h-64 md:h-auto md:w-64 md:aspect-square shrink-0 rounded-md overflow-hidden cursor-pointer hover:bg-neutral-800 group"
+          <button
+            type="button"
+            aria-label={`Preview ${title} screenshots`}
+            className="relative h-64 md:h-auto md:w-64 md:aspect-square shrink-0 rounded-md overflow-hidden cursor-pointer hover:bg-neutral-800 group bg-transparent p-0"
             onClick={() => onPreview(item)}
           >
-            <button className="z-10 opacity-0 group-hover:opacity-100 transition-opacity delay-75 absolute w-full h-full bg-opacity-40 bg-neutral-800 flex items-center justify-center pointer-events-none group-active:bg-opacity-[0.45]">
+            <span className="z-10 opacity-0 group-hover:opacity-100 transition-opacity delay-75 absolute w-full h-full bg-opacity-40 bg-neutral-800 flex items-center justify-center pointer-events-none group-active:bg-opacity-[0.45]">
               <PiCornersOutLight size={32} className="text-white" />
-            </button>
+            </span>
 
             {screenshots.length && (
               <div className="flex flex-row gap-1 absolute right-2.5 top-2.5 z-10">
@@ -56,8 +60,9 @@ export const ProjectCard = ({ item, onPreview }: ProjectCardInterface) => {
               quality={75}
               width={450}
               height={450}
+              sizes="16rem"
             />
-          </div>
+          </button>
         ) : (
           <span className="h-64 md:h-auto md:w-64 md:aspect-square shrink-0 bg-neutral-300 rounded-md" />
         )}

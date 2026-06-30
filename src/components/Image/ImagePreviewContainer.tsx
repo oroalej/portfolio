@@ -1,17 +1,22 @@
+"use client";
+
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import { useGalleryContext } from "@/context/GalleryContext";
 import classNames from "classnames";
-import { DetailedHTMLProps, forwardRef, HTMLAttributes } from "react";
+import type { ComponentPropsWithRef } from "react";
 
 interface ImagePreviewContainerProps
-  extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
+  extends ComponentPropsWithRef<"div"> {
   isNavigationDisabled?: boolean;
 }
 
-const ImagePreviewContainer = forwardRef<
-  HTMLDivElement,
-  ImagePreviewContainerProps
->(({ children, isNavigationDisabled = false }, ref) => {
+const ImagePreviewContainer = ({
+  children,
+  className,
+  isNavigationDisabled = false,
+  ref,
+  ...remaining
+}: ImagePreviewContainerProps) => {
   const { onNext, onPrev, isFirst, isLast } = useGalleryContext();
   const navigationButtonClassName =
     "hidden absolute transform top-1/2 -translate-y-1/2 z-20 text-neutral-800 outline-none p-2.5 aspect-square rounded-full bg-neutral-200 transition-colors";
@@ -19,6 +24,8 @@ const ImagePreviewContainer = forwardRef<
   return (
     <div className="relative h-full flex justify-center gap-4 w-full">
       <button
+        type="button"
+        aria-label="Previous image"
         className={classNames(
           navigationButtonClassName,
           "left-2",
@@ -34,13 +41,19 @@ const ImagePreviewContainer = forwardRef<
       </button>
 
       <div
-        className="relative flex-1 min-w-0 h-full text-center inline-flex flex-col items-center justify-center gap-3 w-full md:px-14 lg:px-16"
+        className={classNames(
+          "relative flex-1 min-w-0 h-full text-center inline-flex flex-col items-center justify-center gap-3 w-full md:px-14 lg:px-16",
+          className
+        )}
         ref={ref}
+        {...remaining}
       >
         {children}
       </div>
 
       <button
+        type="button"
+        aria-label="Next image"
         className={classNames(
           navigationButtonClassName,
           "right-2",
@@ -56,8 +69,6 @@ const ImagePreviewContainer = forwardRef<
       </button>
     </div>
   );
-});
-
-ImagePreviewContainer.displayName = "ImagePreviewContainer";
+};
 
 export default ImagePreviewContainer;

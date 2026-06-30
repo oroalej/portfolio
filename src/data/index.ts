@@ -7,3 +7,5 @@ export const TERM_IDENTIFIER = {
   PROJECT_TYPES: 6,
   GALLERY_CATEGORIES: 7,
 };
+
+export * from "./portfolioSummary";

@@ -5,6 +5,10 @@ export const metadata: Metadata = {
   title: "Alexander Jeam Oro - Quotes",
 };
 
-const QuoteIdPage = () => <QuotesList />;
+const QuoteIdPage = async ({ params }: PageProps<"/quotes/[quoteId]">) => {
+  const { quoteId } = await params;
+
+  return <QuotesList quoteId={quoteId} />;
+};
 
 export default QuoteIdPage;

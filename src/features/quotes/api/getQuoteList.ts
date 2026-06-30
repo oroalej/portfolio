@@ -2,7 +2,6 @@ import {
   keepPreviousData,
   useInfiniteQuery,
   useQuery,
-  useQueryClient,
 } from "@tanstack/react-query";
 import {
   queryFilterBuilder,
@@ -23,7 +22,7 @@ type QuoteListFilterable = Pick<
   "category_id" | "source_id" | "media_detail_id"
 >;
 
-interface getQuotesParams
+interface GetQuotesParams
   extends Required<Paginatable>,
     Sortable<QuoteListSortable>,
     Filterable<QuoteListFilterable>,
@@ -42,7 +41,7 @@ const getQuoteList = ({
   q,
   sort = [],
   filter = {},
-}: getQuotesParams) => {
+}: GetQuotesParams) => {
   let query = supabase
     .from("quotes")
     .select(
@@ -68,7 +67,7 @@ const getQuoteList = ({
   return query.throwOnError();
 };
 
-export const useGetQuoteList = (params: getQuotesParams) =>
+export const useGetQuoteList = (params: GetQuotesParams) =>
   useQuery({
     placeholderData: keepPreviousData,
     staleTime: durationInMinutes(2),
@@ -94,39 +93,33 @@ export const useInfiniteQuoteList = ({
   q,
   sort = [],
   filter = {},
-}: getQuotesParams) => {
-  const queryClient = useQueryClient();
-
-  return useInfiniteQuery(
-    {
-      initialPageParam: page,
-      staleTime: durationInMinutes(2),
-      queryKey: [
-        "infinite_quotes",
-        removeEmptyValues({ q, ...filter }),
-        sort,
+}: GetQuotesParams) =>
+  useInfiniteQuery({
+    initialPageParam: page,
+    staleTime: durationInMinutes(2),
+    queryKey: [
+      "infinite_quotes",
+      removeEmptyValues({ q, ...filter }),
+      sort,
+      per_page,
+    ],
+    queryFn: async ({ pageParam }) => {
+      const { data, count } = await getQuoteList({
         per_page,
-      ],
-      queryFn: async ({ pageParam }) => {
-        const { data, count } = await getQuoteList({
-          per_page,
-          page: pageParam,
-          q,
-          sort,
-          filter,
-        });
+        page: pageParam,
+        q,
+        sort,
+        filter,
+      });
 
-        return {
-          data: (data as unknown as GetAllQuotesAPIDataStructure[]) || [],
-          pagination: generatePaginationData(
-            Number(per_page),
-            Number(pageParam),
-            count || 0
-          ),
-        };
-      },
-      getNextPageParam: getNextPaginationPageParam<GetAllQuotesAPIDataStructure>,
+      return {
+        data: (data as unknown as GetAllQuotesAPIDataStructure[]) || [],
+        pagination: generatePaginationData(
+          Number(per_page),
+          Number(pageParam),
+          count || 0
+        ),
+      };
     },
-    queryClient
-  );
-};
+    getNextPageParam: getNextPaginationPageParam<GetAllQuotesAPIDataStructure>,
+  });

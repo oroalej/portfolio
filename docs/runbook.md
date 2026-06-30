@@ -32,7 +32,7 @@ Run `pnpm.cmd run lint` and `pnpm.cmd run build` after package, routing, proxy, 
 
 - Supabase configuration requires `NEXT_PUBLIC_SUPABASE_URL` plus either `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` or the fallback `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
 - The admin area depends on Supabase Auth and redirects unauthenticated users to `/admin/login`.
-- Remote images are configured in `next.config.js` for Unsplash and the project Supabase host.
+- Remote images are configured in `next.config.js` for Unsplash and the project Supabase host. Next image qualities are limited to 65 and 75.
 
 ## Related Docs
 

@@ -6,8 +6,8 @@ This route reference is based on files under `src/app`.
 
 | Route | Source | Purpose |
 | --- | --- | --- |
-| `/` | `src/app/(web)/(index)/page.tsx` | Homepage with portfolio summary, about section, and tech stack. |
-| `/resume` | `src/app/(web)/resume/page.tsx` | Resume page backed by static resume data. |
+| `/` | `src/app/(web)/(index)/page.tsx` | Homepage with code-style portfolio summary language toggle, about section, and tech stack. |
+| `/resume` | `src/app/(web)/resume/page.tsx` | Resume page backed by static resume data and a local PDF download. |
 | `/projects` | `src/app/(web)/projects/page.tsx` | Redirects to the first project type taxonomy entry. |
 | `/projects/[projectTypeId]` | `src/app/(web)/projects/[projectTypeId]/page.tsx` | Project list for one project type. |
 | `/quotes` | `src/app/(web)/quotes/page.tsx` | Redirects to the first quote category taxonomy entry. |

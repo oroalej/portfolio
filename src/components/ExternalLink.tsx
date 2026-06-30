@@ -1,26 +1,37 @@
-import { FC, ReactNode } from "react";
+import { AnchorHTMLAttributes, ReactNode } from "react";
 
-interface ExternalLinkInterface {
+interface ExternalLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   children: ReactNode;
   href: string;
-  label?: string | undefined;
-  className?: string | undefined;
+  label?: string;
 }
 
-export const ExternalLink: FC<ExternalLinkInterface> = (
-  props: ExternalLinkInterface
-) => {
-  const { children, href, label = "", className = "", ...remaining } = props;
+export type ExternalLinkInterface = ExternalLinkProps;
+
+export const ExternalLink = ({
+  children,
+  href,
+  label,
+  rel,
+  target = "_blank",
+  title,
+  ...remaining
+}: ExternalLinkProps) => {
+  const resolvedLabel = label?.trim();
+  const labelAttributes = resolvedLabel
+    ? {
+        "aria-label": resolvedLabel,
+        title: title ?? resolvedLabel,
+      }
+    : { title };
 
   return (
     <a
       {...remaining}
       href={href}
-      rel="noreferrer"
-      target="_blank"
-      aria-label={label}
-      title={label}
-      className={className}
+      rel={rel ?? (target === "_blank" ? "noopener noreferrer" : undefined)}
+      target={target}
+      {...labelAttributes}
     >
       {children}
     </a>

@@ -14,8 +14,8 @@ const Resume = () => (
   <Container className="font-sans py-14 md:py-20 lg:pb-32">
     <div className="w-full mb-12 lg:mb-6 text-center lg:text-right">
       <a
-        href="https://drive.google.com/file/d/1Y_7k8PR-q1XlO-Bxaklcc9kDO8_qNopE/view?usp=sharing"
-        target="_blank"
+        href="/alexander-jeam-oro-resume.pdf"
+        download="alexander-jeam-oro-resume.pdf"
         className="inline-flex flex-row gap-2 items-center w-fit py-2.5 px-3.5 bg-rose-500 hover:bg-rose-600 transition-colors rounded text-white text-sm"
       >
         <FaDownload />
@@ -47,7 +47,7 @@ const Resume = () => (
           {EXPERIENCES.map(
             ({ company, positions, descriptions, technologies = [] }) => (
               <div
-                className="relative block py-3 space-y-0.5 text-sm lg:text-base"
+                className="relative block py-2.5 space-y-0.5 text-sm lg:text-base"
                 key={kebabCase(company)}
               >
                 <h3 className="text-neutral-700 font-medium dark:text-neutral-200 text-lg">
@@ -66,7 +66,7 @@ const Resume = () => (
                   </div>
                 ))}
 
-                <ul className="list-disc list-inside text-neutral-700 dark:text-neutral-200 space-y-2 pb-2">
+                <ul className="list-disc list-inside text-neutral-700 dark:text-neutral-200 space-y-1.5 pb-2">
                   {descriptions.map((description, index) => (
                     <li key={kebabCase(company, index.toString())}>
                       {description}
