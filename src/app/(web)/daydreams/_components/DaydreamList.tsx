@@ -1,10 +1,8 @@
 "use client";
 
-import { useGetDaydreamList } from "@/features/daydreams/api";
+import { useInfiniteDaydreamList } from "@/features/daydreams/api";
 import { DEFAULT_PAGINATION_VALUES } from "@/utils/pagination";
-import { useQueryState } from "nuqs";
-import { Fragment, Suspense, useEffect } from "react";
-import { SimplePagination } from "@/components";
+import { Suspense, useEffect, useMemo, useRef } from "react";
 import {
   DaydreamCard,
   DaydreamCardLoading,
@@ -17,21 +15,31 @@ import DaydreamPreviewDialog from "@/app/(web)/daydreams/_components/DaydreamPre
 export const DaydreamList = () => {
   const { setList, setSelectedIndex, selectedIndex } = useGalleryContext();
   const { isOpen, onOpen, onClose } = useOpenable();
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
-  const [page, setPage] = useQueryState("per_page", {
-    parse: parseInt,
-    shallow: false,
-    defaultValue: DEFAULT_PAGINATION_VALUES.current_page,
-  });
-
-  const { isLoading, isFetching, data } = useGetDaydreamList({
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+  } = useInfiniteDaydreamList({
     per_page: 21,
-    page: page,
+    page: DEFAULT_PAGINATION_VALUES.current_page,
     sort: [
       { column: "year", order: "desc" },
       { column: "created_at", order: "desc" },
     ],
   });
+
+  const daydreams = useMemo(
+    () => data?.pages.flatMap((page) => page.data) ?? [],
+    [data?.pages]
+  );
+
+  const selectedDaydream = Number.isInteger(selectedIndex)
+    ? daydreams[selectedIndex ?? 0]
+    : undefined;
 
   const onSelectHandler = (index: number) => {
     setSelectedIndex(index);
@@ -39,70 +47,86 @@ export const DaydreamList = () => {
   };
 
   useEffect(() => {
-    setList(data?.data.map(DaydreamGalleryItemTransformer) ?? []);
-  }, [data?.data]);
+    setList(daydreams.map(DaydreamGalleryItemTransformer), {
+      shouldResetSelectedIndex: !isOpen,
+    });
+  }, [daydreams, isOpen]);
 
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  }, [isFetching]);
+    const loadMoreElement = loadMoreRef.current;
+
+    if (!loadMoreElement || !hasNextPage) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting && !isFetchingNextPage) {
+          fetchNextPage().catch();
+        }
+      },
+      { rootMargin: "240px 0px" }
+    );
+
+    observer.observe(loadMoreElement);
+
+    return () => observer.disconnect();
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   if (isLoading) {
     return <DaydreamListLoading />;
   }
 
   return (
-    <Fragment>
+    <>
       <div className="grid gap-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {data?.data.map((item, index) => (
-          <Suspense
-            key={`daydream-${item.id}-${index}`}
-            fallback={<DaydreamCardLoading />}
-          >
-            <DaydreamCard
-              image_path={item.file.storage_file_path}
-              iso={item.iso}
-              shutter_speed={item.shutter_speed}
-              aperture={item.aperture}
-              year={item.year}
-              description={item.description}
-              onSelect={() => onSelectHandler(index)}
-            />
-          </Suspense>
-        )) ?? (
+        {daydreams.length ? (
+          daydreams.map((item, index) => (
+            <Suspense
+              key={`daydream-${item.id}-${index}`}
+              fallback={<DaydreamCardLoading />}
+            >
+              <DaydreamCard
+                image_path={item.file.storage_file_path}
+                iso={item.iso}
+                shutter_speed={item.shutter_speed}
+                aperture={item.aperture}
+                year={item.year}
+                description={item.description}
+                onSelect={() => onSelectHandler(index)}
+              />
+            </Suspense>
+          ))
+        ) : (
           <div className="text-center col-span-3">
             {"I'm sorry, I haven't uploaded yet..."}
           </div>
         )}
+
+        {isFetchingNextPage &&
+          [...Array(3)].map((_, index) => (
+            <DaydreamCardLoading key={`daydream-fetching-${index}`} />
+          ))}
       </div>
 
-      {Number.isInteger(selectedIndex) && data?.data && (
+      {selectedDaydream && (
         <DaydreamPreviewDialog
           isOpen={isOpen}
           onClose={onClose}
-          year={data.data[selectedIndex || 0].year}
-          description={data.data[selectedIndex || 0].description}
-          aperture={data.data[selectedIndex || 0].aperture}
-          iso={data.data[selectedIndex || 0].iso}
-          shutter_speed={data.data[selectedIndex || 0].shutter_speed}
+          year={selectedDaydream.year}
+          description={selectedDaydream.description}
+          aperture={selectedDaydream.aperture}
+          iso={selectedDaydream.iso}
+          shutter_speed={selectedDaydream.shutter_speed}
         />
       )}
 
-      {data?.pagination && data.pagination.last_page !== 1 && (
-        <div className="flex justify-center my-16">
-          <SimplePagination
-            onChange={(value) => {
-              setPage(value).catch();
-            }}
-            current_page={data.pagination.current_page}
-            last_page={data.pagination.last_page}
-            size="large"
-          />
-        </div>
+      {hasNextPage && (
+        <div
+          ref={loadMoreRef}
+          className="h-1 w-full my-16"
+          aria-hidden="true"
+        />
       )}
-    </Fragment>
+    </>
   );
 };
 

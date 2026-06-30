@@ -33,7 +33,7 @@ Quotes store quote content with category, source, and optional media-detail taxo
 
 - Public `/quotes` redirects to the first quote category taxonomy entry.
 - Public quote navigation lists quote categories.
-- Public quote list filters by `category_id`, sorts by newest first, and paginates.
+- Public quote list filters by `category_id`, sorts by newest first, and fetches additional pages through an intersection-observer sentinel.
 - Admin index combines a sticky create form with a paginated table.
 - Admin search filters quote content through `q`.
 - Admin filters use URL query params `category_id`, `source_id`, and `media_detail_id`.
@@ -43,11 +43,13 @@ Quotes store quote content with category, source, and optional media-detail taxo
 ## Cache And State
 
 - Quote list: `["quotes", params]`.
+- Public infinite quote list: `["infinite_quotes", filters, sort, per_page]`.
 - Quote detail: `["quote", id]`.
 - Create invalidates active quote lists and seeds detail cache.
 - Update sets detail cache and patches active paginated list cache.
 - Delete removes the active detail query and invalidates active quote lists.
-- Public and admin pagination use URL query state.
+- Admin pagination uses URL query state.
+- Public quote pagination is held in the infinite query state, not the URL.
 
 ## Forms And Validation
 
@@ -63,6 +65,7 @@ Quotes store quote content with category, source, and optional media-detail taxo
 - Check source/media-detail dependency when category changes.
 - Check the `INDIVIDUAL_ID` branch for quotes that do not require media detail.
 - Check admin filtering preserves pagination behavior.
+- Check public quote infinite-scroll behavior.
 - Run `pnpm.cmd run lint` after quote changes.
 
 ## Open Questions

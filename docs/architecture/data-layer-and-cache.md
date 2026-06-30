@@ -29,6 +29,7 @@ Files are the main exception: file list search uses `ilike("name", "%...%")` ins
 - `DEFAULT_PAGINATION_VALUES`.
 - `getRange`.
 - `generatePaginationData`.
+- `getNextPaginationPageParam` for deriving the next page in infinite query hooks.
 - `updatePaginatedDataCache` for replacing one item inside the active paginated cache.
 
 ## React Query Defaults
@@ -44,10 +45,12 @@ Feature hooks then choose their own `staleTime`, placeholder behavior, and cache
 List keys are usually plural and detail keys are usually singular:
 
 - `["projects", params]` and `["project", id]`.
-- `["quotes", params]` and `["quote", id]`.
-- `["daydreams", params]` and `["daydream", id]`.
+- `["quotes", params]`, `["infinite_quotes", filters, sort, per_page]`, and `["quote", id]`.
+- `["daydreams", params]`, `["infinite_daydreams", filters, sort, per_page]`, and `["daydream", id]`.
 - `["files", params]`, `["infinite_files", filters]`, and `["file", id]`.
 - `["taxonomy", options]`, `["taxonomy", { id }]`, and `["terms"]`.
+
+Infinite list hooks keep pagination metadata in each page response and derive the next page from `pagination.current_page` and `pagination.last_page`.
 
 See [Query Keys Reference](../reference/query-keys.md) for the full module map.
 

@@ -20,7 +20,7 @@ import { FileAPIDataStructure } from "@/features/files/types";
 import toast from "react-hot-toast";
 
 export interface RenameDialogProps
-  extends Required<Omit<DialogProps, "children">> {
+  extends Required<Pick<DialogProps, "isOpen" | "onClose">> {
   item: FileAPIDataStructure;
 }
 

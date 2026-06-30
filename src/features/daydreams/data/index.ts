@@ -1,13 +1,5 @@
 import { DreamFormParams } from "@/features/daydreams/types";
 
-export const MAX_FILE_SIZE = 15728640; // 15MB
-export const ACCEPTED_IMAGE_TYPES = [
-  "image/jpeg",
-  "image/jpg",
-  "image/png",
-  "image/webp",
-];
-
 export const DEFAULT_FORM_VALUES: DreamFormParams = {
   iso: 200,
   shutter_speed: 125,

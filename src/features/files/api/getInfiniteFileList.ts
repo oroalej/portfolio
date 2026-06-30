@@ -3,6 +3,7 @@ import {
   DataWithPagination,
   DEFAULT_PAGINATION_VALUES,
   generatePaginationData,
+  getNextPaginationPageParam,
 } from "@/utils/pagination";
 import { FileListProps, getFiles } from "@/features/files/api/getFileList";
 import { FileAPIDataStructure } from "@/features/files/types";
@@ -39,19 +40,7 @@ export const useInfiniteFileList = ({
         };
       },
 
-      getNextPageParam: (lastPage) => {
-        const pagination = (
-          lastPage as DataWithPagination<FileAPIDataStructure>
-        ).pagination;
-
-        const nextPage = pagination.current_page + 1;
-
-        if (pagination.last_page >= nextPage) {
-          return nextPage;
-        }
-
-        return undefined;
-      },
+      getNextPageParam: getNextPaginationPageParam<FileAPIDataStructure>,
       getPreviousPageParam: (
         firstPage,
         allPages,

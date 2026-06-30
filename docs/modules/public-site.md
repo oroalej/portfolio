@@ -7,7 +7,7 @@ The public site presents the portfolio homepage, resume, project portfolio, quot
 ## User-Facing Routes
 
 - `/`: portfolio summary, about section, and tech stack.
-- `/resume`: resume content from `src/data/resume.ts`.
+- `/resume`: resume content from `src/data/resume.ts`, including categorized technology badges.
 - `/projects`: redirects to the first project type taxonomy entry.
 - `/projects/[projectTypeId]`: lists projects for one project type.
 - `/quotes`: redirects to the first quote category taxonomy entry.
@@ -18,6 +18,7 @@ The public site presents the portfolio homepage, resume, project portfolio, quot
 
 - Public layout: `src/app/(web)/layout.tsx`.
 - Shared public shell: `TheHeader`, `TheFooter`, `ContactMeSection`, `Container`, `DarkModeButton`.
+- Resume components: `TechnologyBadge`, `TechnologyBadgeList`.
 - Homepage sections: `PortfolioSummarySection`, `AboutMeSection`, `SkillsSection`.
 - Project list/navigation: `ProjectNavigation`, `RedirectToProjectTypeId`, `ProjectList`, `ProjectCard`, `PreviewProjectImageDialog`.
 - Quote list/navigation: `QuoteNavigation`, `RedirectToQuoteId`, `QuotesList`, `QuoteCard`.
@@ -36,27 +37,28 @@ The public site presents the portfolio homepage, resume, project portfolio, quot
 - `/projects` fetches terms, finds `TERM_IDENTIFIER.PROJECT_TYPES`, loads taxonomy for that term, and redirects to the first taxonomy id.
 - `/projects/[projectTypeId]` loads projects filtered by `project_type_id`, ordered by `project_order`, then transforms project API data into card items.
 - Project screenshot preview uses `GalleryProvider` to hold the selected screenshot list and active index.
+- `/resume` renders static resume entries and categorizes technology badge labels as frontend, backend, data/API, AI/developer tools, workflow/platform, or other.
 - `/quotes` fetches terms, finds `TERM_IDENTIFIER.QUOTE_CATEGORY`, loads taxonomy for that term, and redirects to the first taxonomy id.
-- `/quotes/[quoteId]` loads paginated quotes filtered by `category_id`.
-- `/daydreams` loads daydreams sorted by year descending and created date descending, then uses `GalleryProvider` for preview state.
+- `/quotes/[quoteId]` loads quotes filtered by `category_id` and fetches additional pages through infinite scroll.
+- `/daydreams` loads daydreams sorted by year descending and created date descending, fetches additional pages through infinite scroll, then uses `GalleryProvider` for preview state.
 
 ## Cache And State
 
 - Terms: `["terms"]`.
 - Taxonomy: `["taxonomy", options]`.
 - Projects: `["projects", params]`.
-- Quotes: `["quotes", params]`.
-- Daydreams: `["daydreams", params]`.
-- Public quote and daydream pagination stores the selected page in the URL query key `per_page`, even though it represents the current page value in those components.
+- Quotes: `["quotes", params]` for paginated lists and `["infinite_quotes", filters, sort, per_page]` for the public infinite list.
+- Daydreams: `["daydreams", params]` for paginated lists and `["infinite_daydreams", filters, sort, per_page]` for the public infinite list.
 
 ## Forms And Validation
 
-The public site has no write forms. It uses read-only data displays, navigation, pagination, and preview dialogs.
+The public site has no write forms. It uses read-only data displays, navigation, infinite loading, pagination where route components still use it, and preview dialogs.
 
 ## Verification Notes
 
 - Validate navigation redirects for `/projects` and `/quotes` when taxonomy data exists.
 - Validate empty states for projects, quotes, and daydreams.
+- Validate public quote and daydream infinite-scroll loading.
 - Validate image preview behavior where `GalleryProvider` is used.
 - Run `pnpm.cmd run lint` after UI changes.
 

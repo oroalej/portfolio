@@ -2,6 +2,10 @@ import { Button, Card, Dialog, DialogProps, Scrollbar } from "@/components";
 import { Fragment } from "react";
 import { computeStorageSizeFromByte } from "@/utils";
 import * as UIScrollArea from "@radix-ui/react-scroll-area";
+import {
+  ACCEPTED_IMAGE_TYPE_LABEL_TEXT,
+  MAX_IMAGE_FILE_SIZE_LABEL,
+} from "@/features/files/data";
 
 export const DEFAULT_REJECT_FILES_VALUES: RejectedFiles = {
   size: [],
@@ -35,7 +39,7 @@ export const RejectedFileListDialog = ({
                 <span className="block text-xs text-red-700 leading-snug mb-2">
                   {"Max size accepted: "}
                   <u className="underline-offset-2">
-                    <b>15MB</b>
+                    <b>{MAX_IMAGE_FILE_SIZE_LABEL}</b>
                   </u>
                 </span>
 
@@ -67,7 +71,7 @@ export const RejectedFileListDialog = ({
                 <span className="block text-xs text-red-700 leading-snug mb-2">
                   {"Only supported types: "}
                   <u className="underline-offset-2">
-                    <b>JPG</b>, <b>JPEG</b>, <b>PNG</b>, and <b>WEBP</b>
+                    <b>{ACCEPTED_IMAGE_TYPE_LABEL_TEXT}</b>
                   </u>
                   .
                 </span>

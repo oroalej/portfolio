@@ -1,4 +1,9 @@
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useInfiniteQuery,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import {
   queryFilterBuilder,
   queryPaginationBuilder,
@@ -6,7 +11,13 @@ import {
 } from "@/utils/supabase";
 import { DaydreamAPIDataStructure } from "@/features/daydreams/types";
 import { Filterable, Paginatable, Searchable, Sortable, Tables } from "@/types";
-import { DataWithPagination, generatePaginationData } from "@/utils/pagination";
+import {
+  DataWithPagination,
+  DEFAULT_PAGINATION_VALUES,
+  generatePaginationData,
+  getNextPaginationPageParam,
+} from "@/utils/pagination";
+import { durationInMinutes, removeEmptyValues } from "@/utils";
 
 type DaydreamListSortable = Pick<
   Tables<"daydreams">,
@@ -82,3 +93,46 @@ export const useGetDaydreamList = <Type extends any = DaydreamAPIDataStructure>(
       return data as DataWithPagination<Type>;
     },
   });
+
+export const useInfiniteDaydreamList = ({
+  per_page = DEFAULT_PAGINATION_VALUES.per_page,
+  page = DEFAULT_PAGINATION_VALUES.current_page,
+  q,
+  sort = [{ column: "created_at", order: "desc" }],
+  filter = {},
+}: getDaydreamListParams) => {
+  const queryClient = useQueryClient();
+
+  return useInfiniteQuery(
+    {
+      initialPageParam: page,
+      staleTime: durationInMinutes(2),
+      queryKey: [
+        "infinite_daydreams",
+        removeEmptyValues({ q, ...filter }),
+        sort,
+        per_page,
+      ],
+      queryFn: async ({ pageParam }) => {
+        const { data, count } = await getDaydreamList({
+          per_page,
+          page: pageParam,
+          q,
+          sort,
+          filter,
+        });
+
+        return {
+          data: (data as unknown as DaydreamAPIDataStructure[]) || [],
+          pagination: generatePaginationData(
+            Number(per_page),
+            Number(pageParam),
+            count || 0
+          ),
+        };
+      },
+      getNextPageParam: getNextPaginationPageParam<DaydreamAPIDataStructure>,
+    },
+    queryClient
+  );
+};

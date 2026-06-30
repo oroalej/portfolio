@@ -28,6 +28,7 @@ export const storeFileBucket = ({
     .from(bucket_name)
     .upload(`${pathname}/${files.name}`, file, {
       cacheControl: "3600",
+      contentType: files.type,
       upsert: true,
     });
 };

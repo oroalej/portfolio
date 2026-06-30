@@ -33,7 +33,7 @@ Daydreams are photography-style entries with an image, year, description, and ca
 
 ## Workflows
 
-- Public daydream list loads 21 items per page sorted by year descending and created date descending.
+- Public daydream list loads 21 items at a time, sorted by year descending and created date descending, then fetches the next page through an intersection-observer sentinel.
 - Public preview uses `GalleryProvider` plus `DaydreamPreviewDialog`.
 - Admin index supports search, year filtering, pagination, row selection, and delete confirmation.
 - Admin create/edit uses a gallery dialog to select the image file.
@@ -43,11 +43,13 @@ Daydreams are photography-style entries with an image, year, description, and ca
 ## Cache And State
 
 - Daydream list: `["daydreams", params]`.
+- Public infinite daydream list: `["infinite_daydreams", filters, sort, per_page]`.
 - Daydream detail: `["daydream", id]`.
 - Create seeds detail cache and invalidates daydream lists.
 - Update sets detail cache and patches active paginated list cache.
 - Delete removes active detail cache and invalidates daydream lists.
-- Public and admin pagination use URL query state.
+- Admin pagination uses URL query state.
+- Public daydream pagination is held in the infinite query state, not the URL.
 - Public preview state uses `GalleryProvider`.
 
 ## Forms And Validation
@@ -55,14 +57,15 @@ Daydreams are photography-style entries with an image, year, description, and ca
 - `DaydreamForm` uses React Hook Form and `DreamSchema`.
 - Required fields: image, year, description, ISO, shutter speed, aperture.
 - Defaults come from `src/features/daydreams/data`.
-- Accepted gallery upload types are JPG, JPEG, PNG, and WEBP.
-- Max image size constant is 15 MB.
+- Gallery upload image rules are owned by `src/features/files/data`.
+- Accepted gallery upload types are JPG, JPEG, PNG, WEBP, GIF, and AVIF.
+- Max gallery image size is 50 MB.
 
 ## Verification Notes
 
 - Check gallery image selection and clear behavior.
 - Check year filter and search in admin list.
-- Check public preview and pagination behavior.
+- Check public preview and infinite-scroll behavior.
 - Run `pnpm.cmd run lint` after daydream changes.
 
 ## Open Questions

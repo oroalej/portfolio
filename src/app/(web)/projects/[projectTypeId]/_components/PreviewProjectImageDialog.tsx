@@ -24,7 +24,7 @@ import { ProjectCardItem } from "@/app/admin/(modules)/projects/_components/Proj
 import { Thumbnail } from "@/app/(web)/projects/[projectTypeId]/_components/Thumbnail";
 
 interface PreviewProjectImageDialogProps
-  extends Required<Omit<DialogProps, "children">>,
+  extends Required<Pick<DialogProps, "isOpen" | "onClose">>,
     Pick<
       ProjectCardItem,
       "title" | "repository_link" | "design_link" | "website_link"
@@ -80,7 +80,7 @@ const PreviewProjectImageDialog = ({
             </button>
           </div>
 
-          <ImagePreviewContainer>
+          <ImagePreviewContainer isNavigationDisabled={isLoading}>
             <div className="flex flex-col md:flex-row justify-between gap-4 md:gap-12 w-full pr-12">
               <div className="overflow-x-auto ">
                 <div className="flex flex-row shrink-0 pb-2 lg:pb-0">
@@ -143,20 +143,17 @@ const PreviewProjectImageDialog = ({
               </div>
             </div>
 
-            <div className="relative flex-1 md:px-14">
+            <div className="relative flex-1">
               <Window title={selectedItem.name}>
-                <div className="relative">
+                <div className="relative h-[calc(100vh-258px)] md:h-[calc(100vh-206px)]">
                   {isLoading && (
                     <div className="bg-white absolute inset-0 z-10">
-                      <BaseSkeletonLoader
-                        className="w-full"
-                        style={{ height: "calc(100vh - 206px)" }}
-                      />
+                      <BaseSkeletonLoader className="w-full h-full" />
                     </div>
                   )}
 
                   <div
-                    className="overflow-y-auto relative scrollbar-w-2 scrollbar scrollbar-thumb-zinc-400 scrollbar-track-gray-200 max-h-[calc(100vh-258px)] md:max-h-[calc(100vh-206px)]"
+                    className="h-full overflow-y-auto relative scrollbar-w-2 scrollbar scrollbar-thumb-zinc-400 scrollbar-track-gray-200 max-h-[calc(100vh-258px)] md:max-h-[calc(100vh-206px)]"
                     ref={imageContainerRef}
                     tabIndex={-1}
                   >

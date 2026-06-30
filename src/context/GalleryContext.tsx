@@ -4,8 +4,12 @@ import { createContext, useCallback, useContext, useState } from "react";
 import { BaseComponent, Tables } from "@/types";
 import { useHotkeys } from "react-hotkeys-hook";
 
+interface SetGalleryListOptions {
+  shouldResetSelectedIndex?: boolean;
+}
+
 interface GalleryContextProps {
-  setList: (value: GalleryItem[]) => void;
+  setList: (value: GalleryItem[], options?: SetGalleryListOptions) => void;
   setSelectedIndex: (value: number) => void;
   selectedIndex?: number | null;
   list: GalleryItem[];
@@ -44,9 +48,16 @@ export const GalleryProvider = ({ children }: BaseComponent) => {
   const total = list.length;
   const selectedItem = list?.[selectedIndex] ?? null;
 
-  const setList = (value: GalleryItem[]) => {
+  const setList = (
+    value: GalleryItem[],
+    { shouldResetSelectedIndex = true }: SetGalleryListOptions = {}
+  ) => {
     setListable(value);
-    setSelectedIndex(0);
+    setSelectedIndex((prevState) => {
+      if (shouldResetSelectedIndex) return 0;
+
+      return Math.min(prevState, Math.max(value.length - 1, 0));
+    });
   };
 
   const onPrev = useCallback(

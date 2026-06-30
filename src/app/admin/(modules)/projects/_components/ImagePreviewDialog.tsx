@@ -9,7 +9,7 @@ import { useEffect, useRef } from "react";
 import { useLoadable } from "@/hooks";
 
 interface ImagePreviewDialogProps
-  extends Required<Omit<DialogProps, "children">> {
+  extends Required<Pick<DialogProps, "isOpen" | "onClose">> {
   indicator?: boolean;
 }
 

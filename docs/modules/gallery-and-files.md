@@ -33,6 +33,7 @@ The gallery module manages image files in Supabase storage and mirrors file meta
 - Filters include category, bookmark tab, and filename search.
 - Upload accepts drag/drop or file input.
 - Upload validates file type and max size before writing to storage and inserting metadata.
+- Upload normalizes accepted image MIME types and passes that value as the Supabase storage `contentType`.
 - Rename updates `files` metadata and moves the storage object when the filename changes.
 - Delete removes the database row and storage object, then invalidates file list caches.
 - Gallery items support preview, download, copy link, rename, bookmark toggle, detail navigation, and delete.
@@ -51,7 +52,10 @@ The gallery module manages image files in Supabase storage and mirrors file meta
 
 - Upload form uses React Hook Form and `StoreGallerySchema`.
 - Category is required.
-- File validation uses `ACCEPTED_IMAGE_TYPES` and `MAX_FILE_SIZE` from daydream constants.
+- File validation uses file-owned image rules from `src/features/files/data`.
+- Max image size is 50 MB.
+- Supported upload formats are JPG, JPEG, PNG, WEBP, GIF, and AVIF. Validation accepts supported MIME types case-insensitively and falls back to lowercase filename extensions only when the browser does not provide a MIME type.
+- SVG and non-image file types are rejected.
 - Rejected files are shown through `RejectedFileListDialog`.
 
 ## Verification Notes
@@ -64,5 +68,4 @@ The gallery module manages image files in Supabase storage and mirrors file meta
 
 ## Open Questions
 
-- File validation constants are owned by `features/daydreams/data`, even though gallery upload also depends on them.
 - Only the `images` bucket is typed in `Buckets`; audio/video types exist but no route currently documents those workflows.

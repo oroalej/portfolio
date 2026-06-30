@@ -20,6 +20,7 @@ Cache notes:
 | Key | Source | Meaning |
 | --- | --- | --- |
 | `["quotes", params]` | `useGetQuoteList` | Paginated quote list. |
+| `["infinite_quotes", filters, sort, per_page]` | `useInfiniteQuoteList` | Infinite quote list used by the public quote category route. |
 | `["quote", id]` | `useGetQuote` | Quote detail for edit form. |
 
 Cache notes:
@@ -33,6 +34,7 @@ Cache notes:
 | Key | Source | Meaning |
 | --- | --- | --- |
 | `["daydreams", params]` | `useGetDaydreamList` | Paginated daydream list. |
+| `["infinite_daydreams", filters, sort, per_page]` | `useInfiniteDaydreamList` | Infinite daydream list used by the public daydream gallery. |
 | `["daydream", id]` | `useGetDaydreamById` | Daydream detail for edit form. |
 
 Cache notes:

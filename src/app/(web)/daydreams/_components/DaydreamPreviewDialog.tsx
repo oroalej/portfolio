@@ -18,7 +18,7 @@ import { useEffect, useRef } from "react";
 import { Tables } from "@/types";
 
 interface DaydreamPreviewDialogProps
-  extends Required<Omit<DialogProps, "children">>,
+  extends Required<Pick<DialogProps, "isOpen" | "onClose">>,
     Omit<Tables<"daydreams">, "created_at" | "file_id" | "id"> {}
 
 const DaydreamPreviewDialog = ({
@@ -47,7 +47,7 @@ const DaydreamPreviewDialog = ({
   }, [selectedIndex]);
 
   return (
-    <Dialog isOpen={isOpen}>
+    <Dialog isOpen={isOpen} isOverlayVisible={false}>
       <CardRoot className="h-full sm:rounded-md">
         <button
           className={classNames(
@@ -61,8 +61,11 @@ const DaydreamPreviewDialog = ({
         <CardBody className="flex flex-col lg:flex-row gap-8 h-full max-w-[1920px] mx-auto">
           <div className="relative flex justify-between items-center overflow-hidden grow dark:bg-neutral-300 bg-neutral-100 rounded-md mt-12 lg:mt-0 md:px-1">
             {isLoading && (
-              <div className="absolute inset-0 bg-neutral-100 z-10 inline-flex justify-center">
-                <BaseSkeletonLoader style={{ height, width }} />
+              <div className="absolute inset-0 bg-neutral-100 z-10 inline-flex items-center justify-center md:px-14 lg:px-16">
+                <BaseSkeletonLoader
+                  className="max-w-full max-h-full"
+                  style={{ height, width }}
+                />
               </div>
             )}
             <ImagePreviewContainer ref={containerRef}>
@@ -70,11 +73,20 @@ const DaydreamPreviewDialog = ({
                 <SupabaseImage
                   src={selectedItem!.storage_file_path}
                   alt={selectedItem?.name ?? ""}
-                  className={classNames("object-contain pointer-events-none", {
-                    invisible: isLoading,
-                  })}
+                  className={classNames(
+                    "object-contain pointer-events-none max-w-full max-h-full w-auto h-auto",
+                    {
+                      invisible: isLoading,
+                    }
+                  )}
                   width={width}
                   height={height}
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                    width: "auto",
+                    height: "auto",
+                  }}
                   onLoadingComplete={endLoading}
                   onLoad={endLoading}
                 />

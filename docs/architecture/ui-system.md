@@ -10,11 +10,11 @@ Important shared groups:
 
 - `Button`: button and Next.js link actions with variants, colors, sizes, rounded/block/icon/loading props.
 - `Card`: card root/body/header/footer/title patterns used heavily in admin screens.
-- `Dialog`: standard, alert, gallery, and image preview dialogs.
+- `Dialog`: standard, alert, gallery, and image preview dialogs. Open dialogs lock document scrolling, support optional overlay hiding, and allow custom overlay classes.
 - `Form`: labels, inputs, textareas, input groups, and form error messages.
 - `Select`: simple, searchable, multi-searchable, and single-simple select patterns.
 - `Pagination`: full and simple pagination controls.
-- `Image`: Supabase image rendering and preview helpers.
+- `Image`: Supabase image rendering and preview helpers. `ImagePreviewContainer` provides shared gallery navigation controls and can temporarily disable navigation while a preview is loading.
 - `SkeletonLoader`: base and image loading placeholders.
 - `Dropdown`, `Popover`, `Tooltip`, `Scrollbar`, and `Code`.
 

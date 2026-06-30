@@ -4,6 +4,7 @@ import { kebabCase } from "@/utils";
 import { FaDownload, FaEnvelope, FaGithub, FaLinkedin } from "react-icons/fa";
 import { FiExternalLink } from "react-icons/fi";
 import Container from "@/app/(web)/_components/Container";
+import { TechnologyBadgeList } from "@/app/(web)/resume/_components/TechnologyBadge";
 
 export const metadata: Metadata = {
   title: "Alexander Jeam Oro - Resume",
@@ -73,16 +74,7 @@ const Resume = () => (
                   ))}
                 </ul>
 
-                <div className="flex flex-row gap-1.5 flex-wrap">
-                  {technologies.map((item) => (
-                    <span
-                      key={kebabCase(company, item)}
-                      className="select-all inline-block bg-neutral-800 text-neutral-200 px-2 leading-none py-1 text-xs whitespace-nowrap rounded"
-                    >
-                      {item}
-                    </span>
-                  ))}
-                </div>
+                <TechnologyBadgeList technologies={technologies} />
               </div>
             )
           )}

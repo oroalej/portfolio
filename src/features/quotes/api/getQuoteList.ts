@@ -1,11 +1,20 @@
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useInfiniteQuery,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import {
   queryFilterBuilder,
   queryPaginationBuilder,
   supabase,
 } from "@/utils/supabase";
-import { generatePaginationData } from "@/utils/pagination";
-import { durationInMinutes } from "@/utils";
+import {
+  DEFAULT_PAGINATION_VALUES,
+  generatePaginationData,
+  getNextPaginationPageParam,
+} from "@/utils/pagination";
+import { durationInMinutes, removeEmptyValues } from "@/utils";
 import { Filterable, Paginatable, Searchable, Sortable, Tables } from "@/types";
 
 type QuoteListSortable = Pick<Tables<"quotes">, "created_at" | "source_id">;
@@ -78,3 +87,46 @@ export const useGetQuoteList = (params: getQuotesParams) =>
       };
     },
   });
+
+export const useInfiniteQuoteList = ({
+  per_page = DEFAULT_PAGINATION_VALUES.per_page,
+  page = DEFAULT_PAGINATION_VALUES.current_page,
+  q,
+  sort = [],
+  filter = {},
+}: getQuotesParams) => {
+  const queryClient = useQueryClient();
+
+  return useInfiniteQuery(
+    {
+      initialPageParam: page,
+      staleTime: durationInMinutes(2),
+      queryKey: [
+        "infinite_quotes",
+        removeEmptyValues({ q, ...filter }),
+        sort,
+        per_page,
+      ],
+      queryFn: async ({ pageParam }) => {
+        const { data, count } = await getQuoteList({
+          per_page,
+          page: pageParam,
+          q,
+          sort,
+          filter,
+        });
+
+        return {
+          data: (data as unknown as GetAllQuotesAPIDataStructure[]) || [],
+          pagination: generatePaginationData(
+            Number(per_page),
+            Number(pageParam),
+            count || 0
+          ),
+        };
+      },
+      getNextPageParam: getNextPaginationPageParam<GetAllQuotesAPIDataStructure>,
+    },
+    queryClient
+  );
+};
