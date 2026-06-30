@@ -38,20 +38,23 @@ export const EditDataManagementWrapper = ({
       select: TAXONOMY_WITH_PARENT_QUERY,
     });
 
-  const onSubmitHandler = useCallback(async (value: TaxonomyFormData) => {
-    await toast.promise(
-      updateTaxonomyMutation.mutateAsync({
-        id: taxonomyId,
-        formData: value,
-        select: TAXONOMY_WITH_PARENT_QUERY,
-      }),
-      {
-        success: "Data has been successfully updated!",
-        loading: "Updating taxonomy...",
-        error: (error) => error,
-      }
-    );
-  }, []);
+  const onSubmitHandler = useCallback(
+    async (value: TaxonomyFormData) => {
+      await toast.promise(
+        updateTaxonomyMutation.mutateAsync({
+          id: taxonomyId,
+          formData: value,
+          select: TAXONOMY_WITH_PARENT_QUERY,
+        }),
+        {
+          success: "Data has been successfully updated!",
+          loading: "Updating taxonomy...",
+          error: (error) => error,
+        }
+      );
+    },
+    [taxonomyId, updateTaxonomyMutation]
+  );
 
   if (isLoading || !data) {
     return <DataManagementFormLoading />;

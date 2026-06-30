@@ -5,12 +5,11 @@ const eslintConfig = [
   {
     ignores: [".next/**", "node_modules/**"],
     rules: {
-      // Temporary React 19/Next migration suppressions; tighten these after resolving existing hook-rule violations.
-      "react-hooks/exhaustive-deps": "off",
-      "react-hooks/immutability": "off",
-      "react-hooks/incompatible-library": "off",
-      "react-hooks/refs": "off",
-      "react-hooks/set-state-in-effect": "off",
+      "react-hooks/exhaustive-deps": "error",
+      "react-hooks/immutability": "error",
+      "react-hooks/incompatible-library": "error",
+      "react-hooks/refs": "error",
+      "react-hooks/set-state-in-effect": "error",
     },
   },
 ];

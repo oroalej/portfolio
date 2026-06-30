@@ -58,7 +58,6 @@ const DaydreamTableFilters = () => {
     control,
     getValues,
     reset,
-    setValue,
   } = useForm<DaydreamFilterParams>({
     mode: "onChange",
     defaultValues: DAYDREAM_FILTER_DEFAULT_VALUES,
@@ -66,8 +65,13 @@ const DaydreamTableFilters = () => {
   });
 
   useEffect(() => {
-    if (!!year) setValue("year", year, { shouldDirty: true });
-  }, []);
+    reset(
+      {
+        year: year ?? DAYDREAM_FILTER_DEFAULT_VALUES.year,
+      },
+      { keepDefaultValues: true }
+    );
+  }, [reset, year]);
 
   const onFilterHandler = async () => {
     if (!!getValues("year")) await setYear(getValues("year") as number);

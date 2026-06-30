@@ -11,13 +11,16 @@ import QuoteFormLoading from "@/app/admin/(modules)/quotes/_components/Loading/Q
 const CreateQuoteWrapper = () => {
   const storeQuoteMutation = useStoreQuoteMutation();
 
-  const onSubmitHandler = useCallback(async (value: QuoteFormStructure) => {
-    await toast.promise(storeQuoteMutation.mutateAsync(value), {
-      success: "Your data has been successfully created!",
-      loading: "Creating your quote...",
-      error: (error) => error,
-    });
-  }, []);
+  const onSubmitHandler = useCallback(
+    async (value: QuoteFormStructure) => {
+      await toast.promise(storeQuoteMutation.mutateAsync(value), {
+        success: "Your data has been successfully created!",
+        loading: "Creating your quote...",
+        error: (error) => error,
+      });
+    },
+    [storeQuoteMutation]
+  );
 
   return (
     <Suspense

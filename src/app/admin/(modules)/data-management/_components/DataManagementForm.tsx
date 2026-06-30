@@ -72,7 +72,7 @@ export const DataManagementForm = ({
       default:
         return undefined;
     }
-  }, [selectedTerm]);
+  }, [data, selectedTerm]);
 
   const TaxonomySchema = useMemo(() => {
     return object({
@@ -109,12 +109,8 @@ export const DataManagementForm = ({
   };
 
   useEffect(() => {
-    reset(item);
-  }, [term]);
-
-  useEffect(() => {
     if (!formState.isSubmitting) reset(item);
-  }, [item, formState.isSubmitting]);
+  }, [formState.isSubmitting, item, reset, term]);
 
   return (
     <form

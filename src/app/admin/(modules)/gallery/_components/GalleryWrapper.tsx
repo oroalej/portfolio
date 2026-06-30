@@ -10,9 +10,7 @@ import {
   ReactNode,
   Suspense,
   useCallback,
-  useEffect,
   useMemo,
-  useRef,
   useState,
 } from "react";
 import { BaseSkeletonLoader, Button } from "@/components";
@@ -85,11 +83,7 @@ const GalleryWrapper = ({
   categoryId: categoryIdProp = null,
   childLoadingIndicator: ChildLoadingIndicator,
 }: GalleryWrapperProps) => {
-  const queryRef = useRef<HTMLInputElement | null>(null);
   const [tab, setTab] = useState<number>(0);
-  const [localCategoryId, setLocalCategoryId] = useState<string | null>(
-    categoryIdProp
-  );
 
   const [query, setQuery] = useQueryState("q", {
     history: "push",
@@ -99,6 +93,10 @@ const GalleryWrapper = ({
     history: "push",
     defaultValue: categoryIdProp ?? "",
   });
+  const [searchQuery, setSearchQuery] = useState(query || "");
+  const [localCategoryId, setLocalCategoryId] = useState<string | null>(
+    (categoryId || categoryIdProp) ?? null
+  );
 
   const {
     data: imageData,
@@ -117,26 +115,18 @@ const GalleryWrapper = ({
     }),
   });
 
-  useEffect(() => {
-    setLocalCategoryId((categoryId || categoryIdProp) ?? null);
-
-    if (queryRef.current) {
-      queryRef.current.value = query || "";
-    }
-  }, []);
-
   const onSearchHandler = () => {
-    if (queryRef.current) {
-      setQuery(queryRef.current?.value.toLowerCase() ?? "").catch();
-    }
-
+    setQuery(searchQuery.toLowerCase()).catch();
     setCategoryId(localCategoryId).catch();
   };
 
-  const getActiveIds = Array.isArray(activeId) ? activeId : [activeId];
+  const activeIds = useMemo(
+    () => (Array.isArray(activeId) ? activeId : [activeId]),
+    [activeId]
+  );
   const filteredActiveIdsFromExcluded = useMemo(
-    () => excluded?.filter((id) => !getActiveIds.includes(id)),
-    [excluded, activeId]
+    () => excluded?.filter((id) => !activeIds.includes(id)),
+    [activeIds, excluded]
   );
 
   const onGalleryCategoryClearHandler = useCallback(
@@ -195,7 +185,8 @@ const GalleryWrapper = ({
             placeholder="Search by filename"
             className="w-56"
             small
-            ref={queryRef}
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.target.value)}
             onKeyPress={(event) => {
               if (event.key === "Enter") onSearchHandler();
             }}
@@ -233,7 +224,7 @@ const GalleryWrapper = ({
                   <div
                     className={classNames(
                       [
-                        getActiveIds.includes(item.id)
+                        activeIds.includes(item.id)
                           ? "ring-blue-700"
                           : "ring-transparent",
                       ],

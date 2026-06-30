@@ -29,7 +29,7 @@ const CategorySearchableSelect = ({
 
       onChange(data.id);
     },
-    [termData?.id]
+    [onChange, storeTaxonomyMutation, termData]
   );
 
   return (

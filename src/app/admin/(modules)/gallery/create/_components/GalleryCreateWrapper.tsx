@@ -88,39 +88,26 @@ const GalleryCreateWrapper = () => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const filesRef = useRef<Record<string, ImageFileData>>({});
 
-  const setImageFiles = (items: Record<string, ImageFileData>) => {
+  const setImageFiles = useCallback((items: Record<string, ImageFileData>) => {
     filesRef.current = items;
     setFiles(items);
-  };
+  }, []);
 
-  const clearImageFiles = () => {
+  const clearImageFiles = useCallback(() => {
     revokeImagePreviewUrls(filesRef.current);
     setImageFiles({});
-  };
+  }, [setImageFiles]);
 
-  const onDragEnterHandler = (event: DragEvent) => {
+  const onDragEnterHandler = useCallback((event: DragEvent) => {
     event.preventDefault();
     event.stopPropagation();
 
     setIsInsideDropzone(true);
-  };
+  }, []);
 
-  const onDragLeaveHandler = (event: DragEvent) => {
+  const onDragLeaveHandler = useCallback((event: DragEvent) => {
     event.preventDefault();
     event.stopPropagation();
-
-    setIsInsideDropzone(false);
-  };
-
-  const onDropHandler = useCallback((event: DragEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const files = event.dataTransfer;
-
-    if (files && files.files.length) {
-      setImageFileDetails(files.files);
-    }
 
     setIsInsideDropzone(false);
   }, []);
@@ -135,7 +122,7 @@ const GalleryCreateWrapper = () => {
     }
   };
 
-  const setImageFileDetails = (data: FileList) => {
+  const setImageFileDetails = useCallback((data: FileList) => {
     const rejected: RejectedFiles = cloneDeep(DEFAULT_REJECT_FILES_VALUES);
     const accepted: Record<string, ImageFileData> = {};
 
@@ -184,7 +171,23 @@ const GalleryCreateWrapper = () => {
       setRejectedFiles(rejected);
       setIsRejectedDialogOpen(true);
     }
-  };
+  }, [setImageFiles]);
+
+  const onDropHandler = useCallback(
+    (event: DragEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const files = event.dataTransfer;
+
+      if (files && files.files.length) {
+        setImageFileDetails(files.files);
+      }
+
+      setIsInsideDropzone(false);
+    },
+    [setImageFileDetails]
+  );
 
   const getImageDimensions = (event: HTMLImageElement, key: string) => {
     const currentFile = filesRef.current[key];
@@ -261,7 +264,7 @@ const GalleryCreateWrapper = () => {
       dropZoneElement?.removeEventListener("dragenter", onDragEnterHandler);
       dropZoneElement?.removeEventListener("dragleave", onDragLeaveHandler);
     };
-  }, []);
+  }, [onDragEnterHandler, onDragLeaveHandler, onDropHandler]);
 
   useEffect(() => {
     return () => {

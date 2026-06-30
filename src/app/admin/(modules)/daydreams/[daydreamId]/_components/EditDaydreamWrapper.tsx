@@ -46,23 +46,26 @@ const EditDaydreamWrapper = () => {
         }
       );
     },
-    [daydreamData]
+    [daydreamData, updateDaydreamMutation]
   );
 
-  const onDeleteHandler = useCallback(async () => {
-    if (!daydreamId) return;
+  const onDeleteHandler = useCallback(
+    async () => {
+      if (!daydreamId) return;
 
-    await toast.promise(
-      deleteDaydreamMutation.mutateAsync(daydreamId as string),
-      {
-        success: "Your data has been successfully deleted!",
-        loading: "Deleting dream...",
-        error: (error) => error,
-      }
-    );
+      await toast.promise(
+        deleteDaydreamMutation.mutateAsync(daydreamId as string),
+        {
+          success: "Your data has been successfully deleted!",
+          loading: "Deleting dream...",
+          error: (error) => error,
+        }
+      );
 
-    router.push("/admin/daydreams/create");
-  }, []);
+      router.push("/admin/daydreams/create");
+    },
+    [daydreamId, deleteDaydreamMutation, router]
+  );
 
   if (isDataFetching || !daydreamData) {
     return (

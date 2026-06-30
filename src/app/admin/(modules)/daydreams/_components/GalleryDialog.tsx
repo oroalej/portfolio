@@ -72,7 +72,7 @@ const GalleryDialog = ({
           );
         });
     }
-  }, [isOpen, categoryTermTaxonomy]);
+  }, [activeId, categoryTermTaxonomy, isOpen, queryClient]);
 
   return (
     <Dialog isOpen={isOpen}>

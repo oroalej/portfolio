@@ -9,13 +9,11 @@ export const metadata: Metadata = {
   title: "Admin - Edit Project",
 };
 
-interface AdminProjectEditPageProps {
-  params: { projectId: string };
-}
+const AdminProjectEditPage = async ({
+  params,
+}: PageProps<"/admin/projects/[projectId]">) => {
+  const { projectId } = await params;
 
-const AdminProjectEditPage = ({
-  params: { projectId },
-}: AdminProjectEditPageProps) => {
   return (
     <Fragment>
       <BreadcrumbDataSetter

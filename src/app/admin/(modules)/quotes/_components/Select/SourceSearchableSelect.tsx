@@ -39,7 +39,7 @@ const SourceSearchableSelect = ({
 
       onChange(data.id);
     },
-    [termData?.id, categoryId]
+    [categoryId, onChange, storeTaxonomyMutation, termData]
   );
 
   return (

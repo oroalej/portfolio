@@ -76,9 +76,14 @@ const DaydreamForm = ({
   submitButtonText = "Submit",
 }: DaydreamFormComponentProps) => {
   const [isGalleryDialogOpen, setIsGalleryDialogOpen] = useState(false);
-  const [image, setImage] = useState<FileAPIDataStructure | null>(
-    (item?.file as FileAPIDataStructure) ?? null
-  );
+  const itemImage = (item?.file as FileAPIDataStructure) ?? null;
+  const itemImageKey = item?.file_id ?? itemImage?.id ?? "";
+  const [imageOverride, setImageOverride] = useState<{
+    key: string;
+    value: FileAPIDataStructure | null;
+  } | null>(null);
+  const image =
+    imageOverride?.key === itemImageKey ? imageOverride.value : itemImage;
 
   const {
     handleSubmit,
@@ -97,15 +102,10 @@ const DaydreamForm = ({
   useEffect(() => {
     reset(item);
 
-    if (!formState.isSubmitting) {
-      setImage((item?.file as FileAPIDataStructure) ?? null);
-    }
-
     if (!item?.file_id) {
       setValue("file_id", null);
-      setImage(null);
     }
-  }, [item]);
+  }, [item, reset, setValue]);
 
   const onSubmitHandler = async () => {
     await onSubmit(getValues());
@@ -113,7 +113,7 @@ const DaydreamForm = ({
   };
 
   const onResetFormHandler = () => {
-    setImage((item?.file as FileAPIDataStructure) ?? null);
+    setImageOverride(null);
     reset(item);
   };
 
@@ -150,9 +150,13 @@ const DaydreamForm = ({
                 >
                   {image && (
                     <button
+                      type="button"
                       className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 text-neutral-600 hover:text-neutral-700 transition-colors cursor-pointer p-1 z-[1]"
                       onClick={async () => {
-                        setImage(null);
+                        setImageOverride({
+                          key: itemImageKey,
+                          value: null,
+                        });
                         setValue("file_id", null);
                         await trigger("file_id");
                       }}
@@ -365,7 +369,10 @@ const DaydreamForm = ({
         isOpen={isGalleryDialogOpen}
         onClose={() => setIsGalleryDialogOpen(false)}
         onSelect={async (value) => {
-          setImage(value);
+          setImageOverride({
+            key: itemImageKey,
+            value,
+          });
           setIsGalleryDialogOpen(false);
           setValue("file_id", value.id, { shouldDirty: true });
           await trigger("file_id");

@@ -19,7 +19,7 @@ On Windows PowerShell, prefer `pnpm.cmd`.
 
 ## Verification Levels
 
-- Use lint for routine documentation and code-change validation.
+- Use lint for routine documentation and code-change validation. The ESLint config extends Next core web vitals and enforces the React Hooks rules configured in `eslint.config.mjs`.
 - Use build when changing routes, layouts, proxy, client/server boundaries, image config, Supabase data access, or anything that could affect runtime rendering.
 
 ## Known Test State

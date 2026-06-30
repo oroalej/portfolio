@@ -29,6 +29,7 @@ This file is the canonical agent guidance for this repository. Keep Codex and ot
 ## Coding Standards
 
 - Preserve TypeScript strictness. Prefer existing utility types from `src/types`, especially `Tables<T>`, `Filterable<T>`, `Sortable<T>`, `Searchable`, and `Paginatable`.
+- Keep React hook usage lint-clean. `react-hooks/exhaustive-deps`, `immutability`, `incompatible-library`, `refs`, and `set-state-in-effect` are enforced by `eslint.config.mjs`.
 - Add `"use client"` only to files that need client-only React features, browser APIs, hooks, contexts, navigation hooks, React Query hooks, or event handlers.
 - Keep page/layout files thin. Put interactive behavior in colocated `_components` files or reusable components.
 - Follow existing component style: named exports for shared components, default exports for many route-local wrappers, `BaseComponent` for common `children`/`className` props, and `classNames` for conditional Tailwind classes.

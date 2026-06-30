@@ -82,7 +82,7 @@ export const ProjectForm = ({
 
   useEffect(() => {
     reset(item);
-  }, [item]);
+  }, [item, reset]);
 
   return (
     <Fragment>

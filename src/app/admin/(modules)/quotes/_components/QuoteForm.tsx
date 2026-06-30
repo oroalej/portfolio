@@ -12,7 +12,7 @@ import {
   Textarea,
 } from "@/components";
 import { FormEvent, Suspense, useEffect, useMemo } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { any, object } from "zod";
 import { isEmpty } from "lodash";
@@ -88,13 +88,14 @@ const QuoteForm = ({
     getValues,
     reset,
     setValue,
-    watch,
     resetField,
   } = useForm<QuoteFormStructure>({
     mode: "onChange",
     defaultValues: useMemo(() => item, [item]),
     resolver: zodResolver(QuoteSchema),
   });
+  const categoryId = useWatch({ control, name: "category_id" });
+  const sourceId = useWatch({ control, name: "source_id" });
 
   const onSubmitHandler = async () => {
     await onSubmit(getValues());
@@ -103,7 +104,7 @@ const QuoteForm = ({
 
   useEffect(() => {
     reset(item);
-  }, [item]);
+  }, [item, reset]);
 
   return (
     <form
@@ -160,8 +161,8 @@ const QuoteForm = ({
                 render={({ field: { value, onChange }, fieldState }) => (
                   <Suspense fallback={<QuoteInputFieldLoading />}>
                     <SourceSearchableSelect
-                      categoryId={watch("category_id")}
-                      disabled={!watch("category_id")}
+                      categoryId={categoryId}
+                      disabled={!categoryId}
                       value={value}
                       defaultValue={item.source_id}
                       error={fieldState.error?.message}
@@ -176,7 +177,7 @@ const QuoteForm = ({
               />
             </FormGroup>
 
-            {watch("category_id") !== INDIVIDUAL_ID && (
+            {categoryId !== INDIVIDUAL_ID && (
               <FormGroup>
                 <Label required>Song Title, Interview, or Character Name</Label>
 
@@ -187,10 +188,10 @@ const QuoteForm = ({
                   control={control}
                   render={({ field: { value, onChange }, fieldState }) => (
                     <Suspense fallback={<QuoteInputFieldLoading />}>
-                      <MediaDetailSearchableSelect
-                        value={value || null}
-                        sourceId={watch("source_id")}
-                        disabled={!watch("source_id")}
+                        <MediaDetailSearchableSelect
+                          value={value || null}
+                        sourceId={sourceId}
+                        disabled={!sourceId}
                         defaultValue={item.media_detail_id}
                         error={fieldState.error?.message}
                         onChange={onChange}

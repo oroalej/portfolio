@@ -77,29 +77,40 @@ export const GalleryItem = ({ item, isSelected }: GalleryItem) => {
     toast.success("Link copied!");
   };
 
-  const onDeleteHandler = useCallback(async () => {
-    await toast.promise(
-      deleteFileMutation.mutateAsync({
-        id: item.id,
-        pathname: item.storage_file_path,
-        bucket_name: item.bucket_name,
-      }),
-      {
-        loading: `Deleting ${item.name}`,
-        success: "Your file has been successfully deleted!",
-        error: (error) => error,
-      },
-      {
-        id: item.id,
+  const onDeleteHandler = useCallback(
+    async () => {
+      await toast.promise(
+        deleteFileMutation.mutateAsync({
+          id: item.id,
+          pathname: item.storage_file_path,
+          bucket_name: item.bucket_name,
+        }),
+        {
+          loading: `Deleting ${item.name}`,
+          success: "Your file has been successfully deleted!",
+          error: (error) => error,
+        },
+        {
+          id: item.id,
+        }
+      );
+
+      if (params.imageId) {
+        router.replace("/admin/gallery/");
       }
-    );
 
-    if (params.imageId) {
-      router.replace("/admin/gallery/");
-    }
-
-    setIsDeleteDialogOpen(false);
-  }, []);
+      setIsDeleteDialogOpen(false);
+    },
+    [
+      deleteFileMutation,
+      item.bucket_name,
+      item.id,
+      item.name,
+      item.storage_file_path,
+      params.imageId,
+      router,
+    ]
+  );
 
   const onBookmarkHandler = async () => {
     const { id, created_at, category, is_bookmarked, ...remaining } = item;

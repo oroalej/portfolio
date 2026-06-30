@@ -3,26 +3,26 @@ import { Fragment } from "react";
 import { BreadcrumbDataSetter } from "@/app/admin/(modules)/_components/Breadcrumbs";
 import { Metadata } from "next";
 
-interface AdminGalleryItemShowPage {
-  params: { imageId: string };
-}
-
 export const metadata: Metadata = {
   title: "Admin - Show Image",
 };
 
-const AdminGalleryItemShowPage = ({
-  params: { imageId },
-}: AdminGalleryItemShowPage) => (
-  <Fragment>
-    <BreadcrumbDataSetter
-      breadcrumbs={[
-        { href: "/gallery", content: "Gallery" },
-        { content: imageId },
-      ]}
-    />
-    <ShowWrapper id={imageId} />
-  </Fragment>
-);
+const AdminGalleryItemShowPage = async ({
+  params,
+}: PageProps<"/admin/gallery/[imageId]">) => {
+  const { imageId } = await params;
+
+  return (
+    <Fragment>
+      <BreadcrumbDataSetter
+        breadcrumbs={[
+          { href: "/gallery", content: "Gallery" },
+          { content: imageId },
+        ]}
+      />
+      <ShowWrapper id={imageId} />
+    </Fragment>
+  );
+};
 
 export default AdminGalleryItemShowPage;

@@ -53,10 +53,13 @@ const DaydreamTable = () => {
     sort: [{ column: "created_at", order: "desc" }],
   });
 
-  const onSelectHandler = useCallback((item: DaydreamAPIDataStructure) => {
-    setSelected(item);
-    onOpen();
-  }, []);
+  const onSelectHandler = useCallback(
+    (item: DaydreamAPIDataStructure) => {
+      setSelected(item);
+      onOpen();
+    },
+    [onOpen]
+  );
 
   const onDeleteHandler = useCallback(async () => {
     if (!selected) return;
@@ -78,7 +81,14 @@ const DaydreamTable = () => {
 
     setSelected(null);
     onClose();
-  }, [selected?.id]);
+  }, [
+    data,
+    deleteDaydreamMutation,
+    onClose,
+    queryClient,
+    selected,
+    setPage,
+  ]);
 
   if (isGetAPILoading) {
     return <DaydreamTableLoading />;
