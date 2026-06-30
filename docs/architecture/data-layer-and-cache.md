@@ -8,6 +8,8 @@ The application uses Supabase for persistence and TanStack React Query for clien
 
 The browser client and `src/proxy.ts` both require `NEXT_PUBLIC_SUPABASE_URL` plus either `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` or the fallback `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
 
+Empty publishable-key values are treated as missing so CI environments can fall back to the anon key when the newer publishable-key secret is not configured.
+
 Most feature API modules import this `supabase` instance directly.
 
 ## Query Builders
