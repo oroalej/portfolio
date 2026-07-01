@@ -1,7 +1,6 @@
 "use client";
 
 import PreviewProjectImageDialog from "@/app/(web)/projects/[projectTypeId]/_components/PreviewProjectImageDialog";
-import { useParams } from "next/navigation";
 import { useGetProjectList } from "@/features/projects/api/getProjectList";
 import { Fragment, useState } from "react";
 import {
@@ -10,10 +9,13 @@ import {
 } from "@/app/(web)/projects/[projectTypeId]/_components/ProjectCard";
 import { useGalleryContext } from "@/context/GalleryContext";
 import { ProjectListSelector } from "@/features/projects/transformers";
-import { ProjectCardItem } from "@/app/admin/(modules)/projects/_components/ProjectCard";
+import type { ProjectCardItem } from "@/features/projects/types";
 
-export const ProjectList = () => {
-  const { projectTypeId } = useParams();
+interface ProjectListProps {
+  projectTypeId: string;
+}
+
+export const ProjectList = ({ projectTypeId }: ProjectListProps) => {
   const { setList } = useGalleryContext();
   const [selectedProject, setSelectedProject] =
     useState<ProjectCardItem | null>();
@@ -21,7 +23,7 @@ export const ProjectList = () => {
   const { isLoading, data } = useGetProjectList(
     {
       byType: true,
-      filter: { project_type_id: projectTypeId as string },
+      filter: { project_type_id: projectTypeId },
       sort: [
         {
           column: "project_order",
@@ -56,7 +58,7 @@ export const ProjectList = () => {
           {data?.map((item) => (
             <ProjectCard
               key={item.id}
-              item={item as unknown as ProjectCardItem}
+              item={item}
               onPreview={onPreviewImageHandler}
             />
           ))}

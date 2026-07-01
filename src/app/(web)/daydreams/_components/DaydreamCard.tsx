@@ -1,12 +1,15 @@
+"use client";
+
 import { Tables } from "@/types";
 import { useStoragePublicUrl } from "@/features/files/api";
 import { BaseSkeletonLoader, ImageSkeletonLoader } from "@/components";
 import Image from "next/image";
 
 export interface DaydreamCardProps
-  extends Omit<Tables<"daydreams">, "created_at" | "id" | "file_id"> {
+  extends Omit<Tables<"daydreams">, "created_at" | "id"> {
   onSelect: () => void;
-  image_path: string;
+  image_count: number;
+  image_path?: string;
 }
 
 export const DaydreamCard = ({
@@ -17,16 +20,29 @@ export const DaydreamCard = ({
   shutter_speed,
   aperture,
   onSelect,
+  image_count,
 }: DaydreamCardProps) => {
   const { isLoading, data } = useStoragePublicUrl(image_path);
+  const hasIso = iso !== null && iso !== undefined;
+  const hasShutterSpeed =
+    shutter_speed !== null && shutter_speed !== undefined;
+  const hasAperture = aperture !== null && aperture !== undefined;
+  const hasCameraSettings = hasIso || hasShutterSpeed || hasAperture;
 
   return (
-    <div
-      className="bg-white p-5 overflow-hidden cursor-pointer transition-all dark:bg-neutral-100 hover:drop-shadow-lg"
+    <button
+      type="button"
+      aria-label={`Preview ${description}`}
+      className="block w-full bg-white p-5 overflow-hidden cursor-pointer transition-all dark:bg-neutral-100 hover:drop-shadow-lg text-left flex flex-col"
       onClick={onSelect}
     >
       <div className="relative aspect-square mb-4 group overflow-hidden">
         <div className="absolute inset-0 z-10" />
+        {image_count > 1 && (
+          <span className="absolute right-2 top-2 z-20 rounded-md bg-neutral-900/80 px-2 py-1 text-xs font-medium text-white">
+            {image_count} images
+          </span>
+        )}
 
         {isLoading || !data ? (
           <ImageSkeletonLoader />
@@ -37,33 +53,50 @@ export const DaydreamCard = ({
             width={450}
             height={450}
             quality={75}
+            sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
             style={{ width: "100%", height: "100%" }}
-            className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 point-events-none object-cover"
+            className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none object-cover"
           />
         )}
       </div>
 
-      <div className="flex flex-row justify-between text-neutral-600 text-sm gap-6">
-        <div className="flex flex-col grow gap-0.5">
-          <span className="whitespace-nowrap">
-            {iso}{" "}
-            <abbr title="International Organization for Standardization">
-              ISO
-            </abbr>
-          </span>
-          <span className="whitespace-nowrap">
-            {shutter_speed} <abbr title="Shutter Speed">SS</abbr>
-          </span>
-          <span className="whitespace-nowrap">
-            {aperture} <abbr title="Aperture">A</abbr>
-          </span>
+      {hasCameraSettings ? (
+        <div className="flex flex-row-reverse justify-between text-neutral-600 text-sm gap-6">
+          <div className="flex flex-col gap-0.5 items-end text-right">
+            <span>{description}</span>
+            <span className="whitespace-nowrap">{year}</span>
+          </div>
+
+          <div className="flex flex-col grow gap-0.5">
+            {hasIso && (
+              <span className="whitespace-nowrap">
+                {iso}{" "}
+                <abbr title="International Organization for Standardization">
+                  ISO
+                </abbr>
+              </span>
+            )}
+
+            {hasShutterSpeed && (
+              <span className="whitespace-nowrap">
+                {shutter_speed} <abbr title="Shutter Speed">SS</abbr>
+              </span>
+            )}
+
+            {hasAperture && (
+              <span className="whitespace-nowrap">
+                {aperture} <abbr title="Aperture">A</abbr>
+              </span>
+            )}
+          </div>
         </div>
-        <div className="flex flex-col gap-0.5 items-end text-right">
+      ) : (
+        <div className="flex w-full flex-col items-end gap-0.5 text-right text-sm text-neutral-600">
           <span>{description}</span>
           <span className="whitespace-nowrap">{year}</span>
         </div>
-      </div>
-    </div>
+      )}
+    </button>
   );
 };
 

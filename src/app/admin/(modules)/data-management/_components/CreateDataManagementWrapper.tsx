@@ -14,19 +14,22 @@ export const CreateDataManagementWrapper = () => {
   const storeTaxonomyMutation =
     useStoreTaxonomyMutation<TaxonomyWithParentAPIDataStructure>();
 
-  const onSubmitHandler = useCallback(async (value: TaxonomyFormData) => {
-    await toast.promise(
-      storeTaxonomyMutation.mutateAsync({
-        formData: value,
-        select: TAXONOMY_WITH_PARENT_QUERY,
-      }),
-      {
-        success: "Data has been successfully created!",
-        loading: "Creating taxonomy...",
-        error: (error) => error,
-      }
-    );
-  }, []);
+  const onSubmitHandler = useCallback(
+    async (value: TaxonomyFormData) => {
+      await toast.promise(
+        storeTaxonomyMutation.mutateAsync({
+          formData: value,
+          select: TAXONOMY_WITH_PARENT_QUERY,
+        }),
+        {
+          success: "Data has been successfully created!",
+          loading: "Creating taxonomy...",
+          error: (error) => error,
+        }
+      );
+    },
+    [storeTaxonomyMutation]
+  );
 
   return <DataManagementForm onSubmit={onSubmitHandler} />;
 };

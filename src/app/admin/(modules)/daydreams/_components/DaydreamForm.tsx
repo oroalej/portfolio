@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  BaseSkeletonLoader,
   Button,
   Card,
   FormGroup,
@@ -19,41 +18,27 @@ import {
   SHUTTER_SPEED,
   YEARS,
 } from "@/features/daydreams/data";
-import {
-  FormEvent,
-  Fragment,
-  Suspense,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import { isEmpty, parseInt } from "lodash";
+import { FormEvent, Fragment, useEffect, useMemo } from "react";
+import { isEmpty } from "lodash";
 import { SelectDataFormatter } from "@/utils";
 import { DreamFormParams } from "@/features/daydreams/types";
-import { any, number, object, string } from "zod";
-import { FileAPIDataStructure } from "@/features/files/types";
-import { FaRegImages } from "react-icons/fa6";
-import { PiXBold } from "react-icons/pi";
-import GalleryDialog from "@/app/admin/(modules)/daydreams/_components/GalleryDialog";
-import SupabaseImage from "@/components/Image/SupabaseImage";
-import classNames from "classnames";
+import { any, array, number, object, string } from "zod";
+import DaydreamImageManager from "@/app/admin/(modules)/daydreams/_components/DaydreamImageManager";
 
 export const DreamSchema = object({
-  shutter_speed: any().refine(
-    (item) => !isNaN(parseInt(item)),
-    "The shutter speed field is required."
-  ),
-  aperture: any().refine(
-    (item) => !isNaN(parseInt(item)),
-    "The aperture field is required."
-  ),
-  iso: any().refine(
-    (item) => !isNaN(parseInt(item)),
-    "The iso field is required."
-  ),
+  shutter_speed: number().nullable(),
+  aperture: number().nullable(),
+  iso: number().nullable(),
   year: number(),
   description: string().trim().min(1, "The description field is required."),
-  file_id: string().trim().min(1, "Image is required."),
+  images: array(
+    object({
+      file: any().optional(),
+      file_id: string().trim().min(1, "Image is required."),
+      id: string().optional(),
+      image_order: number().optional(),
+    })
+  ).min(1, "At least one image is required."),
 });
 
 interface DaydreamFormComponentProps {
@@ -71,37 +56,16 @@ const DaydreamForm = ({
   onDelete,
   submitButtonText = "Submit",
 }: DaydreamFormComponentProps) => {
-  const [isGalleryDialogOpen, setIsGalleryDialogOpen] = useState(false);
-  const [image, setImage] = useState<FileAPIDataStructure | null>(
-    (item?.file as FileAPIDataStructure) ?? null
-  );
-
-  const {
-    handleSubmit,
-    formState,
-    control,
-    getValues,
-    reset,
-    setValue,
-    trigger,
-  } = useForm<DreamFormParams>({
-    mode: "onChange",
-    defaultValues: useMemo(() => item, [item]),
-    resolver: zodResolver(DreamSchema),
-  });
+  const { handleSubmit, formState, control, getValues, reset, trigger } =
+    useForm<DreamFormParams>({
+      mode: "onChange",
+      defaultValues: useMemo(() => item, [item]),
+      resolver: zodResolver(DreamSchema),
+    });
 
   useEffect(() => {
     reset(item);
-
-    if (!formState.isSubmitting) {
-      setImage((item?.file as FileAPIDataStructure) ?? null);
-    }
-
-    if (!item?.file_id) {
-      setValue("file_id", null);
-      setImage(null);
-    }
-  }, [item]);
+  }, [item, reset]);
 
   const onSubmitHandler = async () => {
     await onSubmit(getValues());
@@ -109,7 +73,6 @@ const DaydreamForm = ({
   };
 
   const onResetFormHandler = () => {
-    setImage((item?.file as FileAPIDataStructure) ?? null);
     reset(item);
   };
 
@@ -118,7 +81,7 @@ const DaydreamForm = ({
       <form
         method="post"
         onSubmit={(event: FormEvent) => handleSubmit(onSubmitHandler)(event)}
-        className="max-w-md w-full sticky top-2"
+        className="max-w-lg w-full sticky top-2"
       >
         <fieldset
           className="disabled:opacity-95"
@@ -130,71 +93,27 @@ const DaydreamForm = ({
             </Card.Header>
             <Card.Body>
               <h3 className="text-base font-bold text-neutral-600 mb-3">
-                {"Photo: "}
+                {"Photos: "}
               </h3>
 
-              <div className="w-full mb-3">
-                <div
-                  className={classNames(
-                    [
-                      !!formState.errors.file_id
-                        ? "border-red-700 bg-red-100"
-                        : "border-neutral-200 hover:border-neutral-400 bg-neutral-100",
-                    ],
-                    "group relative w-52 mx-auto aspect-square overflow-hidden border-2 border-dashed rounded-md"
-                  )}
-                >
-                  {image && (
-                    <button
-                      className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 text-neutral-600 hover:text-neutral-700 transition-colors cursor-pointer p-1 z-[1]"
-                      onClick={async () => {
-                        setImage(null);
-                        setValue("file_id", null);
-                        await trigger("file_id");
-                      }}
-                    >
-                      <PiXBold size={20} />
-                    </button>
-                  )}
+              <Controller
+                name="images"
+                control={control}
+                rules={{ required: true }}
+                defaultValue={DEFAULT_FORM_VALUES.images}
+                render={({ field: { onChange, value }, fieldState }) => (
+                  <DaydreamImageManager
+                    items={value}
+                    error={fieldState.error?.message}
+                    onChange={async (value) => {
+                      onChange(value);
+                      await trigger("images");
+                    }}
+                  />
+                )}
+              />
 
-                  <div
-                    className="relative h-full w-full inline-flex items-center justify-center cursor-pointer"
-                    onClick={() => setIsGalleryDialogOpen(true)}
-                  >
-                    {image ? (
-                      <Suspense
-                        fallback={
-                          <div className="p-1 w-full h-full">
-                            <BaseSkeletonLoader className="aspect-square" />
-                          </div>
-                        }
-                      >
-                        <SupabaseImage
-                          src={image.storage_file_path}
-                          alt={image.name}
-                          className="w-full h-full object-contain group-hover:opacity-90"
-                          quality={75}
-                          width={480}
-                          height={480}
-                        />
-                      </Suspense>
-                    ) : (
-                      <FaRegImages
-                        className={classNames(
-                          [
-                            !!formState.errors.file_id
-                              ? "text-red-600 group-hover:text-red-700"
-                              : "text-neutral-400 group-hover:text-neutral-500",
-                          ],
-                          "text-2xl transition-colors pointer-events-none "
-                        )}
-                      />
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              <div>
+              <div className="mt-3">
                 <h3 className="text-base font-bold text-neutral-600 mb-3">
                   {"Details: "}
                 </h3>
@@ -249,19 +168,19 @@ const DaydreamForm = ({
 
                 <div className="grid grid-cols-2 gap-x-4">
                   <FormGroup>
-                    <Label required>ISO</Label>
+                    <Label>ISO</Label>
 
                     <Controller
                       name="iso"
                       control={control}
-                      rules={{ required: true }}
-                      defaultValue={DEFAULT_FORM_VALUES.iso as any}
+                      defaultValue={DEFAULT_FORM_VALUES.iso}
                       render={({ field: { onChange, value }, fieldState }) => (
                         <SearchableSelect
                           value={value}
                           options={SelectDataFormatter<number>(ISO)}
                           onChange={onChange}
                           defaultValue={DEFAULT_FORM_VALUES.iso}
+                          onClear={() => onChange(null)}
                           error={fieldState.error?.message}
                         />
                       )}
@@ -269,12 +188,11 @@ const DaydreamForm = ({
                   </FormGroup>
 
                   <FormGroup>
-                    <Label required>Shutter Speed</Label>
+                    <Label>Shutter Speed</Label>
 
                     <Controller
                       name="shutter_speed"
                       control={control}
-                      rules={{ required: true }}
                       defaultValue={DEFAULT_FORM_VALUES.shutter_speed}
                       render={({ field: { onChange, value }, fieldState }) => (
                         <SearchableSelect
@@ -282,6 +200,7 @@ const DaydreamForm = ({
                           value={value}
                           onChange={onChange}
                           defaultValue={DEFAULT_FORM_VALUES.shutter_speed}
+                          onClear={() => onChange(null)}
                           error={fieldState.error?.message}
                         />
                       )}
@@ -289,12 +208,11 @@ const DaydreamForm = ({
                   </FormGroup>
 
                   <FormGroup>
-                    <Label required>Aperture</Label>
+                    <Label>Aperture</Label>
 
                     <Controller
                       name="aperture"
                       control={control}
-                      rules={{ required: true }}
                       defaultValue={DEFAULT_FORM_VALUES.aperture}
                       render={({ field: { onChange, value }, fieldState }) => (
                         <SearchableSelect
@@ -302,6 +220,7 @@ const DaydreamForm = ({
                           value={value}
                           onChange={onChange}
                           defaultValue={DEFAULT_FORM_VALUES.aperture}
+                          onClear={() => onChange(null)}
                           error={fieldState.error?.message}
                         />
                       )}
@@ -314,7 +233,7 @@ const DaydreamForm = ({
               <div>
                 {!!onDelete && (
                   <Button
-                    color="danger"
+                    color="dark"
                     type="button"
                     size="small"
                     onClick={onDelete}
@@ -356,18 +275,6 @@ const DaydreamForm = ({
           </Card>
         </fieldset>
       </form>
-
-      <GalleryDialog
-        isOpen={isGalleryDialogOpen}
-        onClose={() => setIsGalleryDialogOpen(false)}
-        onSelect={async (value) => {
-          setImage(value);
-          setIsGalleryDialogOpen(false);
-          setValue("file_id", value.id, { shouldDirty: true });
-          await trigger("file_id");
-        }}
-        activeId={image?.id}
-      />
     </Fragment>
   );
 };

@@ -1,4 +1,4 @@
-import { BreadcrumbDataSetter } from "src/app/admin/(modules)/_components/Breadcrumbs";
+import { BreadcrumbDataSetter } from "@/app/admin/(modules)/_components/Breadcrumbs";
 import { CardHeader, CardRoot, CardTitle } from "@/components";
 import { GoFileDirectoryFill } from "react-icons/go";
 import { Fragment } from "react";
@@ -9,13 +9,11 @@ export const metadata: Metadata = {
   title: "Admin - Edit Project",
 };
 
-interface AdminProjectEditPageProps {
-  params: { projectId: string };
-}
+const AdminProjectEditPage = async ({
+  params,
+}: PageProps<"/admin/projects/[projectId]">) => {
+  const { projectId } = await params;
 
-const AdminProjectEditPage = ({
-  params: { projectId },
-}: AdminProjectEditPageProps) => {
   return (
     <Fragment>
       <BreadcrumbDataSetter

@@ -48,6 +48,18 @@ export const generatePaginationData = (
   };
 };
 
+export const getNextPaginationPageParam = <Structure>({
+  pagination,
+}: DataWithPagination<Structure>) => {
+  const nextPage = pagination.current_page + 1;
+
+  if (pagination.last_page >= nextPage) {
+    return nextPage;
+  }
+
+  return undefined;
+};
+
 interface updatePaginatedDataCache<T extends { id: string }> {
   queryClient: QueryClient;
   queryKey: any[];

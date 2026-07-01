@@ -6,7 +6,7 @@ import {
   GetProjectListParams,
   useGetProjectList,
 } from "@/features/projects/api/getProjectList";
-import { useQueryState } from "next-usequerystate";
+import { useQueryState } from "nuqs";
 import {
   closestCorners,
   DndContext,
@@ -19,9 +19,8 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-import { find, pick } from "lodash";
-import { Fragment, Suspense, useEffect, useState } from "react";
-import { useId } from "@radix-ui/react-id";
+import { pick } from "lodash";
+import { Fragment, Suspense, useId, useState } from "react";
 import {
   restrictToVerticalAxis,
   restrictToWindowEdges,
@@ -32,10 +31,8 @@ import {
 } from "@/features/projects/api/reorderProjects";
 import { useQueryClient } from "@tanstack/react-query";
 import { GalleryProvider } from "@/context/GalleryContext";
-import {
-  ProjectCard,
-  ProjectCardItem,
-} from "@/app/admin/(modules)/projects/_components/ProjectCard";
+import { ProjectCard } from "@/app/admin/(modules)/projects/_components/ProjectCard";
+import type { ProjectCardItem } from "@/features/projects/types";
 import { ProjectListSelector } from "@/features/projects/transformers";
 import ProjectCardLoading from "@/app/admin/(modules)/projects/_components/Loading/ProjectCardLoading";
 
@@ -47,7 +44,10 @@ const IndexProjectListWrapper = () => {
   const [type] = useQueryState("type");
   const [q] = useQueryState("q");
   const [draggedItem, setDraggedItem] = useState<ProjectCardItem | null>(null);
-  const [localData, setLocalData] = useState<ProjectCardItem[]>([]);
+  const [localDataOverride, setLocalDataOverride] = useState<{
+    source: ProjectCardItem[] | undefined;
+    items: ProjectCardItem[];
+  } | null>(null);
 
   const typeParamExists = !!type;
 
@@ -57,10 +57,11 @@ const IndexProjectListWrapper = () => {
     sort: [{ column: "project_order", order: "asc" }],
   };
   const { data, isLoading } = useGetProjectList(params, ProjectListSelector);
-
-  useEffect(() => {
-    setLocalData((data as any) ?? []);
-  }, [data]);
+  const remoteData = (data as ProjectCardItem[] | undefined) ?? [];
+  const localData =
+    localDataOverride && localDataOverride.source === data
+      ? localDataOverride.items
+      : remoteData;
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -70,7 +71,7 @@ const IndexProjectListWrapper = () => {
   );
 
   const onDragStartHandler = (event: DragStartEvent) => {
-    const item = find((data as any) ?? [], { id: event.active.id });
+    const item = localData.find((project) => project.id === event.active.id);
 
     if (item) {
       setDraggedItem(item);
@@ -78,7 +79,7 @@ const IndexProjectListWrapper = () => {
   };
 
   const onDragEndHandler = ({ active, over }: DragEndEvent): void => {
-    if (!localData) return;
+    if (!over) return;
 
     const activeIndex = localData.findIndex((item) => item.id === active.id);
     const overIndex = localData.findIndex((item) => item.id === over?.id);
@@ -109,7 +110,10 @@ const IndexProjectListWrapper = () => {
       });
     }
 
-    setLocalData(newOrder);
+    setLocalDataOverride({
+      source: data as ProjectCardItem[] | undefined,
+      items: newOrder,
+    });
     setDraggedItem(null);
 
     queryClient.setQueryData(["projects", params], newOrder);

@@ -1,20 +1,12 @@
 import { DreamFormParams } from "@/features/daydreams/types";
 
-export const MAX_FILE_SIZE = 15728640; // 15MB
-export const ACCEPTED_IMAGE_TYPES = [
-  "image/jpeg",
-  "image/jpg",
-  "image/png",
-  "image/webp",
-];
-
 export const DEFAULT_FORM_VALUES: DreamFormParams = {
-  iso: 200,
-  shutter_speed: 125,
-  aperture: 2.8,
+  iso: null,
+  shutter_speed: null,
+  aperture: null,
   year: new Date().getFullYear(),
   description: "",
-  file_id: null,
+  images: [],
 };
 
 export const YEARS = [...Array(30)].map((_, index) => {

@@ -1,7 +1,10 @@
+"use client";
+
 import { BaseSkeletonLoader, Dialog, DialogProps } from "@/components";
 import { MdClose } from "react-icons/md";
 import { useHotkeys } from "react-hotkeys-hook";
 import classNames from "classnames";
+import { getSafeImageDimensions } from "@/components/Image/getSafeImageDimensions";
 import ImagePreviewContainer from "@/components/Image/ImagePreviewContainer";
 import SupabaseImage from "@/components/Image/SupabaseImage";
 import { useGalleryContext } from "@/context/GalleryContext";
@@ -9,7 +12,7 @@ import { useEffect, useRef } from "react";
 import { useLoadable } from "@/hooks";
 
 interface ImagePreviewDialogProps
-  extends Required<Omit<DialogProps, "children">> {
+  extends Required<Pick<DialogProps, "isOpen" | "onClose">> {
   indicator?: boolean;
 }
 
@@ -20,14 +23,17 @@ const ImagePreviewDialog = ({ isOpen, onClose }: ImagePreviewDialogProps) => {
 
   useHotkeys(["esc", "escape"], onClose);
 
-  const scale = selectedItem?.width / 1024;
+  const safeImageDimensions = getSafeImageDimensions(selectedItem ?? undefined);
+  const scale = safeImageDimensions.width / 1024;
 
-  const height = selectedItem?.height / scale;
-  const width = selectedItem?.width / scale;
+  const height = safeImageDimensions.height / scale;
+  const width = safeImageDimensions.width / scale;
 
   useEffect(() => {
     startLoading();
-  }, [selectedIndex]);
+  }, [selectedIndex, startLoading]);
+
+  if (!selectedItem) return null;
 
   const onLoadingCompleteHandler = () => {
     containerRef.current?.scrollTo({
@@ -47,6 +53,8 @@ const ImagePreviewDialog = ({ isOpen, onClose }: ImagePreviewDialogProps) => {
 
       <div className="absolute right-3 top-3 z-10">
         <button
+          type="button"
+          aria-label="Close preview"
           className={classNames("text-white outline-none p-1.5 cursor-pointer")}
           onClick={onClose}
         >
@@ -80,6 +88,7 @@ const ImagePreviewDialog = ({ isOpen, onClose }: ImagePreviewDialogProps) => {
                 maxWidth: "1024px",
                 height,
               }}
+              ref={containerRef}
               tabIndex={-1}
             >
               {isLoading && (
@@ -93,14 +102,14 @@ const ImagePreviewDialog = ({ isOpen, onClose }: ImagePreviewDialogProps) => {
 
               {selectedItem?.storage_file_path && (
                 <SupabaseImage
-                  src={selectedItem!.storage_file_path}
-                  alt={selectedItem?.name ?? ""}
+                  src={selectedItem.storage_file_path}
+                  alt={selectedItem.name}
                   className="object-contain group-hover:opacity-90 pointer-events-none"
                   quality={75}
                   width={width}
                   height={height}
-                  onLoadingComplete={onLoadingCompleteHandler}
                   onLoad={onLoadingCompleteHandler}
+                  sizes="100vw"
                 />
               )}
             </div>

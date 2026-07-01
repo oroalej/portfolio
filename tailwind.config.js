@@ -1,4 +1,3 @@
-const colors = require("tailwindcss/colors");
 const plugin = require("tailwindcss/plugin");
 
 module.exports = {
@@ -11,7 +10,6 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        ...colors,
         AccentIndigoDye: "#284B63",
         AccentMing: "#3C6E71",
       },
@@ -40,7 +38,4 @@ module.exports = {
     }),
     require("tailwind-scrollbar")({ nocompatible: true }),
   ],
-  experimental: {
-    applyComplexClasses: true,
-  },
 };

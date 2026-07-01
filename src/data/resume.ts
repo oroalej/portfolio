@@ -1,22 +1,23 @@
 export const EXPERIENCES = [
   {
-    company: "SolidLeisure Solution Inc.",
+    company: "SolidLeisure Solution Inc. & DigiPlus Inc.",
     positions: [
       {
         title: "Senior Frontend Developer",
         duration: {
           start: "December 2023",
-          end: "Present",
+          end: "June 2026",
         },
       },
     ],
     descriptions: [
-      "Responsible for maintaining multiple existing projects; bug tracing, enhancements, and developing new features.",
-      "Responsible for refactoring and cleaning up of codes.",
-      "Assisting and enhancing team's coding knowledge and standards.",
-      "Lead developer of company's revamp website. Responsible for creating CMS and HCM system, database and code architecture.",
+      "Maintain and enhance multiple production web applications, resolving defects and delivering new features across existing codebases.",
+      "Investigate frontend issues, implement fixes, and improve application usability and stability.",
+      "Strengthen team engineering practices through technical knowledge sharing and consistent coding standards.",
     ],
     technologies: [
+      "Claude Code (CLI)",
+      "Cursor",
       "HTML5",
       "CSS3",
       "SCSS",
@@ -26,39 +27,24 @@ export const EXPERIENCES = [
       "Vue3 - Composition API",
       "VueRouter",
       "Vuex",
-      "Tenstack Query",
+      "ECMAScript",
       "Typescript",
       "Pinia",
-      "Supabase",
       "PostgresQL",
-      "GraphQL",
+      "Vite",
       "SSR",
       "SPA",
-      "Git - Version Control",
       "API Integration",
+      "Git - Version Control",
+      "Gitlab",
       "Jira",
       "Confluence",
-      "Gitlab",
+      "Postman",
+      "Tenstack Query",
+      "Supabase",
+      "GraphQL",
     ],
   },
-  // {
-  //   company: "Self-Development / Startup",
-  //   positions: [
-  //     {
-  //       title: "Full-Stack Software Engineer",
-  //       duration: {
-  //         start: "April 2021",
-  //         end: "Present",
-  //       },
-  //     },
-  //   ],
-  //   descriptions: [
-  //     "Started Algorand NFT Marketplace, Expense Tracker, Food Discovery Platform, and Intothealgoverse",
-  //     "Market Research (Competitor's Benchmarking, Monetization Strategy, Target Audience, Roadmaps), Technical/Product Specification, UI Designing / Mockups, Front and Backend Development",
-  //     "Used Trello for project planning, Figma for UI Designing, Jira / Gitlab for issue tracking, Slack for communication, Notion for scheduling, Zoom for meetings / Calls",
-  //   ],
-  //   technologies: [],
-  // },
   {
     company: "Career Break",
     positions: [
@@ -85,10 +71,11 @@ export const EXPERIENCES = [
       },
     ],
     descriptions: [
-      "Market Research (Competitor's Benchmarking, Monetization Strategy, Target Audience, Roadmaps)",
-      "My wife, a marketing researcher, and I started this project together. We identified a gap in the Philippine market after Zomato exited: a lack of reliable and up-to-date food discovery platforms. However, due to recent life events, this project is currently on hold.",
+      "Conducted market research, competitor benchmarking, target-audience analysis, monetization planning, and roadmap definition for a Philippine food discovery platform.",
+      "Co-founded the concept with a marketing research partner after identifying a market gap left by Zomato's exit from the Philippines.",
+      "Paused development after the discovery phase due to personal constraints, while preserving the research and product direction for future validation.",
     ],
-    technologies: [],
+    technologies: ["Trello"],
   },
   {
     company: "Startup - Algorand NFT Marketplace",
@@ -102,8 +89,9 @@ export const EXPERIENCES = [
       },
     ],
     descriptions: [
-      "Market Research (Competitor's Benchmarking, Monetization Strategy, Target Audience, Roadmaps), Technical/Product Specification, UI Designing / Mockups, Front and Backend Development",
-      "Given the team's increased workload with their full-time jobs and the significant shifts in the NFT market landscape, we've decided to discontinue the development of this project for now.",
+      "Led early product discovery for an Algorand-based NFT marketplace, including competitor benchmarking, target-audience analysis, monetization planning, and roadmap definition.",
+      "Prepared technical specifications and UI mockups, then began the initial full-stack implementation using Next.js, React, Python, and PyTeal.",
+      "Paused development as team capacity tightened and the NFT market shifted.",
     ],
     technologies: [
       "Figma",
@@ -117,7 +105,7 @@ export const EXPERIENCES = [
     ],
   },
   {
-    company: "Suki Reward App",
+    company: "Startup - Suki Reward App",
     positions: [
       {
         title: "Web Developer",
@@ -128,9 +116,8 @@ export const EXPERIENCES = [
       },
     ],
     descriptions: [
-      "Responsible for converting Figma design to working website",
-      "Created admin frontend",
-      "Assisted on database architecture",
+      "Developed RESTful APIs and a backend administration system for the rewards application.",
+      "Contributed to database architecture and schema design based on application requirements.",
     ],
     technologies: [
       "HTML5",
@@ -158,9 +145,9 @@ export const EXPERIENCES = [
       },
     ],
     descriptions: [
-      "Maintained E-Learning and Content Management System (CMS) projects",
-      "Refactored code, bug tracing, testing, UI enhancements",
-      "Followed software development life cycle (SDLC).",
+      "Developed and maintained an e-learning platform and content management system using Laravel, Vue.js, AngularJS, PHP, and Go.",
+      "Refactored application code, diagnosed defects, and delivered UI enhancements to improve maintainability and user experience.",
+      "Performed application testing and supported ongoing feature development.",
     ],
     technologies: [
       "HTML5",
@@ -192,7 +179,9 @@ export const EXPERIENCES = [
     ],
     position: "Web Developer",
     descriptions: [
-      "Created content management system (CMS) like wordpress.com UI",
+      "Designed and developed a custom content management system with a WordPress.com-inspired interface using Laravel, Vue.js, Vuetify, Vue Router, and Vuex.",
+      "Implemented frontend routing and state management to support content-management workflows.",
+      "Project: thriving-in-between.com",
     ],
     technologies: [
       "HTML5",
@@ -230,12 +219,10 @@ export const EXPERIENCES = [
       },
     ],
     descriptions: [
-      "Followed Agile software development methodology",
-      "Worked closely with UX/UI, QA, BA, PM in analyzing project requirements and enhancements",
-      "Developed and maintained internal company projects like Game Curation Platform, Wedding Supplier Portal, CMS, Data Gathering / crawler, Video Editing Platform",
-      "Performed bug tracing, Testing",
-      "Conducted code reviews",
-      "Mentored junior developers",
+      "Collaborated with UX/UI designers, QA engineers, business analysts, and project managers to analyze requirements and plan application enhancements.",
+      "Conducted code reviews and mentored junior developers to reinforce code quality and development standards.",
+      "Diagnosed defects, performed testing, and maintained and enhanced existing applications.",
+      "Developed backend services and APIs for a video-editing system using Laravel, with Vue.js, Vue Router, and Vuex on the frontend.",
     ],
     technologies: [
       "HTML5",
@@ -266,12 +253,11 @@ export const EXPERIENCES = [
       },
     ],
     descriptions: [
-      "Certified workday consultant with experience in HCM configuration",
-      "Analyzed and provided feedback to client's configuration requirements",
-      "Created and reviewed deployment documentation",
-      "Responsible for system production deployment",
-      "Did regression testing, test scripts, test scenarios",
-      "Performed bug tracing and fixes",
+      "Configured Workday HCM solutions as a certified Workday consultant.",
+      "Analyzed client configuration requirements and provided implementation recommendations.",
+      "Created and reviewed deployment documentation and supported production deployments.",
+      "Prepared and executed regression test scripts and test scenarios.",
+      "Investigated application defects and implemented fixes.",
     ],
     technologies: ["Scrum", "Workday Platform"],
   },
@@ -287,8 +273,8 @@ export const EXPERIENCES = [
       },
     ],
     descriptions: [
-      "Developed inventory and POS System for Poultry Farm",
-      "Updated UI, managed database, refactored code",
+      "Developed an inventory and point-of-sale system for a poultry farm using CodeIgniter.",
+      "Enhanced the user interface, managed database updates, and refactored application code.",
     ],
     technologies: [
       "HTML5",
@@ -312,34 +298,84 @@ export const EXPERIENCES = [
       },
     ],
     descriptions: [
-      "Assisted on the development of an internal employee hub system.",
-      "Converted PSD designs to web",
-      "Updated client website design",
+      "Supported the development of an internal employee hub.",
+      "Converted PSD designs into functional web pages.",
+      "Updated website layouts and user-interface elements for client projects.",
     ],
     technologies: ["HTML5", "CSS3", "PHP", "Magento", "JQuery", "Javascript"],
   },
 ];
 
-export const SKILLS = [
-  "PHP",
-  "Laravel",
-  "Javascript",
-  "ReactJS",
-  "VueJS",
-  "AngularJS",
-  "Typescript",
-  "TailwindCSS",
-  "HTML5",
-  "CSS3",
-  "SASS",
-  "MySQL",
-  "GoLang",
+export interface SkillGroup {
+  title: string;
+  items: string[];
+  subgroups?: SkillGroup[];
+}
+
+export const SKILL_GROUPS: SkillGroup[] = [
+  {
+    title: "Frontend",
+    items: [
+      "HTML5",
+      "SCSS / CSS3",
+      "Tailwind CSS",
+      "JavaScript",
+      "TypeScript",
+      "Vite",
+      "SSR",
+      "SPA",
+      "React",
+      "Next.js",
+      "TanStack Query",
+      "ShadCN",
+      "Zustand",
+      "Vue",
+      "Vue Router",
+      "Vuex",
+      "Pinia",
+      "AngularJS",
+    ],
+  },
+  {
+    title: "Backend",
+    items: [
+      "PHP",
+      "Laravel",
+      "Go",
+    ],
+  },
+  {
+    title: "Data & APIs",
+    items: [
+      "MySQL",
+      "PostgreSQL",
+      "Supabase",
+      "Redis",
+      "GraphQL",
+    ],
+  },
+  {
+    title: "AI & Developer Tools",
+    items: ["Claude Code", "Cursor", "Codex"],
+  },
+  {
+    title: "Applications & Workflow",
+    items: [
+      "Git",
+      "GitLab",
+      "Jira",
+      "Confluence",
+      "Postman",
+      "Figma",
+      "Trello",
+    ],
+  },
 ];
 
 export const INTEREST = [
   "Listening to music",
-  "Watching NBA",
   "Photography",
   "Coding",
   "Hiking",
+  "Watching Movies and Series",
 ];

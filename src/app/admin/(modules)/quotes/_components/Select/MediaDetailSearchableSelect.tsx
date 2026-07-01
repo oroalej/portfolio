@@ -39,7 +39,7 @@ const MediaDetailSearchableSelect = ({
 
       onChange(data.id);
     },
-    [termData?.id, sourceId]
+    [onChange, sourceId, storeTaxonomyMutation, termData]
   );
 
   return (

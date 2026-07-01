@@ -10,13 +10,16 @@ import toast from "react-hot-toast";
 const CreateDaydreamWrapper = () => {
   const storeDaydreamMutation = useStoreDaydreamMutation();
 
-  const onSubmitHandler = useCallback(async (value: DreamFormParams) => {
-    await toast.promise(storeDaydreamMutation.mutateAsync(value), {
-      success: "Your data has been successfully created!",
-      loading: "Saving information to daydreams table...",
-      error: (error) => error,
-    });
-  }, []);
+  const onSubmitHandler = useCallback(
+    async (value: DreamFormParams) => {
+      await toast.promise(storeDaydreamMutation.mutateAsync(value), {
+        success: "Your data has been successfully created!",
+        loading: "Saving information to daydreams table...",
+        error: (error) => error,
+      });
+    },
+    [storeDaydreamMutation]
+  );
 
   return (
     <DaydreamForm

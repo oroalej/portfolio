@@ -21,8 +21,8 @@ import {
   parseAsString,
   useQueryState,
   useQueryStates,
-} from "next-usequerystate";
-import { Controller, useForm } from "react-hook-form";
+} from "nuqs";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { object, string } from "zod";
 import { removeEmptyValues } from "@/utils";
@@ -38,7 +38,7 @@ const QUOTE_TABLE_FILTER_DEFAULT_VALUES = {
 };
 
 interface QuoteTableFilterParams {
-  category_id?: string;
+  category_id: string;
   source_id?: string;
   media_detail_id?: string;
 }
@@ -73,13 +73,13 @@ const QuoteTableFilter = () => {
     getValues,
     reset,
     resetField,
-    watch,
-    setValue,
   } = useForm<QuoteTableFilterParams>({
     mode: "onChange",
     defaultValues: QUOTE_TABLE_FILTER_DEFAULT_VALUES,
     resolver: zodResolver(QuoteTableFilterSchema),
   });
+  const categoryId = useWatch({ control, name: "category_id" });
+  const sourceId = useWatch({ control, name: "source_id" });
 
   const onClearHandler = async () => {
     await setFilters({
@@ -92,14 +92,16 @@ const QuoteTableFilter = () => {
   };
 
   useEffect(() => {
-    for (const [key, value] of Object.entries(filters)) {
-      if (!!value) {
-        setValue(key as keyof QuoteTableFilterParams, value, {
-          shouldDirty: true,
-        });
-      }
-    }
-  }, []);
+    reset(
+      {
+        ...QUOTE_TABLE_FILTER_DEFAULT_VALUES,
+        category_id: filters.category_id,
+        source_id: filters.source_id,
+        media_detail_id: filters.media_detail_id,
+      },
+      { keepDefaultValues: true }
+    );
+  }, [filters.category_id, filters.media_detail_id, filters.source_id, reset]);
 
   const onFilterHandler = async () => {
     await setFilters({
@@ -199,7 +201,7 @@ const QuoteTableFilter = () => {
                               }
                               render={({ field: { onChange, value } }) => (
                                 <SourceSearchableSelect
-                                  categoryId={watch("category_id") as string}
+                                  categoryId={categoryId as string}
                                   value={value ?? null}
                                   defaultValue={
                                     QUOTE_TABLE_FILTER_DEFAULT_VALUES.source_id
@@ -212,7 +214,7 @@ const QuoteTableFilter = () => {
                                     onChange(value);
                                     resetField("media_detail_id");
                                   }}
-                                  disabled={!watch("category_id")}
+                                  disabled={!categoryId}
                                 />
                               )}
                             />
@@ -228,8 +230,8 @@ const QuoteTableFilter = () => {
                               }
                               render={({ field: { onChange, value } }) => (
                                 <MediaDetailSearchableSelect
-                                  disabled={!watch("source_id")}
-                                  sourceId={watch("source_id") as string}
+                                  disabled={!sourceId}
+                                  sourceId={sourceId as string}
                                   value={value ?? null}
                                   defaultValue={
                                     QUOTE_TABLE_FILTER_DEFAULT_VALUES.media_detail_id

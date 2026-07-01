@@ -14,21 +14,20 @@ const WebLayoutRoot = ({ children }: Pick<BaseComponent, "children">) => (
       className="!bg-neutral-300 !opacity-100 !text-neutral-800 z-[9999]"
     />
 
-    <div className="sm:p-3.5 flex flex-col h-full font-mono">
+    <div className="flex min-h-screen flex-col font-mono sm:p-3.5">
       <span className="fixed inset-x-0 top-0 h-3.5 bg-white z-[1] hidden sm:block" />
       <span className="fixed inset-x-0 bottom-0 h-3.5 bg-white z-[1] hidden sm:block" />
       <span className="fixed inset-y-0 left-0 w-3.5 bg-white z-[1] hidden sm:block" />
       <span className="fixed inset-y-0 right-0 w-3.5 bg-white z-[1] hidden sm:block" />
 
-      <div className="rounded-lg bg-zinc-50 dark:bg-neutral-800">
+      <div className="flex min-h-screen flex-col rounded-lg bg-zinc-50 dark:bg-neutral-800 sm:min-h-[calc(100vh-1.75rem)]">
         <TheHeader />
 
-        {children}
+        <main className="flex-1">{children}</main>
 
         <ContactMeSection />
         <TheFooter />
       </div>
-      <span className="h-3.5 block text-xs invisible">Padding</span>
     </div>
 
     <Toaster position="top-right" gutter={8} containerClassName="text-sm" />

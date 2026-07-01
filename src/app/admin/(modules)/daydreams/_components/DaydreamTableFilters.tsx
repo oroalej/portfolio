@@ -17,7 +17,7 @@ import {
 import { InputField } from "@/components/Form/InputField";
 import { RiSearch2Line } from "react-icons/ri";
 import { BsFillMoonStarsFill } from "react-icons/bs";
-import { useQueryState } from "next-usequerystate";
+import { useQueryState } from "nuqs";
 import { VscSettings } from "react-icons/vsc";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -58,7 +58,6 @@ const DaydreamTableFilters = () => {
     control,
     getValues,
     reset,
-    setValue,
   } = useForm<DaydreamFilterParams>({
     mode: "onChange",
     defaultValues: DAYDREAM_FILTER_DEFAULT_VALUES,
@@ -66,8 +65,13 @@ const DaydreamTableFilters = () => {
   });
 
   useEffect(() => {
-    if (!!year) setValue("year", year, { shouldDirty: true });
-  }, []);
+    reset(
+      {
+        year: year ?? DAYDREAM_FILTER_DEFAULT_VALUES.year,
+      },
+      { keepDefaultValues: true }
+    );
+  }, [reset, year]);
 
   const onFilterHandler = async () => {
     if (!!getValues("year")) await setYear(getValues("year") as number);

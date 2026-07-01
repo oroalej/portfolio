@@ -36,7 +36,7 @@ const GalleryCategorySelect = ({
 
       onChange(response.id);
     },
-    [termData]
+    [onChange, storeTaxonomyMutation, termData]
   );
 
   return (

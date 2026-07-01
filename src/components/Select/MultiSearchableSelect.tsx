@@ -5,7 +5,7 @@ import {
   SearchableSelectItem,
   SelectItem,
 } from "@/components";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useOpenable } from "@/hooks";
 import { PiXBold } from "react-icons/pi";
 import { find } from "lodash";
@@ -41,11 +41,11 @@ export const MultiSearchableSelect = ({
 }: SearchableMultiSelectProps) => {
   const [query, setQuery] = useState<string>("");
   const { isOpen, onOpen, onClose } = useOpenable();
-  const ref = useClickOutside({ onTriggered: onClose });
-
-  useEffect(() => {
-    if (!isOpen) setQuery("");
-  }, [isOpen]);
+  const onCloseHandler = useCallback(() => {
+    setQuery("");
+    onClose();
+  }, [onClose]);
+  const ref = useClickOutside({ onTriggered: onCloseHandler });
 
   const filteredOptions = useMemo(() => {
     let filtered = options;
@@ -61,7 +61,7 @@ export const MultiSearchableSelect = ({
     }
 
     return filtered;
-  }, [query, options]);
+  }, [query, options, value]);
 
   const onSelectHandler = (item: SelectItem<string>) => {
     onChange([item.value, ...value]);

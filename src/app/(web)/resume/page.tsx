@@ -1,9 +1,10 @@
 import { Metadata } from "next";
-import { EXPERIENCES, INTEREST, SKILLS } from "@/data/resume";
+import { EXPERIENCES, INTEREST, SKILL_GROUPS } from "@/data/resume";
 import { kebabCase } from "@/utils";
 import { FaDownload, FaEnvelope, FaGithub, FaLinkedin } from "react-icons/fa";
 import { FiExternalLink } from "react-icons/fi";
 import Container from "@/app/(web)/_components/Container";
+import { TechnologyBadgeList } from "@/app/(web)/resume/_components/TechnologyBadge";
 
 export const metadata: Metadata = {
   title: "Alexander Jeam Oro - Resume",
@@ -13,8 +14,8 @@ const Resume = () => (
   <Container className="font-sans py-14 md:py-20 lg:pb-32">
     <div className="w-full mb-12 lg:mb-6 text-center lg:text-right">
       <a
-        href="https://drive.google.com/file/d/1Y_7k8PR-q1XlO-Bxaklcc9kDO8_qNopE/view?usp=sharing"
-        target="_blank"
+        href="/alexander-jeam-oro-resume.pdf"
+        download="alexander-jeam-oro-resume.pdf"
         className="inline-flex flex-row gap-2 items-center w-fit py-2.5 px-3.5 bg-rose-500 hover:bg-rose-600 transition-colors rounded text-white text-sm"
       >
         <FaDownload />
@@ -33,7 +34,7 @@ const Resume = () => (
         </h3>
 
         <p className="dark:text-neutral-400 mt-3 lg:mt-6 text-sm lg:text-base">
-          Innovative developer with 7 years of professional experience in
+          Innovative developer with 9 years of professional experience in
           object-oriented programming, implementing design interfaces, testing,
           and debugging. Passionate about technology and learning new things.
         </p>
@@ -46,7 +47,7 @@ const Resume = () => (
           {EXPERIENCES.map(
             ({ company, positions, descriptions, technologies = [] }) => (
               <div
-                className="relative block py-3 space-y-0.5 text-sm lg:text-base"
+                className="relative block py-2.5 space-y-0.5 text-sm lg:text-base"
                 key={kebabCase(company)}
               >
                 <h3 className="text-neutral-700 font-medium dark:text-neutral-200 text-lg">
@@ -65,7 +66,7 @@ const Resume = () => (
                   </div>
                 ))}
 
-                <ul className="list-disc list-inside text-neutral-700 dark:text-neutral-200 space-y-2 pb-2">
+                <ul className="list-disc list-inside text-neutral-700 dark:text-neutral-200 space-y-1.5 pb-2">
                   {descriptions.map((description, index) => (
                     <li key={kebabCase(company, index.toString())}>
                       {description}
@@ -73,16 +74,7 @@ const Resume = () => (
                   ))}
                 </ul>
 
-                <div className="flex flex-row gap-1.5 flex-wrap">
-                  {technologies.map((item) => (
-                    <span
-                      key={kebabCase(company, item)}
-                      className="select-all inline-block bg-neutral-800 text-neutral-200 px-2 leading-none py-1 text-xs whitespace-nowrap rounded"
-                    >
-                      {item}
-                    </span>
-                  ))}
-                </div>
+                <TechnologyBadgeList technologies={technologies} />
               </div>
             )
           )}
@@ -167,11 +159,42 @@ const Resume = () => (
               Skills
             </h2>
 
-            <div className="relative grid grid-cols-2 grid-flow-row py-3 gap-1.5 w-full text-gray-700 dark:text-gray-200 capitalize">
-              {SKILLS.map((entry) => (
-                <span key={kebabCase(entry)} className={"text-sm lg:text-base"}>
-                  {entry}
-                </span>
+            <div className="space-y-4 py-3">
+              {SKILL_GROUPS.map(({ title, items, subgroups }) => (
+                <div className="space-y-1.5" key={kebabCase(title)}>
+                  <h3 className="text-sm lg:text-base font-semibold text-neutral-700 dark:text-neutral-200">
+                    {title}
+                  </h3>
+
+                  <div className="space-y-3">
+                    <div className="relative grid grid-cols-2 grid-flow-row gap-1.5 w-full text-gray-700 dark:text-gray-200 text-sm lg:text-base">
+                      {items.map((item) => (
+                        <span key={kebabCase(title, item)}>{item}</span>
+                      ))}
+                    </div>
+
+                    {subgroups?.map(
+                      ({ title: subgroupTitle, items: subgroupItems }) => (
+                        <div
+                          className="space-y-1.5 border-t border-neutral-200 pt-2 dark:border-neutral-700"
+                          key={kebabCase(title, subgroupTitle)}
+                        >
+                          <h4 className="text-sm font-medium text-neutral-600 dark:text-neutral-300">
+                            {subgroupTitle}
+                          </h4>
+
+                          <div className="relative grid grid-cols-2 grid-flow-row gap-1.5 w-full text-gray-700 dark:text-gray-200 text-sm lg:text-base">
+                            {subgroupItems.map((item) => (
+                              <span key={kebabCase(subgroupTitle, item)}>
+                                {item}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )
+                    )}
+                  </div>
+                </div>
               ))}
             </div>
           </div>

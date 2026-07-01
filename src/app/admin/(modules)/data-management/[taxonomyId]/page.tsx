@@ -5,13 +5,11 @@ export const metadata: Metadata = {
   title: "Admin - Data Management",
 };
 
-interface DataManagementEditPage {
-  params: { taxonomyId: string };
-}
+const DataManagementEditPage = async ({
+  params,
+}: PageProps<"/admin/data-management/[taxonomyId]">) => {
+  const { taxonomyId } = await params;
 
-const DataManagementEditPage = ({
-  params: { taxonomyId },
-}: DataManagementEditPage) => {
   return <EditDataManagementWrapper taxonomyId={taxonomyId} />;
 };
 

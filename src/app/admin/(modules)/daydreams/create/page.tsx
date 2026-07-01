@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { Fragment, Suspense } from "react";
-import { BreadcrumbDataSetter } from "src/app/admin/(modules)/_components/Breadcrumbs";
+import { BreadcrumbDataSetter } from "@/app/admin/(modules)/_components/Breadcrumbs";
 import CreateDaydreamWrapper from "@/app/admin/(modules)/daydreams/create/_components/CreateDaydreamWrapper";
 import DaydreamFormLoading from "@/app/admin/(modules)/daydreams/_components/Loading/DaydreamFormLoading";
 

@@ -7,7 +7,7 @@ import { useOpenable } from "@/hooks";
 import { useParams, useSearchParams } from "next/navigation";
 import { removeEmptyValues } from "@/utils";
 import { useDeleteQuoteMutation, useGetQuoteList } from "@/features/quotes/api";
-import { useQueryState } from "next-usequerystate";
+import { useQueryState } from "nuqs";
 import { GetAllQuotesAPIDataStructure } from "@/features/quotes/types";
 import QuoteTableLoading from "@/app/admin/(modules)/quotes/_components/Loading/QuoteTableLoading";
 import QuoteTableRow from "@/app/admin/(modules)/quotes/_components/QuoteTableRow";
@@ -40,10 +40,13 @@ const QuotesTable = () => {
     sort: [{ column: "created_at", order: "desc" }],
   });
 
-  const onSelectHandler = useCallback((item: GetAllQuotesAPIDataStructure) => {
-    setSelected(item);
-    onOpen();
-  }, []);
+  const onSelectHandler = useCallback(
+    (item: GetAllQuotesAPIDataStructure) => {
+      setSelected(item);
+      onOpen();
+    },
+    [onOpen]
+  );
 
   const onDeleteHandler = useCallback(async () => {
     if (!selected) return;
@@ -62,7 +65,7 @@ const QuotesTable = () => {
 
     setSelected(null);
     onClose();
-  }, [selected?.id]);
+  }, [deleteQuoteMutation, onClose, selected]);
 
   if (isGetAPILoading) {
     return <QuoteTableLoading />;

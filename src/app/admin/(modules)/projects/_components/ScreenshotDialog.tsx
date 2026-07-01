@@ -15,7 +15,7 @@ import { InputField } from "@/components/Form/InputField";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { object, string } from "zod";
-import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { FormEvent, useEffect, useMemo, useRef } from "react";
 import { SetRequired } from "@/types";
 import { isEqual, pick } from "lodash";
 import * as UIScrollArea from "@radix-ui/react-scroll-area";
@@ -58,7 +58,6 @@ export const ScreenshotDialog = ({
   item = DEFAULT_SCREENSHOT_FORM_VALUES,
 }: ScreenshotDialogProps) => {
   const titleInputRef = useRef<HTMLInputElement>(null);
-  const [selectedImageId, setSelectedImageId] = useState<string>(item.file_id);
 
   const { data: termList } = useGetTermList();
   const termData = termList?.find(
@@ -80,19 +79,19 @@ export const ScreenshotDialog = ({
 
   useEffect(() => {
     reset(item);
-    setSelectedImageId(item.file_id);
-  }, [item]);
+  }, [item, reset]);
 
   const onSubmitHandler = () => {
-    if (!selectedImageId) {
-      return;
-    }
-
-    const is_created = item.is_created ?? !item?.id;
     const formData = {
       title: getValues().title,
       file_id: getValues().file_id,
     };
+
+    if (!formData.file_id) {
+      return;
+    }
+
+    const is_created = item.is_created ?? !item?.id;
 
     onSubmit({
       id: item?.id ?? crypto.randomUUID(),
@@ -103,7 +102,6 @@ export const ScreenshotDialog = ({
     });
 
     reset(formData);
-    setSelectedImageId(formData.file_id);
 
     if (onClose) {
       onClose();
@@ -148,7 +146,6 @@ export const ScreenshotDialog = ({
                           activeId={value}
                           onSelect={async (selectedValue) => {
                             onChange(selectedValue.id);
-                            setSelectedImageId(selectedValue.id);
 
                             await trigger("file_id");
 
@@ -199,7 +196,6 @@ export const ScreenshotDialog = ({
                 color="secondary"
                 variant="text"
                 onClick={() => {
-                  setSelectedImageId(item.file_id);
                   reset(item);
 
                   if (onClose) onClose();
@@ -212,7 +208,6 @@ export const ScreenshotDialog = ({
                 rounded
                 type="submit"
                 size="small"
-                onClick={onSubmitHandler}
                 disabled={!formState.isDirty || !formState.isValid}
                 isLoading={formState.isSubmitting}
               >

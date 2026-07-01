@@ -44,7 +44,7 @@ const EditQuoteWrapper = () => {
         }
       );
     },
-    [quoteId]
+    [quoteId, updateQuoteMutation]
   );
 
   const onDeleteHandler = useCallback(async () => {
@@ -61,7 +61,7 @@ const EditQuoteWrapper = () => {
     );
 
     router.push(`/admin/quotes?${searchParams.toString()}`);
-  }, [quoteId]);
+  }, [deleteQuoteMutation, quoteId, router, searchParams]);
 
   if (isFetchingLoading) {
     return <AdminQuoteEditLoading />;

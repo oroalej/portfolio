@@ -23,7 +23,10 @@ export const DaydreamTableRow = ({
   isSelected,
 }: DaydreamTableRowProps) => {
   const { isOpen, onClose, onOpen } = useOpenable();
-  const { isLoading } = useStoragePublicUrl(item.file?.storage_file_path || "");
+  const coverImage = item.images[0]?.file;
+  const { isLoading } = useStoragePublicUrl(coverImage?.storage_file_path);
+  const hasCameraSettings =
+    item.iso !== null || item.shutter_speed !== null || item.aperture !== null;
 
   if (isLoading) {
     return <DaydreamTableRowLoading />;
@@ -33,14 +36,14 @@ export const DaydreamTableRow = ({
     <Fragment>
       <tr>
         <td className="text-center">
-          {item.file ? (
+          {coverImage ? (
             <div
               className="relative aspect-square w-32 h-32 overflow-hidden flex items-center justify-center group"
               onClick={onOpen}
             >
               <SupabaseImage
-                src={item.file.storage_file_path}
-                alt={item.file.name}
+                src={coverImage.storage_file_path}
+                alt={coverImage.name}
                 className="point-events-none absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full object-cover rounded-md"
                 quality={75}
                 width={480}
@@ -55,13 +58,31 @@ export const DaydreamTableRow = ({
         </td>
         <td>{item.description}</td>
         <td>
-          <span className="block mb-1 whitespace-nowrap">{item.iso} ISO</span>
-          <span className="block mb-1 whitespace-nowrap">
-            {item.shutter_speed} <abbr title="Shutter Speed">SS</abbr>
-          </span>
-          <span className="block mb-1 whitespace-nowrap">
-            {item.aperture} Aperture
-          </span>
+          {hasCameraSettings ? (
+            <Fragment>
+              {item.iso !== null && (
+                <span className="block mb-1 whitespace-nowrap">
+                  {item.iso} ISO
+                </span>
+              )}
+              
+              {item.shutter_speed !== null && (
+                <span className="block mb-1 whitespace-nowrap">
+                  {item.shutter_speed} <abbr title="Shutter Speed">SS</abbr>
+                </span>
+              )}
+
+              {item.aperture !== null && (
+                <span className="block mb-1 whitespace-nowrap">
+                  {item.aperture} Aperture
+                </span>
+              )}
+            </Fragment>
+          ) : (
+            <span className="text-sm text-neutral-400">
+              No camera settings
+            </span>
+          )}
         </td>
         <td>{new Date(item.created_at).toLocaleDateString()}</td>
         <td>
@@ -100,15 +121,15 @@ export const DaydreamTableRow = ({
         </td>
       </tr>
 
-      {isOpen && (
+      {isOpen && coverImage && (
         <ImagePreviewDialog
           isOpen={isOpen}
           onClose={onClose}
           item={{
-            storage_file_path: item.file.storage_file_path,
-            name: item.file.name,
-            height: item.file.height,
-            width: item.file.width,
+            storage_file_path: coverImage.storage_file_path,
+            name: coverImage.name,
+            height: coverImage.height,
+            width: coverImage.width,
           }}
         />
       )}

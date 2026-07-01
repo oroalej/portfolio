@@ -1,17 +1,24 @@
-import {useState} from "react";
+import { Dispatch, SetStateAction, useCallback, useState } from "react";
 
-const useLoadable = (initialValue: boolean = false) => {
-  const [isLoading, setIsLoading] = useState(initialValue)
+export interface UseLoadableResult {
+  isLoading: boolean;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  startLoading: () => void;
+  endLoading: () => void;
+}
 
-  const startLoading = () => setIsLoading(true);
-  const endLoading = () => setIsLoading(false);
+const useLoadable = (initialValue: boolean = false): UseLoadableResult => {
+  const [isLoading, setIsLoading] = useState(initialValue);
+
+  const startLoading = useCallback(() => setIsLoading(true), []);
+  const endLoading = useCallback(() => setIsLoading(false), []);
 
   return {
     isLoading,
     setIsLoading,
     startLoading,
-    endLoading
-  }
-}
+    endLoading,
+  };
+};
 
 export default useLoadable;

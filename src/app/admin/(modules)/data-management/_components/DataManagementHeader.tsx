@@ -9,7 +9,7 @@ import {
 } from "@/components";
 import { TermAPIDataStructure } from "@/features/terms/types";
 import { useGetTermList } from "@/features/terms/api/getTermList";
-import { useQueryState } from "next-usequerystate";
+import { useQueryState } from "nuqs";
 import { useMemo } from "react";
 import { BsDatabaseFill } from "react-icons/bs";
 

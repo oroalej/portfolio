@@ -1,4 +1,8 @@
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useInfiniteQuery,
+  useQuery,
+} from "@tanstack/react-query";
 import {
   queryFilterBuilder,
   queryPaginationBuilder,
@@ -6,7 +10,14 @@ import {
 } from "@/utils/supabase";
 import { DaydreamAPIDataStructure } from "@/features/daydreams/types";
 import { Filterable, Paginatable, Searchable, Sortable, Tables } from "@/types";
-import { DataWithPagination, generatePaginationData } from "@/utils/pagination";
+import {
+  DataWithPagination,
+  DEFAULT_PAGINATION_VALUES,
+  generatePaginationData,
+  getNextPaginationPageParam,
+} from "@/utils/pagination";
+import { durationInMinutes, removeEmptyValues } from "@/utils";
+import { DAYDREAM_SELECT } from "@/features/daydreams/api/constants";
 
 type DaydreamListSortable = Pick<
   Tables<"daydreams">,
@@ -15,7 +26,7 @@ type DaydreamListSortable = Pick<
 
 type DaydreamListFilterable = Pick<Tables<"daydreams">, "year">;
 
-export interface getDaydreamListParams
+export interface GetDaydreamListParams
   extends Required<Paginatable>,
     Sortable<DaydreamListSortable>,
     Filterable<DaydreamListFilterable>,
@@ -27,13 +38,10 @@ export const getDaydreamList = ({
   page,
   sort = [{ column: "created_at", order: "desc" }],
   filter = {},
-}: getDaydreamListParams) => {
+}: GetDaydreamListParams) => {
   let query = supabase
     .from("daydreams")
-    .select(
-      "id, year, description, iso, shutter_speed, aperture, created_at, file:file_id(id, name, width, height, size, storage_file_path, type)",
-      { count: "exact" }
-    );
+    .select(DAYDREAM_SELECT, { count: "exact" });
 
   query = queryFilterBuilder({
     query,
@@ -42,19 +50,22 @@ export const getDaydreamList = ({
     filter,
   });
 
+  query = query.order("image_order", {
+    foreignTable: "daydream_images",
+    ascending: true,
+  });
+
   query = queryPaginationBuilder({
     query,
     page,
     per_page,
   });
 
-  query = query.throwOnError();
-
-  return query;
+  return query.throwOnError();
 };
 
-export const useGetDaydreamList = <Type extends any = DaydreamAPIDataStructure>(
-  params: getDaydreamListParams,
+export const useGetDaydreamList = <Type = DaydreamAPIDataStructure>(
+  params: GetDaydreamListParams,
   transformer?: (value: DaydreamAPIDataStructure[]) => Type[]
 ) =>
   useQuery({
@@ -83,4 +94,41 @@ export const useGetDaydreamList = <Type extends any = DaydreamAPIDataStructure>(
 
       return data as DataWithPagination<Type>;
     },
+  });
+
+export const useInfiniteDaydreamList = ({
+  per_page = DEFAULT_PAGINATION_VALUES.per_page,
+  page = DEFAULT_PAGINATION_VALUES.current_page,
+  q,
+  sort = [{ column: "created_at", order: "desc" }],
+  filter = {},
+}: GetDaydreamListParams) =>
+  useInfiniteQuery({
+    initialPageParam: page,
+    staleTime: durationInMinutes(2),
+    queryKey: [
+      "infinite_daydreams",
+      removeEmptyValues({ q, ...filter }),
+      sort,
+      per_page,
+    ],
+    queryFn: async ({ pageParam }) => {
+      const { data, count } = await getDaydreamList({
+        per_page,
+        page: pageParam,
+        q,
+        sort,
+        filter,
+      });
+
+      return {
+        data: (data as unknown as DaydreamAPIDataStructure[]) || [],
+        pagination: generatePaginationData(
+          Number(per_page),
+          Number(pageParam),
+          count || 0
+        ),
+      };
+    },
+    getNextPageParam: getNextPaginationPageParam<DaydreamAPIDataStructure>,
   });

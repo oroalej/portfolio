@@ -63,7 +63,7 @@ export const BreadcrumbDataSetter = ({ breadcrumbs }: BreadcrumbDataSetter) => {
 
   useEffect(() => {
     setBreadcrumbs(breadcrumbs);
-  }, [breadcrumbs]);
+  }, [breadcrumbs, setBreadcrumbs]);
 
   return <Fragment />;
 };

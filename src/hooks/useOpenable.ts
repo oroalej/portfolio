@@ -1,6 +1,6 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useState } from "react";
 
-export interface useOpenableProps {
+export interface UseOpenableProps {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   onClose: () => void;
@@ -8,12 +8,12 @@ export interface useOpenableProps {
   onToggle: () => void;
 }
 
-const useOpenable = (initialValue: boolean = false): useOpenableProps => {
+const useOpenable = (initialValue: boolean = false): UseOpenableProps => {
   const [isOpen, setIsOpen] = useState<boolean>(initialValue);
 
-  const onClose = () => setIsOpen(false);
-  const onOpen = () => setIsOpen(true);
-  const onToggle = () => setIsOpen(() => !isOpen);
+  const onClose = useCallback(() => setIsOpen(false), []);
+  const onOpen = useCallback(() => setIsOpen(true), []);
+  const onToggle = useCallback(() => setIsOpen((value) => !value), []);
 
   return {
     isOpen,

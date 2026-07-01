@@ -1,45 +1,59 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import { PiMoonFill, PiSunFill } from "react-icons/pi";
 import * as Switch from "@radix-ui/react-switch";
 
-const isInitialDarkTheme = () => {
-  if ("theme" in localStorage) {
-    const storedTheme = localStorage.getItem("theme");
+const themeChangeEvent = "portfolio-theme-change";
 
-    if (storedTheme !== null) {
-      return storedTheme;
-    }
+const getDarkThemeSnapshot = () => {
+  if (typeof window === "undefined") return false;
 
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      return "dark";
-    }
-  }
+  return window.localStorage.getItem("theme") === "dark";
+};
 
-  return "light";
+const subscribeToThemeChanges = (onStoreChange: () => void) => {
+  if (typeof window === "undefined") return () => {};
+
+  window.addEventListener("storage", onStoreChange);
+  window.addEventListener(themeChangeEvent, onStoreChange);
+
+  return () => {
+    window.removeEventListener("storage", onStoreChange);
+    window.removeEventListener(themeChangeEvent, onStoreChange);
+  };
+};
+
+const setPageTheme = (isDark: boolean) => {
+  const documentRoot = window.document.documentElement;
+
+  if (isDark) documentRoot.classList.add("dark");
+  else documentRoot.classList.remove("dark");
 };
 
 const DarkModeButton = () => {
-  const [enabled, setEnabled] = useState(false);
+  const enabled = useSyncExternalStore(
+    subscribeToThemeChanges,
+    getDarkThemeSnapshot,
+    () => false
+  );
 
-  const setPageTheme = (event: boolean) => {
-    const documentRoot = window.document.documentElement;
+  useEffect(() => {
+    setPageTheme(enabled);
+  }, [enabled]);
 
-    if (event) documentRoot.classList.add("dark");
-    else documentRoot.classList.remove("dark");
-
-    localStorage.theme = event ? "dark" : "light";
+  const onCheckedChange = (isDark: boolean) => {
+    window.localStorage.setItem("theme", isDark ? "dark" : "light");
+    setPageTheme(isDark);
+    window.dispatchEvent(new Event(themeChangeEvent));
   };
-
-  useEffect(() => setEnabled(isInitialDarkTheme() === "dark"), []);
-  useEffect(() => setPageTheme(enabled), [enabled]);
 
   return (
     <Switch.Root
       className="rounded-full h-10 w-10 flex items-center justify-center bg-white hover:bg-neutral-200 group transition-colors z-50 lg:relative"
       checked={enabled}
-      onCheckedChange={setEnabled}
+      aria-label="Toggle dark mode"
+      onCheckedChange={onCheckedChange}
     >
       {enabled ? (
         <PiMoonFill

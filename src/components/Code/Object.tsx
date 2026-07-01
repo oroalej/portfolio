@@ -1,22 +1,49 @@
-"use client";
+import { Fragment, ReactNode } from "react";
+import classNames from "classnames";
+import { CodeToken } from "./CodeToken";
+import { CodeLanguage } from "./types";
 
-import {FC, Fragment, ReactNode} from "react";
-
-export interface ObjectInterface {
+export interface CodePropertyProps {
   children: ReactNode;
-  name: string,
-  isLast?: boolean
+  name: string;
+  isLast?: boolean;
+  language?: CodeLanguage;
+  operator?: string;
+  operatorClassName?: string;
+  withTrailingComma?: boolean;
 }
 
-export const Object: FC<ObjectInterface> = (props: ObjectInterface) => {
-  const {children, name, isLast = false} = props;
+const CodeProperty = ({
+  children,
+  isLast,
+  language = "javascript",
+  name,
+  operator = ":",
+  operatorClassName = "mr-1.5 sm:mr-2",
+  withTrailingComma,
+}: CodePropertyProps) => {
+  const shouldRenderTrailingComma = withTrailingComma ?? !isLast;
 
   return (
     <Fragment>
-      <span className="text-rose-500">{name}</span>
-      <span className="text-white mr-1.5 sm:mr-2">:</span>
+      <CodeToken type="property" language={language}>
+        {name}
+      </CodeToken>
+      <CodeToken
+        type="operator"
+        language={language}
+        className={classNames(operatorClassName)}
+      >
+        {operator}
+      </CodeToken>
       {children}
-      {!isLast && <span className="text-white">,</span>}
+      {shouldRenderTrailingComma && (
+        <CodeToken type="operator" language={language}>
+          ,
+        </CodeToken>
+      )}
     </Fragment>
-  )
-}
+  );
+};
+
+export { CodeProperty, CodeProperty as Object };

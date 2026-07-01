@@ -1,32 +1,44 @@
 "use client";
 import { Button, Card, Dialog, DialogProps, Scrollbar } from "@/components";
-import { DataWithPagination } from "@/utils/pagination";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { FileAPIDataStructure } from "@/features/files/types";
-import GalleryWrapper, {
-  GallerySingleProps,
-} from "@/app/admin/(modules)/gallery/_components/GalleryWrapper";
+import GalleryWrapper from "@/app/admin/(modules)/gallery/_components/GalleryWrapper";
 import { useGetTermList } from "@/features/terms/api/getTermList";
 import { TERM_IDENTIFIER } from "@/data";
 import { useGetTaxonomyByTermId } from "@/features/term_taxonomy/api/getTaxonomyByTermId";
 import * as UIScrollArea from "@radix-ui/react-scroll-area";
-import { useQueryClient } from "@tanstack/react-query";
+import { DaydreamImageFile } from "@/features/daydreams/types";
 
-interface GalleryDialogProps
-  extends Omit<DialogProps, "children">,
-    Required<Pick<GallerySingleProps, "onSelect">>,
-    Omit<GallerySingleProps, "onSelect" | "cols"> {}
+interface GalleryDialogProps extends Omit<DialogProps, "children"> {
+  onSelect: (value: DaydreamImageFile[]) => void | Promise<void>;
+  selectedImages: DaydreamImageFile[];
+}
+
+const toDaydreamImageFile = (
+  file: FileAPIDataStructure
+): DaydreamImageFile => ({
+  bucket_name: file.bucket_name,
+  height: file.height,
+  id: file.id,
+  name: file.name,
+  size: file.size,
+  storage_file_path: file.storage_file_path,
+  type: file.type,
+  width: file.width,
+});
 
 const GalleryDialog = ({
   isOpen,
   onClose,
   onSelect,
-  activeId,
+  selectedImages,
 }: GalleryDialogProps) => {
   const [localSelected, setLocalSelected] =
-    useState<FileAPIDataStructure | null>(null);
-
-  const queryClient = useQueryClient();
+    useState<DaydreamImageFile[]>(selectedImages);
+  const selectedIds = useMemo(
+    () => localSelected.map((item) => item.id),
+    [localSelected]
+  );
 
   const { data: termList } = useGetTermList();
   const termData = termList?.find(
@@ -40,39 +52,21 @@ const GalleryDialog = ({
   );
 
   const onSelectHandler = () => {
-    if (!!localSelected) {
+    if (!!localSelected.length) {
       onSelect(localSelected);
-      setLocalSelected(null);
+      setLocalSelected([]);
     }
   };
 
-  useEffect(() => {
-    if (isOpen && categoryTermTaxonomy?.id) {
-      let selectedItem: FileAPIDataStructure | undefined = undefined;
+  const onToggleSelectedHandler = (value: FileAPIDataStructure) => {
+    setLocalSelected((current) => {
+      if (current.some((item) => item.id === value.id)) {
+        return current.filter((item) => item.id !== value.id);
+      }
 
-      queryClient
-        .getQueryCache()
-        .findAll({
-          queryKey: [
-            "infinite_files",
-            { category_id: categoryTermTaxonomy!.id },
-          ],
-          exact: false,
-        })
-        ?.forEach((cache) => {
-          (queryClient.getQueryData(cache.queryKey) as any)?.pages.forEach(
-            ({ data }: DataWithPagination<FileAPIDataStructure>) => {
-              selectedItem = data.find((item) => item.id === activeId);
-
-              if (!!selectedItem) {
-                setLocalSelected(selectedItem);
-                return;
-              }
-            }
-          );
-        });
-    }
-  }, [isOpen, categoryTermTaxonomy]);
+      return [...current, toDaydreamImageFile(value)];
+    });
+  };
 
   return (
     <Dialog isOpen={isOpen}>
@@ -84,11 +78,12 @@ const GalleryDialog = ({
           <UIScrollArea.Root type="auto">
             <UIScrollArea.Viewport className="h-96 p-1 pr-4">
               <GalleryWrapper
+                multiple
                 cols={8}
                 per_page={16}
-                activeId={localSelected?.id}
+                activeId={selectedIds}
                 categoryId={categoryTermTaxonomy?.id}
-                onSelect={setLocalSelected}
+                onSelect={onToggleSelectedHandler}
               />
             </UIScrollArea.Viewport>
             <Scrollbar />
@@ -102,14 +97,19 @@ const GalleryDialog = ({
             rounded
             onClick={() => {
               onClose && onClose();
-              setLocalSelected(null);
+              setLocalSelected([]);
             }}
           >
             Cancel
           </Button>
 
-          <Button size="small" rounded onClick={onSelectHandler}>
-            Select Image
+          <Button
+            size="small"
+            rounded
+            onClick={onSelectHandler}
+            disabled={!localSelected.length}
+          >
+            Select Images
           </Button>
         </Card.Footer>
       </Card>

@@ -1,8 +1,11 @@
-import Image, { ImageProps } from "next/image";
+"use client";
+
+import Image from "next/image";
+import type { ImageProps } from "next/image";
 import { useStoragePublicUrl } from "@/features/files/api";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
-interface SupabaseImage extends ImageProps {
+interface SupabaseImageProps extends ImageProps {
   src: string;
 }
 
@@ -11,7 +14,7 @@ const SupabaseImage = ({
   alt,
   className,
   ...remaining
-}: SupabaseImage) => {
+}: SupabaseImageProps) => {
   const publicUrlData = useStoragePublicUrl(src);
 
   if (publicUrlData.isLoading || !publicUrlData.data) {

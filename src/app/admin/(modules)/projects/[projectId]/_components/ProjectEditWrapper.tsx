@@ -132,10 +132,24 @@ const ProjectEditWrapper = ({ projectId }: ProjectEditWrapper) => {
           id: projectId,
         });
       } catch (error) {
-        // toast.error(error);
+        const errorMessage =
+          error instanceof Error ? error.message : "Failed to update project.";
+
+        toast.error(errorMessage, { id: projectId });
+        throw error;
       }
     },
-    [data]
+    [
+      data,
+      deleteProjectScreenshotsMutation,
+      deleteProjectSkillsMutation,
+      memoizedData?.skills,
+      projectId,
+      queryClient,
+      storeProjectSkillsMutation,
+      updateProjectMutation,
+      upsertProjectScreenshotsMutation,
+    ]
   );
 
   if (!data || isLoading) return <ProjectFormLoading />;

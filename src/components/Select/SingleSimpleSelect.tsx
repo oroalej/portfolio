@@ -42,6 +42,7 @@ export const SingleSimpleSelect = <
   const SelectedItem = options.find(
     (item) => (item?.[optionValue] as unknown as ValueType) === activeValue
   );
+  const selectedText = SelectedItem?.[optionText];
 
   return (
     <div className="relative">
@@ -52,7 +53,9 @@ export const SingleSimpleSelect = <
           isChanged={defaultValue !== value}
           onReset={() => onChange(defaultValue as ValueType)}
         >
-          {SelectedItem?.[optionText] ?? placeholder}
+          {selectedText === undefined || selectedText === null
+            ? placeholder
+            : String(selectedText)}
         </SelectTrigger>
         <SelectContent>
           {!!options.length ? (

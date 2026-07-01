@@ -1,4 +1,4 @@
-import { BreadcrumbDataSetter } from "src/app/admin/(modules)/_components/Breadcrumbs";
+import { BreadcrumbDataSetter } from "@/app/admin/(modules)/_components/Breadcrumbs";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

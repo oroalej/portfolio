@@ -38,12 +38,10 @@ export const getProjectList = async ({
     filter,
   });
 
-  query = query.throwOnError();
-
-  return query;
+  return query.throwOnError();
 };
 
-export const useGetProjectList = <Type extends any = ProjectAPIDataStructure>(
+export const useGetProjectList = <Type = ProjectAPIDataStructure>(
   params: GetProjectListParams,
   transformer?: (value: ProjectAPIDataStructure[]) => Type[]
 ) => {

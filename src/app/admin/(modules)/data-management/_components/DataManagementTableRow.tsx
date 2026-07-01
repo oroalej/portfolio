@@ -28,29 +28,32 @@ export const DataManagementTableRow = ({
 
   const isSelected = params?.taxonomyId === item.id;
 
-  const onDeleteHandler = useCallback(async () => {
-    setIsDeleteLoading(true);
+  const onDeleteHandler = useCallback(
+    async () => {
+      setIsDeleteLoading(true);
 
-    await toast.promise(
-      deleteTaxonomyMutation.mutateAsync(pick(item, ["id", "term_id"])),
-      {
-        success: () => {
-          setIsDeleteDialogOpen(false);
-          setIsDeleteLoading(false);
+      await toast.promise(
+        deleteTaxonomyMutation.mutateAsync(pick(item, ["id", "term_id"])),
+        {
+          success: () => {
+            setIsDeleteDialogOpen(false);
+            setIsDeleteLoading(false);
 
-          return "Data has been successfully deleted";
-        },
-        loading: "Deleting taxonomy...",
-        error: (error) => {
-          setIsDeleteLoading(false);
+            return "Data has been successfully deleted";
+          },
+          loading: "Deleting taxonomy...",
+          error: (error) => {
+            setIsDeleteLoading(false);
 
-          return error;
-        },
-      }
-    );
+            return error;
+          },
+        }
+      );
 
-    router.push(`/admin/data-management?type=${item.term_id}`);
-  }, []);
+      router.push(`/admin/data-management?type=${item.term_id}`);
+    },
+    [deleteTaxonomyMutation, item, router]
+  );
 
   return (
     <Fragment>

@@ -38,7 +38,7 @@ const SkillSearchableSelect = ({
 
       onChange([response.id, ...value]);
     },
-    [termData]
+    [onChange, storeTaxonomyMutation, termData, value]
   );
 
   return (

@@ -6,8 +6,8 @@ import { useSortable } from "@dnd-kit/sortable";
 import { AiOutlineExpand } from "react-icons/ai";
 import { useDeleteProjectMutation } from "@/features/projects/api/deleteProject";
 import { useQueryClient } from "@tanstack/react-query";
-import { GalleryItem, useGalleryContext } from "@/context/GalleryContext";
-import { Tables } from "@/types";
+import { useGalleryContext } from "@/context/GalleryContext";
+import type { ProjectCardItem } from "@/features/projects/types";
 import { CSS } from "@dnd-kit/utilities";
 import { Fragment, useState } from "react";
 import classNames from "classnames";
@@ -19,12 +19,6 @@ export interface ProjectCardProps {
   item: ProjectCardItem;
   sortable?: boolean;
   isBeingDragged?: boolean;
-}
-export interface ProjectCardItem
-  extends Omit<Tables<"projects">, "created_at" | "project_type_id"> {
-  skills: Pick<Tables<"term_taxonomy">, "id" | "name">[];
-  project_type: Pick<Tables<"term_taxonomy">, "name" | "id">;
-  screenshots: GalleryItem[];
 }
 
 export const ProjectCard = ({

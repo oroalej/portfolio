@@ -5,7 +5,7 @@ import { GoFileDirectoryFill } from "react-icons/go";
 import { InputField } from "@/components/Form/InputField";
 import { RiSearch2Line } from "react-icons/ri";
 import { ProjectTypeSelect } from "@/app/admin/(modules)/projects/_components/Select/ProjectTypeSelect";
-import { useQueryState } from "next-usequerystate";
+import { useQueryState } from "nuqs";
 import { useState } from "react";
 
 const IndexProjectHeader = () => {

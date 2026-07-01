@@ -11,7 +11,7 @@ const RedirectToQuoteId = () => {
   const router = useRouter();
 
   const { data: termList } = useGetTermList();
-  const { data, isLoading } = useGetTaxonomyByTermId({
+  const { data } = useGetTaxonomyByTermId({
     filter: {
       term_id: termList?.find(
         (item) => item.identifier === TERM_IDENTIFIER.QUOTE_CATEGORY
@@ -19,11 +19,11 @@ const RedirectToQuoteId = () => {
     },
   });
 
-  const taxonomy = data?.find(Boolean);
+  const taxonomyId = data?.find(Boolean)?.id;
 
   useEffect(() => {
-    if (taxonomy) router.replace(`/quotes/${taxonomy.id}`);
-  }, [taxonomy?.id]);
+    if (taxonomyId) router.replace(`/quotes/${taxonomyId}`);
+  }, [router, taxonomyId]);
 
   return <QuotesListLoading />;
 };

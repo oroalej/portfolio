@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, FormErrorMessage, SelectItem } from "@/components";
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import { ReactNode, useCallback, useMemo, useState } from "react";
 import { useOpenable } from "@/hooks";
 import { PiXBold } from "react-icons/pi";
 import { find } from "lodash";
@@ -89,11 +89,11 @@ export const SearchableSelect = <Type extends string | number = string>({
 }: SearchableSelectProps<Type>) => {
   const [query, setQuery] = useState<string>("");
   const { isOpen, onOpen, onClose } = useOpenable();
-  const ref = useClickOutside({ onTriggered: onClose });
-
-  useEffect(() => {
-    if (!isOpen) setQuery("");
-  }, [isOpen]);
+  const onCloseHandler = useCallback(() => {
+    setQuery("");
+    onClose();
+  }, [onClose]);
+  const ref = useClickOutside({ onTriggered: onCloseHandler });
 
   const filteredOptions = useMemo(() => {
     if (query === "") return options;
@@ -115,7 +115,7 @@ export const SearchableSelect = <Type extends string | number = string>({
 
   const onSelectHandler = (selected: Type) => {
     onChange(selected);
-    onClose();
+    onCloseHandler();
   };
 
   const getDisplayValue = useMemo(() => {

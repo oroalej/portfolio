@@ -1,25 +1,22 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updatePaginatedDataCache } from "@/utils/pagination";
-import { StoreDaydreamParams } from "@/features/daydreams/api/createDaydream";
-import { DaydreamAPIDataStructure } from "@/features/daydreams/types";
-import { supabase } from "@/utils/supabase";
+import {
+  DaydreamAPIDataStructure,
+  DreamFormParams,
+} from "@/features/daydreams/types";
 import toast from "react-hot-toast";
+import { saveDaydream } from "@/features/daydreams/api/saveDaydream";
 
 interface UpdateDaydreamParams {
   id: string;
-  formData: StoreDaydreamParams;
+  formData: DreamFormParams;
 }
 
-export const updateDaydream = ({ id, formData }: UpdateDaydreamParams) => {
-  return supabase
-    .from("daydreams")
-    .update(formData)
-    .eq("id", id)
-    .select(
-      "id, year, description, iso, shutter_speed, aperture, created_at, file:file_id(id, name, width, height, size, storage_file_path, type)"
-    )
-    .single()
-    .throwOnError();
+export const updateDaydream = async ({
+  id,
+  formData,
+}: UpdateDaydreamParams): Promise<DaydreamAPIDataStructure> => {
+  return await saveDaydream({ formData, id });
 };
 
 export const useUpdateDaydreamMutation = () => {
@@ -29,17 +26,20 @@ export const useUpdateDaydreamMutation = () => {
     mutationFn: async (
       params: UpdateDaydreamParams
     ): Promise<DaydreamAPIDataStructure> => {
-      const { data } = await updateDaydream(params);
-
-      return data as unknown as DaydreamAPIDataStructure;
+      return await updateDaydream(params);
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       queryClient.setQueryData(["daydream", data.id], data);
 
       updatePaginatedDataCache({
         queryKey: ["daydreams"],
         queryClient,
         data,
+      });
+
+      await queryClient.invalidateQueries({
+        queryKey: ["infinite_daydreams"],
+        exact: false,
       });
     },
     onError: (error, variables) => {

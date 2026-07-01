@@ -20,7 +20,7 @@ import { FileAPIDataStructure } from "@/features/files/types";
 import toast from "react-hot-toast";
 
 export interface RenameDialogProps
-  extends Required<Omit<DialogProps, "children">> {
+  extends Required<Pick<DialogProps, "isOpen" | "onClose">> {
   item: FileAPIDataStructure;
 }
 
@@ -29,11 +29,11 @@ export const RenameFormSchema = object({
 });
 
 export interface RenameFormStructure {
-  name: string | undefined;
+  name: string;
 }
 
 export const RENAME_DEFAULT_FORM_VALUES: RenameFormStructure = {
-  name: undefined,
+  name: "",
 };
 
 export const RenameDialog = ({ isOpen, onClose, item }: RenameDialogProps) => {

@@ -1,11 +1,19 @@
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useInfiniteQuery,
+  useQuery,
+} from "@tanstack/react-query";
 import {
   queryFilterBuilder,
   queryPaginationBuilder,
   supabase,
 } from "@/utils/supabase";
-import { generatePaginationData } from "@/utils/pagination";
-import { durationInMinutes } from "@/utils";
+import {
+  DEFAULT_PAGINATION_VALUES,
+  generatePaginationData,
+  getNextPaginationPageParam,
+} from "@/utils/pagination";
+import { durationInMinutes, removeEmptyValues } from "@/utils";
 import { Filterable, Paginatable, Searchable, Sortable, Tables } from "@/types";
 
 type QuoteListSortable = Pick<Tables<"quotes">, "created_at" | "source_id">;
@@ -14,7 +22,7 @@ type QuoteListFilterable = Pick<
   "category_id" | "source_id" | "media_detail_id"
 >;
 
-interface getQuotesParams
+interface GetQuotesParams
   extends Required<Paginatable>,
     Sortable<QuoteListSortable>,
     Filterable<QuoteListFilterable>,
@@ -33,7 +41,7 @@ const getQuoteList = ({
   q,
   sort = [],
   filter = {},
-}: getQuotesParams) => {
+}: GetQuotesParams) => {
   let query = supabase
     .from("quotes")
     .select(
@@ -56,12 +64,10 @@ const getQuoteList = ({
     per_page,
   });
 
-  query = query.throwOnError();
-
-  return query;
+  return query.throwOnError();
 };
 
-export const useGetQuoteList = (params: getQuotesParams) =>
+export const useGetQuoteList = (params: GetQuotesParams) =>
   useQuery({
     placeholderData: keepPreviousData,
     staleTime: durationInMinutes(2),
@@ -79,4 +85,41 @@ export const useGetQuoteList = (params: getQuotesParams) =>
         ),
       };
     },
+  });
+
+export const useInfiniteQuoteList = ({
+  per_page = DEFAULT_PAGINATION_VALUES.per_page,
+  page = DEFAULT_PAGINATION_VALUES.current_page,
+  q,
+  sort = [],
+  filter = {},
+}: GetQuotesParams) =>
+  useInfiniteQuery({
+    initialPageParam: page,
+    staleTime: durationInMinutes(2),
+    queryKey: [
+      "infinite_quotes",
+      removeEmptyValues({ q, ...filter }),
+      sort,
+      per_page,
+    ],
+    queryFn: async ({ pageParam }) => {
+      const { data, count } = await getQuoteList({
+        per_page,
+        page: pageParam,
+        q,
+        sort,
+        filter,
+      });
+
+      return {
+        data: (data as unknown as GetAllQuotesAPIDataStructure[]) || [],
+        pagination: generatePaginationData(
+          Number(per_page),
+          Number(pageParam),
+          count || 0
+        ),
+      };
+    },
+    getNextPageParam: getNextPaginationPageParam<GetAllQuotesAPIDataStructure>,
   });

@@ -8,7 +8,8 @@ import {
   TWITTER_LINK,
 } from "@/constants";
 import { ExternalLink } from "@/components";
-import { SiGithub, SiLinkedin, SiTwitter } from "react-icons/si";
+import { FaLinkedin, FaTwitter } from "react-icons/fa";
+import { SiGithub } from "react-icons/si";
 import Container from "@/app/(web)/_components/Container";
 import classNames from "classnames";
 import { usePathname } from "next/navigation";
@@ -123,7 +124,7 @@ const TheFooter = () => {
                 label="LinkedIn"
                 className="hover:text-white transition-colors"
               >
-                <SiLinkedin size={22} />
+                <FaLinkedin size={22} />
               </ExternalLink>
 
               {/*<ExternalLink href={FACEBOOK_LINK} label="Facebook"*/}
@@ -136,7 +137,7 @@ const TheFooter = () => {
                 label="Twitter"
                 className="hover:text-white transition-colors"
               >
-                <SiTwitter size={22} />
+                <FaTwitter size={22} />
               </ExternalLink>
             </div>
           </div>

@@ -11,7 +11,7 @@ const RedirectToProjectTypeId = () => {
   const router = useRouter();
 
   const { data: termList } = useGetTermList();
-  const { data, isLoading } = useGetTaxonomyByTermId({
+  const { data } = useGetTaxonomyByTermId({
     filter: {
       term_id: termList?.find(
         (item) => item.identifier === TERM_IDENTIFIER.PROJECT_TYPES
@@ -19,11 +19,11 @@ const RedirectToProjectTypeId = () => {
     },
   });
 
-  const taxonomy = data?.find(Boolean);
+  const taxonomyId = data?.find(Boolean)?.id;
 
   useEffect(() => {
-    if (taxonomy) router.replace(`/projects/${taxonomy.id}`);
-  }, [taxonomy?.id]);
+    if (taxonomyId) router.replace(`/projects/${taxonomyId}`);
+  }, [router, taxonomyId]);
 
   return <ProjectListLoading />;
 };
