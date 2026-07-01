@@ -39,6 +39,7 @@ Common public patterns:
 - `PortfolioSummarySection` uses the shared `Code` primitives for a faux editor with JavaScript/PHP language selection.
 - `NavLink` handles active taxonomy navigation for projects and quotes.
 - `GalleryProvider` powers project screenshot previews and daydream previews, stores a nullable selected item, and provides default previous/next callbacks for the available image list unless a route-specific preview flow overrides the container navigation.
+- `GalleryPreviewDialog` is the shared public preview shell for project screenshots and daydream images. It composes the dialog frame, contained image stage, preview loading skeleton, close button, thumbnail row, and optional sidebar/footer content while reusing `ImagePreviewContainer`, `Thumbnail`, and `SupabaseImage`.
 - `SupabaseImage` displays images from storage.
 
 ## Admin UI Patterns

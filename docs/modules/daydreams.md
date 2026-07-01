@@ -37,7 +37,7 @@ Daydreams are photography-style entries with one or more ordered images, year, d
 
 - Public daydream list loads 21 posts at a time, sorted by year descending and created date descending, then fetches the next page through an intersection-observer sentinel.
 - Public cards use the first ordered image as the cover, show an image count when a post has multiple images, and omit missing camera-setting rows.
-- Public preview uses `GalleryProvider` plus `DaydreamPreviewDialog`, supports thumbnail selection within a post, can move previous/next across adjacent daydream posts, fetches the next infinite-query page from the preview boundary when needed, and shows the camera-setting block only when at least one camera setting is present.
+- Public preview uses `GalleryProvider` plus `DaydreamPreviewDialog` with the shared public `GalleryPreviewDialog` shell. It supports thumbnail selection within a post, can move previous/next across adjacent daydream posts, fetches the next infinite-query page from the preview boundary when needed, and shows the camera-setting block only when at least one camera setting is present.
 - Admin index supports search, year filtering, pagination, row selection, and delete confirmation.
 - Admin create/edit uses a gallery dialog to select one or more existing gallery images.
 - Image selection writes ordered `images` into the form and supports add, remove, and drag-handle reorder.

@@ -2,14 +2,10 @@
 
 import SupabaseImage from "@/components/Image/SupabaseImage";
 import { Fragment } from "react";
-import { BaseSkeletonLoader, ExternalLink } from "@/components";
-import {
-  PiCode,
-  PiCornersOutLight,
-  PiFigmaLogoLight,
-  PiGlobeHemisphereWestThin,
-} from "react-icons/pi";
+import { BaseSkeletonLoader } from "@/components";
+import { PiCornersOutLight } from "react-icons/pi";
 import type { ProjectCardItem } from "@/features/projects/types";
+import { ProjectLinks } from "@/app/(web)/projects/[projectTypeId]/_components/ProjectLinks";
 
 interface ProjectCardInterface {
   item: ProjectCardItem;
@@ -18,7 +14,6 @@ interface ProjectCardInterface {
 
 export const ProjectCard = ({ item, onPreview }: ProjectCardInterface) => {
   const {
-    id,
     screenshots,
     title,
     description,
@@ -38,28 +33,27 @@ export const ProjectCard = ({ item, onPreview }: ProjectCardInterface) => {
             className="relative h-64 md:h-auto md:w-64 md:aspect-square shrink-0 rounded-md overflow-hidden cursor-pointer hover:bg-neutral-800 group bg-transparent p-0"
             onClick={() => onPreview(item)}
           >
-            <span className="z-10 opacity-0 group-hover:opacity-100 transition-opacity delay-75 absolute w-full h-full bg-opacity-40 bg-neutral-800 flex items-center justify-center pointer-events-none group-active:bg-opacity-[0.45]">
+            <span
+              aria-hidden="true"
+              className="absolute inset-0 z-10 h-full w-full opacity-0 group-hover:opacity-20 transition-opacity delay-75 bg-neutral-800 flex items-center justify-center pointer-events-none group-active:bg-opacity-[0.45]"
+            >
               <PiCornersOutLight size={32} className="text-white" />
             </span>
 
-            {screenshots.length && (
-              <div className="flex flex-row gap-1 absolute right-2.5 top-2.5 z-10">
-                {[...Array(screenshots.length)].map((_, index) => (
-                  <span
-                    key={`indicator-${index}-${id}`}
-                    className="w-1.5 h-1.5 bg-neutral-600 rounded-full"
-                  />
-                ))}
-              </div>
+            {screenshots.length > 1 && (
+              <span className="absolute right-2 top-2 z-20 rounded-md bg-neutral-900/80 px-2 py-1 text-xs font-medium text-white">
+                {screenshots.length} images
+              </span>
             )}
 
             <SupabaseImage
               src={screenshots[0].storage_file_path}
               alt={screenshots[0].name}
-              className="object-cover absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 h-full w-full"
+              className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none object-cover object-center"
               quality={75}
               width={450}
               height={450}
+              style={{ width: "100%", height: "100%" }}
               sizes="16rem"
             />
           </button>
@@ -71,46 +65,12 @@ export const ProjectCard = ({ item, onPreview }: ProjectCardInterface) => {
             <h2 className="text-xl font-bold text-neutral-700 dark:text-neutral-200 mb-2">
               {title}
             </h2>
-            <div className="flex flex-row gap-3 items-center">
-              {repository_link && (
-                <ExternalLink
-                  href={`https://github.com/${repository_link}`}
-                  label="Code"
-                  className="transform hover:scale-110 cursor-pointer transition-colors text-neutral-800 dark:text-neutral-200"
-                  data-tooltip-id="guest-tooltip"
-                  data-tooltip-content="Code"
-                  data-tooltip-place="bottom"
-                >
-                  <PiCode size={22} />
-                </ExternalLink>
-              )}
-
-              {website_link && (
-                <ExternalLink
-                  href={`https://${website_link}`}
-                  label="Link"
-                  className="transform hover:scale-110 cursor-pointer transition-colors text-neutral-800 dark:text-neutral-200"
-                  data-tooltip-id="guest-tooltip"
-                  data-tooltip-content="Website"
-                  data-tooltip-place="bottom"
-                >
-                  <PiGlobeHemisphereWestThin size={22} />
-                </ExternalLink>
-              )}
-
-              {design_link && (
-                <ExternalLink
-                  href={`https://www.figma.com/file/${design_link}`}
-                  label="Figma"
-                  className="transform hover:scale-110 cursor-pointer transition-colors text-neutral-800 dark:text-neutral-200"
-                  data-tooltip-id="guest-tooltip"
-                  data-tooltip-content="Design"
-                  data-tooltip-place="bottom"
-                >
-                  <PiFigmaLogoLight size={22} />
-                </ExternalLink>
-              )}
-            </div>
+            <ProjectLinks
+              className="flex flex-row gap-3 items-center"
+              design_link={design_link}
+              repository_link={repository_link}
+              website_link={website_link}
+            />
           </div>
 
           <p className="text-neutral-600 dark:text-neutral-200 mb-4">

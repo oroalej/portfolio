@@ -38,7 +38,8 @@ Projects document portfolio work and power both the public project gallery and t
 
 - Public `/projects` redirects to the first project type taxonomy entry.
 - Public project list filters by `project_type_id` and sorts by `project_order`.
-- Public screenshot preview uses `GalleryProvider`, thumbnail navigation, and `PreviewProjectImageDialog`.
+- Public project cards use the first screenshot as a square cover, show an image-count badge when multiple screenshots exist, and open the preview dialog from the image button.
+- Public screenshot preview uses `GalleryProvider`, thumbnail navigation, and `PreviewProjectImageDialog` with the shared public `GalleryPreviewDialog` shell for the contained image stage and project details/sidebar links.
 - Admin index filters by URL query params `type` and `q`.
 - Admin index can reorder projects with `@dnd-kit` when a project type filter is active.
 - Admin create uses `store_project` RPC.
@@ -64,6 +65,7 @@ Projects document portfolio work and power both the public project gallery and t
 ## Verification Notes
 
 - Check public filtering by project type.
+- Check public project screenshot card cover alignment, image-count badges, and preview hover affordance.
 - Check admin create, edit, skill diffing, screenshot diffing, and reorder behavior.
 - Check links are rendered with the expected URL prefixes in public preview dialogs.
 - Run `pnpm.cmd run lint` after project changes.

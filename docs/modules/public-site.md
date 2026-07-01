@@ -39,11 +39,11 @@ The public site presents the portfolio homepage, resume, project portfolio, quot
 - The homepage summary renders a faux code editor that can switch between JavaScript and PHP syntax while keeping links and contact metadata sourced from `PORTFOLIO_SUMMARY`.
 - `/projects` fetches terms, finds `TERM_IDENTIFIER.PROJECT_TYPES`, loads taxonomy for that term, and redirects to the first taxonomy id.
 - `/projects/[projectTypeId]` loads projects filtered by `project_type_id`, ordered by `project_order`, then transforms project API data into card items.
-- Project screenshot preview uses `GalleryProvider` to hold the selected screenshot list and active index.
+- Project cards use the first screenshot as a square cover, show an image-count badge for multiple screenshots, and use `GalleryProvider` with the shared public `GalleryPreviewDialog` shell for screenshot preview state.
 - `/resume` renders static resume entries, downloads `/alexander-jeam-oro-resume.pdf`, and categorizes technology badge labels as frontend, backend, data/API, AI/developer tools, workflow/platform, or other.
 - `/quotes` fetches terms, finds `TERM_IDENTIFIER.QUOTE_CATEGORY`, loads taxonomy for that term, and redirects to the first taxonomy id.
 - `/quotes/[quoteId]` loads quotes filtered by `category_id` and fetches additional pages through infinite scroll.
-- `/daydreams` loads daydream posts sorted by year descending and created date descending, fetches additional pages through infinite scroll, uses the first ordered image as each cover, then uses `GalleryProvider` for preview state with thumbnail selection, previous/next navigation across adjacent daydream posts, and preview-boundary next-page fetching.
+- `/daydreams` loads daydream posts sorted by year descending and created date descending, fetches additional pages through infinite scroll, uses the first ordered image as each cover, then uses `GalleryProvider` and the shared public `GalleryPreviewDialog` shell for preview state with thumbnail selection, previous/next navigation across adjacent daydream posts, and preview-boundary next-page fetching.
 
 ## Cache And State
 
