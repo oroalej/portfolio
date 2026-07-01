@@ -23,14 +23,17 @@ export const DaydreamCard = ({
   image_count,
 }: DaydreamCardProps) => {
   const { isLoading, data } = useStoragePublicUrl(image_path);
-  const hasCameraSettings =
-    iso !== null || shutter_speed !== null || aperture !== null;
+  const hasIso = iso !== null && iso !== undefined;
+  const hasShutterSpeed =
+    shutter_speed !== null && shutter_speed !== undefined;
+  const hasAperture = aperture !== null && aperture !== undefined;
+  const hasCameraSettings = hasIso || hasShutterSpeed || hasAperture;
 
   return (
     <button
       type="button"
       aria-label={`Preview ${description}`}
-      className="block w-full bg-white p-5 overflow-hidden cursor-pointer transition-all dark:bg-neutral-100 hover:drop-shadow-lg text-left"
+      className="block w-full bg-white p-5 overflow-hidden cursor-pointer transition-all dark:bg-neutral-100 hover:drop-shadow-lg text-left flex flex-col"
       onClick={onSelect}
     >
       <div className="relative aspect-square mb-4 group overflow-hidden">
@@ -52,15 +55,20 @@ export const DaydreamCard = ({
             quality={75}
             sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
             style={{ width: "100%", height: "100%" }}
-            className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 point-events-none object-cover"
+            className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none object-cover"
           />
         )}
       </div>
 
-      <div className="flex flex-row justify-between text-neutral-600 text-sm gap-6">
-        {hasCameraSettings && (
+      {hasCameraSettings ? (
+        <div className="flex flex-row-reverse justify-between text-neutral-600 text-sm gap-6">
+          <div className="flex flex-col gap-0.5 items-end text-right">
+            <span>{description}</span>
+            <span className="whitespace-nowrap">{year}</span>
+          </div>
+
           <div className="flex flex-col grow gap-0.5">
-            {iso !== null && (
+            {hasIso && (
               <span className="whitespace-nowrap">
                 {iso}{" "}
                 <abbr title="International Organization for Standardization">
@@ -68,25 +76,26 @@ export const DaydreamCard = ({
                 </abbr>
               </span>
             )}
-            
-            {shutter_speed !== null && (
+
+            {hasShutterSpeed && (
               <span className="whitespace-nowrap">
                 {shutter_speed} <abbr title="Shutter Speed">SS</abbr>
               </span>
             )}
 
-            {aperture !== null && (
+            {hasAperture && (
               <span className="whitespace-nowrap">
                 {aperture} <abbr title="Aperture">A</abbr>
               </span>
             )}
           </div>
-        )}
-        <div className="ml-auto flex flex-col gap-0.5 items-end text-right">
+        </div>
+      ) : (
+        <div className="flex w-full flex-col items-end gap-0.5 text-right text-sm text-neutral-600">
           <span>{description}</span>
           <span className="whitespace-nowrap">{year}</span>
         </div>
-      </div>
+      )}
     </button>
   );
 };

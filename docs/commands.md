@@ -17,7 +17,7 @@ Agent and coding standards remain canonical in `../CLAUDE.md`. These notes descr
 | --- | --- | --- | --- |
 | `/commit` | `$commit` | Generate a conventional commit from already staged changes. | Does not stage or modify files. Uses portfolio scopes such as `projects`, `quotes`, `docs`, and `agent`. |
 | `/create-pr` | `$create-pr` | Push the current branch and open a GitHub pull request with `gh`. | Requires a clean worktree. Draft PRs are the default unless `--ready` is supplied. |
-| `/desloppify` | `$desloppify` | Run a read-only maintainability scan. | Uses `CLAUDE.md`, portfolio skills, and `docs/` to find stale patterns or cleanup opportunities. |
+| `/desloppify` | `$desloppify` | Run a read-only maintainability scan. | Uses `CLAUDE.md`, portfolio skills, and `docs/` to find broad cleanup opportunities, capped at 20 meaningful findings. |
 | `/doc-sync` | `$doc-sync` | Synchronize docs and agent guidance with staged application changes. | Uses `docs/` as the Obsidian vault. It must not create alternate vault or monorepo app folders. |
 | `/new-branch` | `$new-branch` | Create a portfolio-scoped branch from `main`. | Infers names from staged or unstaged paths when no explicit name is supplied. |
 | `/pr-merge-review` | `$pr-merge-review` | Evaluate whether a PR can still merge into current `main`. | Read-only by default and does not merge. |

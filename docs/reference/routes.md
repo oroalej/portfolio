@@ -12,7 +12,7 @@ This route reference is based on files under `src/app`.
 | `/projects/[projectTypeId]` | `src/app/(web)/projects/[projectTypeId]/page.tsx` | Project list for one project type. |
 | `/quotes` | `src/app/(web)/quotes/page.tsx` | Redirects to the first quote category taxonomy entry. |
 | `/quotes/[quoteId]` | `src/app/(web)/quotes/[quoteId]/page.tsx` | Quote list for one quote category. |
-| `/daydreams` | `src/app/(web)/daydreams/page.tsx` | Public daydream image gallery. |
+| `/daydreams` | `src/app/(web)/daydreams/page.tsx` | Infinite daydream image gallery with preview thumbnails and cross-post navigation. |
 
 ## Admin Routes
 

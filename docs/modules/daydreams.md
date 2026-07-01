@@ -37,7 +37,7 @@ Daydreams are photography-style entries with one or more ordered images, year, d
 
 - Public daydream list loads 21 posts at a time, sorted by year descending and created date descending, then fetches the next page through an intersection-observer sentinel.
 - Public cards use the first ordered image as the cover, show an image count when a post has multiple images, and omit missing camera-setting rows.
-- Public preview uses `GalleryProvider` plus `DaydreamPreviewDialog`, navigates only the selected post's images, and shows the camera-setting block only when at least one camera setting is present.
+- Public preview uses `GalleryProvider` plus `DaydreamPreviewDialog`, supports thumbnail selection within a post, can move previous/next across adjacent daydream posts, fetches the next infinite-query page from the preview boundary when needed, and shows the camera-setting block only when at least one camera setting is present.
 - Admin index supports search, year filtering, pagination, row selection, and delete confirmation.
 - Admin create/edit uses a gallery dialog to select one or more existing gallery images.
 - Image selection writes ordered `images` into the form and supports add, remove, and drag-handle reorder.
@@ -54,7 +54,7 @@ Daydreams are photography-style entries with one or more ordered images, year, d
 - Delete removes active detail cache and invalidates daydream lists.
 - Admin pagination uses URL query state.
 - Public daydream pagination is held in the infinite query state, not the URL.
-- Public preview state uses `GalleryProvider`.
+- Public preview state uses `GalleryProvider` for the active image list and image index, plus route-local selected daydream index state for cross-post navigation. Preview next can call the infinite query's `fetchNextPage` when it reaches the currently loaded boundary.
 
 ## Forms And Validation
 
@@ -69,7 +69,7 @@ Daydreams are photography-style entries with one or more ordered images, year, d
 
 - Check gallery image selection, remove, and reorder behavior.
 - Check year filter and search in admin list.
-- Check public preview and infinite-scroll behavior.
+- Check public preview thumbnail selection, previous/next navigation across daydream posts, preview-boundary next-page fetching, and infinite-scroll behavior.
 - Run `pnpm.cmd run lint` after daydream changes.
 
 ## Open Questions

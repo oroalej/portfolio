@@ -24,7 +24,7 @@ import {
   PiGlobeHemisphereWestThin,
 } from "react-icons/pi";
 import type { ProjectCardItem } from "@/features/projects/types";
-import { Thumbnail } from "@/app/(web)/projects/[projectTypeId]/_components/Thumbnail";
+import { Thumbnail } from "@/components/Image/Thumbnail";
 
 interface PreviewProjectImageDialogProps
   extends Required<Pick<DialogProps, "isOpen" | "onClose">>,
@@ -95,6 +95,7 @@ const PreviewProjectImageDialog = ({
                   {list?.map((item, index) => (
                     <Thumbnail
                       key={`thumbnail-${index}-${item.name}`}
+                      className="w-16 md:w-20 aspect-square"
                       image={item}
                       isActive={index === selectedIndex}
                       onSelect={() => onClickThumbnailHandler(index)}

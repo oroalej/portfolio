@@ -14,7 +14,7 @@ Important shared groups:
 - `Form`: labels, inputs, textareas, input groups, and form error messages.
 - `Select`: simple, searchable, multi-searchable, and single-simple select patterns.
 - `Pagination`: full and simple pagination controls.
-- `Image`: Supabase image rendering and preview helpers. `ImagePreviewContainer` provides labeled gallery navigation controls, clamps first/last navigation through `GalleryProvider`, and can temporarily disable navigation while a preview is loading.
+- `Image`: Supabase image rendering and preview helpers. `ImagePreviewContainer` provides labeled gallery navigation controls and matching left/right hotkeys, clamps first/last navigation through `GalleryProvider` by default, accepts custom previous/next handlers for route-specific preview flows, and can temporarily disable navigation while a preview is loading. `Thumbnail` is the shared selectable preview thumbnail used by image preview dialogs.
 - `SkeletonLoader`: base and image loading placeholders.
 - `Dropdown`, `Popover`, `Tooltip`, and `Scrollbar`.
 - `Code`: faux editor primitives for line numbers, indentation, language-aware tokens, comments, and properties. Current token themes support JavaScript and PHP.
@@ -38,7 +38,7 @@ Common public patterns:
 - `Section` helpers structure homepage sections.
 - `PortfolioSummarySection` uses the shared `Code` primitives for a faux editor with JavaScript/PHP language selection.
 - `NavLink` handles active taxonomy navigation for projects and quotes.
-- `GalleryProvider` powers project screenshot previews and daydream previews, stores a nullable selected item, and clamps previous/next navigation to the available image list.
+- `GalleryProvider` powers project screenshot previews and daydream previews, stores a nullable selected item, and provides default previous/next callbacks for the available image list unless a route-specific preview flow overrides the container navigation.
 - `SupabaseImage` displays images from storage.
 
 ## Admin UI Patterns

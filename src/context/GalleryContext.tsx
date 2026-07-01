@@ -8,7 +8,6 @@ import {
   useState,
 } from "react";
 import { BaseComponent, Tables } from "@/types";
-import { useHotkeys } from "react-hotkeys-hook";
 
 interface SetGalleryListOptions {
   shouldResetSelectedIndex?: boolean;
@@ -83,9 +82,6 @@ export const GalleryProvider = ({ children }: BaseComponent) => {
       }),
     [list.length]
   );
-
-  useHotkeys("right", onNext);
-  useHotkeys("left", onPrev);
 
   const contextValue = useMemo(
     () => ({

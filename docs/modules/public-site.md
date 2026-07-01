@@ -43,7 +43,7 @@ The public site presents the portfolio homepage, resume, project portfolio, quot
 - `/resume` renders static resume entries, downloads `/alexander-jeam-oro-resume.pdf`, and categorizes technology badge labels as frontend, backend, data/API, AI/developer tools, workflow/platform, or other.
 - `/quotes` fetches terms, finds `TERM_IDENTIFIER.QUOTE_CATEGORY`, loads taxonomy for that term, and redirects to the first taxonomy id.
 - `/quotes/[quoteId]` loads quotes filtered by `category_id` and fetches additional pages through infinite scroll.
-- `/daydreams` loads daydream posts sorted by year descending and created date descending, fetches additional pages through infinite scroll, uses the first ordered image as each cover, then uses `GalleryProvider` for selected-post image preview state.
+- `/daydreams` loads daydream posts sorted by year descending and created date descending, fetches additional pages through infinite scroll, uses the first ordered image as each cover, then uses `GalleryProvider` for preview state with thumbnail selection, previous/next navigation across adjacent daydream posts, and preview-boundary next-page fetching.
 
 ## Cache And State
 
@@ -52,6 +52,7 @@ The public site presents the portfolio homepage, resume, project portfolio, quot
 - Projects: `["projects", params]`.
 - Quotes: `["quotes", params]` for paginated lists and `["infinite_quotes", filters, sort, per_page]` for the public infinite list.
 - Daydreams: `["daydreams", params]` for paginated lists and `["infinite_daydreams", filters, sort, per_page]` for the public infinite list.
+- Daydream preview state combines `GalleryProvider` selected-image state with the infinite daydream query so preview navigation can advance across adjacent posts and fetch another page at the loaded boundary.
 
 ## Forms And Validation
 

@@ -1,17 +1,19 @@
 "use client";
 
 import classNames from "classnames";
-import SupabaseImage from "@/components/Image/SupabaseImage";
-import { useLoadable } from "@/hooks";
 import type { GalleryItem } from "@/context/GalleryContext";
+import { useLoadable } from "@/hooks";
+import SupabaseImage from "@/components/Image/SupabaseImage";
 
 export interface ThumbnailInterface {
+  className?: string;
   image: GalleryItem;
   isActive: boolean;
   onSelect?: () => void;
 }
 
 export const Thumbnail = ({
+  className,
   image,
   isActive,
   onSelect,
@@ -25,14 +27,17 @@ export const Thumbnail = ({
       aria-pressed={isActive}
       onClick={onSelect}
       className={classNames(
-        "m-1 w-16 md:w-20 aspect-square overflow-hidden rounded-md border border-solid border-neutral-300 transition-colors shrink-0 bg-transparent p-0",
+        "m-1 overflow-hidden rounded-md border border-solid border-neutral-300 transition-all shrink-0 bg-transparent p-0 hover:opacity-100",
+        className ?? "h-14 w-14",
         {
           "ring dark:ring-neutral-200 ring-neutral-800 dark:ring-offset-neutral-200 border-transparent":
             isActive,
+          "opacity-100": isActive,
+          "opacity-60": !isActive,
         }
       )}
     >
-      <div className="relative aspect-square cursor-pointer w-full h-full">
+      <div className="relative cursor-pointer h-full w-full">
         {isLoading && <ImageLoadingIndicator />}
 
         <div className="pointer-events-none">
