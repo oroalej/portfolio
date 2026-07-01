@@ -8,13 +8,14 @@ Agent and coding standards remain canonical in `../CLAUDE.md`. These notes descr
 
 - `.claude/commands/` is ignored by Git. These files remain available on this machine but are not committed.
 - Local Codex bridge skills may live under ignored `.agents/skills/<command-name>/` folders.
-- In Codex, invoke bridge skills with `$commit`, `$review`, `$doc-sync`, `$create-pr`, `$new-branch`, `$pr-merge-review`, or `$desloppify`.
+- In Codex, invoke bridge skills with `$brainstorm`, `$commit`, `$review`, `$doc-sync`, `$create-pr`, `$new-branch`, `$pr-merge-review`, or `$desloppify`.
 - Use `/skills` to browse skills. Do not use `@commit`; `@` is for file and context mentions.
 
 ## Commands
 
 | Claude command | Codex skill | Purpose | Notes |
 | --- | --- | --- | --- |
+| `/brainstorm` | `$brainstorm` | Brainstorm and analyze feature, refactor, change, or concept ideas. | Read-only by default. Uses repo/docs context, asks focused questions when needed, and may use web research or subagents selectively. |
 | `/commit` | `$commit` | Generate a conventional commit from already staged changes. | Does not stage or modify files. Uses portfolio scopes such as `projects`, `quotes`, `docs`, and `agent`. |
 | `/create-pr` | `$create-pr` | Push the current branch and open a GitHub pull request with `gh`. | Requires a clean worktree. Draft PRs are the default unless `--ready` is supplied. |
 | `/desloppify` | `$desloppify` | Run a read-only maintainability scan. | Uses `CLAUDE.md`, portfolio skills, and `docs/` to find broad cleanup opportunities, capped at 20 meaningful findings. |

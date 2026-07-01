@@ -37,6 +37,7 @@ yarn-error.log*
 # local agent commands
 .claude/commands/
 .agents/skills/commit/
+.agents/skills/brainstorm/
 .agents/skills/create-pr/
 .agents/skills/desloppify/
 .agents/skills/doc-sync/
