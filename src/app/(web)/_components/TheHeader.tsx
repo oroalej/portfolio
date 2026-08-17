@@ -38,7 +38,7 @@ const TheHeader = () => {
 
       <div
         className={classNames(
-          "fixed inset-0 lg:relative w-full bg-white z-10 lg:bg-transparent",
+          "fixed inset-0 z-50 w-full bg-white lg:relative lg:z-auto lg:bg-transparent",
           [isOpen ? "block" : "hidden lg:block"]
         )}
       >

@@ -14,6 +14,11 @@ export interface PortfolioSummary {
       address: string;
       href: string;
     };
+    phone: {
+      display: string;
+      href: string;
+      label: string;
+    };
     resume: {
       display: string;
       download: string;
@@ -38,6 +43,11 @@ export const PORTFOLIO_SUMMARY: PortfolioSummary = {
     email: {
       address: "alexanderjeamoro@gmail.com",
       href: "mailto:alexanderjeamoro@gmail.com",
+    },
+    phone: {
+      display: "+63 952 468 0860",
+      href: "tel:+639524680860",
+      label: "Call Alexander Jeam Oro",
     },
     resume: {
       display: "Download",
