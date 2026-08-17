@@ -161,6 +161,23 @@ const EmailValue = ({ language }: LanguageComponentProps) => {
   );
 };
 
+const PhoneValue = ({ language }: LanguageComponentProps) => {
+  const { phone } = PORTFOLIO_SUMMARY.contacts;
+
+  return (
+    <a
+      aria-label={phone.label}
+      href={phone.href}
+      title={phone.label}
+      className={getCodeTokenClassName("string", language)}
+    >
+      {`'`}
+      <span className="select-all">{phone.display}</span>
+      {`'`}
+    </a>
+  );
+};
+
 const JavaScriptPortfolioSummaryCode = () => {
   const language: CodeLanguage = "javascript";
 
@@ -259,22 +276,28 @@ const JavaScriptPortfolioSummaryCode = () => {
       </CodeLine>
 
       <CodeLine line={18} indent={2}>
-        <CodeProperty
-          name="email"
-          language={language}
-          withTrailingComma={false}
-        >
+        <CodeProperty name="email" language={language}>
           <EmailValue language={language} />
         </CodeProperty>
       </CodeLine>
 
-      <CodeLine line={19} indent={1}>
+      <CodeLine line={19} indent={2}>
+        <CodeProperty
+          name="phone"
+          language={language}
+          withTrailingComma={false}
+        >
+          <PhoneValue language={language} />
+        </CodeProperty>
+      </CodeLine>
+
+      <CodeLine line={20} indent={1}>
         <CodeToken type="punctuation" language={language}>
           {"}"}
         </CodeToken>
       </CodeLine>
 
-      <CodeLine line={20}>
+      <CodeLine line={21}>
         <CodeToken type="punctuation" language={language}>
           {"}"}
         </CodeToken>
@@ -412,19 +435,30 @@ const PhpPortfolioSummaryCode = () => {
           language={language}
           operator="=>"
           operatorClassName={PHP_OPERATOR_SPACING}
-          withTrailingComma={false}
         >
           <EmailValue language={language} />
         </CodeProperty>
       </CodeLine>
 
-      <CodeLine line={19} indent={1}>
+      <CodeLine line={19} indent={2}>
+        <CodeProperty
+          name="'phone'"
+          language={language}
+          operator="=>"
+          operatorClassName={PHP_OPERATOR_SPACING}
+          withTrailingComma={false}
+        >
+          <PhoneValue language={language} />
+        </CodeProperty>
+      </CodeLine>
+
+      <CodeLine line={20} indent={1}>
         <CodeToken type="punctuation" language={language}>
           ]
         </CodeToken>
       </CodeLine>
 
-      <CodeLine line={20}>
+      <CodeLine line={21}>
         <CodeToken type="punctuation" language={language}>
           ]
         </CodeToken>
@@ -453,7 +487,7 @@ export const PortfolioSummaryCode = ({
     <>
       <SummaryCodeRenderer />
 
-      <CodeLine line={21}>
+      <CodeLine line={22}>
         <span
           aria-hidden="true"
           className="border-l-[3px] h-[1rem] sm:h-[1.25rem] border-solid self-end animate-blinking mb-3 sm:mb-2"
@@ -462,7 +496,7 @@ export const PortfolioSummaryCode = ({
         </span>
       </CodeLine>
 
-      <CodeLine line={22} />
+      <CodeLine line={23} />
     </>
   );
 };
