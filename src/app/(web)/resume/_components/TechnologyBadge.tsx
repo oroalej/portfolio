@@ -105,7 +105,7 @@ export const TechnologyBadge = ({ name }: TechnologyBadgeProps) => {
   return (
     <span
       aria-label={`${name}, ${categoryLabel}`}
-      className="select-all inline-block bg-neutral-800 text-neutral-200 px-2 leading-none py-1 text-xs whitespace-nowrap rounded"
+      className="select-all inline-block bg-neutral-800 text-neutral-200 px-2 leading-none py-1 text-xs whitespace-nowrap rounded dark:bg-neutral-200 dark:text-neutral-800"
       title={categoryLabel}
     >
       {name}
